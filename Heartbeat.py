@@ -17,7 +17,6 @@ import numpy as np
 import torch
 import torchvision
 from torchvision import transforms, datasets
-from google.colab import drive
 from torch.utils.data import DataLoader
 from torch import nn
 from torch.autograd import Variable
@@ -26,7 +25,6 @@ from matplotlib import pyplot as plt
 import matplotlib as mpl
 import pathlib
 
-drive.mount('/content/drive')
 # transforms to apply to the data
 data_transform = transforms.Compose([
     # transforms.Resize(120),
@@ -45,13 +43,12 @@ data_transform_test = transforms.Compose([
     transforms.Normalize(mean=[0.5, 0.5, 0.5],
                          std=[0.5, 0.5, 0.5])
 ])
-hawk_dataset = datasets.ImageFolder(root='C:/Users/phfro/Documents/python/data/BirdiesData',
+hawk_dataset = datasets.ImageFolder(root='C:/Users/phfro/Documents/python/data/BirdiesData/train/',
                                     transform=data_transform)
 print("hawk_dataset = ", len(hawk_dataset))
 train_loader = DataLoader(hawk_dataset,
                           batch_size=batch_sizes, shuffle=True, num_workers=4)
-hawk_test_dataset = datasets.ImageFolder(root='/content/drive/My Drive/' \
-                                              'Colab Notebooks/BirdiesData/val/', \
+hawk_test_dataset = datasets.ImageFolder(root='C:/Users/phfro/Documents/python/data/BirdiesData/val/', \
                                          transform=data_transform_test)
 print("hawk_test_dataset = ", len(hawk_test_dataset))
 test_loader = DataLoader(hawk_test_dataset,

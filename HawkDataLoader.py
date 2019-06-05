@@ -3,27 +3,27 @@ from torchvision import transforms, datasets
 from torch.utils.data import DataLoader
 
 class HawkLoader:
-    def __init__(self, train_path, test_path, batch_sizes):
+    def __init__(self, dir_path, batch_sizes):
         self.batch_sizes = batch_sizes
-        self.train_path = train_path
-        self.test_path = test_path
-        self.data_transform = transforms.Compose([
-            # transforms.Resize(120),
-            # transforms.RandomResizedCrop(120,(1,1),(1,1),2),
-            transforms.RandomSizedCrop(120),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.5, 0.5, 0.5],
-                                 std=[0.5, 0.5, 0.5])
-            ])
-        self.data_transform_test = transforms.Compose([
-            # transforms.Resize(120),
-            transforms.RandomResizedCrop(120, (1, 1), (1, 1), 2),
-            # transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.5, 0.5, 0.5],
-                                 std=[0.5, 0.5, 0.5])
-            ])
+        self.dir_path = dir_path
+        data_transforms = {
+            'train': transforms.Compose([
+                transforms.RandomResizedCrop(224),
+                transforms.RandomHorizontalFlip(),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ]),
+            'val': transforms.Compose([
+                transforms.Resize(256),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ]),
+        }
+
+        # transforms.RandomResizedCrop(120,(1,1),(1,1),2),
+
+
         hawk_dataset = datasets.ImageFolder(root=self.train_path,
                                             transform=self.data_transform)
         print("hawk_dataset = ",len(hawk_dataset))

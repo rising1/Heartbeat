@@ -12,8 +12,8 @@ weight_decay = 0.0001 # used in HeartbeatClean
 dropout_factor = 0.1 # used in Unit
 snapshot_point = 20
 faff = 'false'
-dataPathRootTrain = 'C:/Users/phfro/Documents/python/data/BirdiesData' # used in DataLoaderHeartbeat
-dataPathRootTest = 'C:/Users/phfro/Documents/python/data/BirdiesData/val/' # used in DataLoaderHeartbeat
+dataPathRootTrain = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
+dataPathRootVal = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
 num_epochs = 1 # used in HeartbeatClean
 batch_sizes = 64 # used in HeartbeatClean
 
@@ -24,7 +24,7 @@ import torch
 from torch import nn
 from torch.autograd import Variable
 import ConvNet
-import DataLoaderHeartbeat
+import HawkDataLoader
 from torch.optim import Adam
 import time
 
@@ -35,7 +35,7 @@ if cuda_avail:
 optimizer = Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 loss_fn = nn.CrossEntropyLoss()
 
-train_loader_class = DataLoaderHeartbeat.DataLoaderHeartbeatTrain( \
+train_loader_class = HawkDataLoader.DataLoaderHeartbeatTrain( \
                 dataPathRootTrain,batch_sizes)
 train_loader = train_loader_class.train_loader
 
