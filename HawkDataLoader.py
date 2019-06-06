@@ -23,18 +23,16 @@ class HawkLoader:
 
         # transforms.RandomResizedCrop(120,(1,1),(1,1),2),
 
+        image_datasets = {x: datasets.ImageFolder(os.path.join(self.train_path, x),
+                                                  data_transforms[x])
+                          for x in ['train', 'val']}
+        dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x],
+                                        batch_size=self.batch_sizes,
+                                        shuffle=True, num_workers=4)
+                       for x in ['train', 'val']}
+        dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
 
-        hawk_dataset = datasets.ImageFolder(root=self.train_path,
-                                            transform=self.data_transform)
-        print("hawk_dataset = ",len(hawk_dataset))
-        train_loader = DataLoader(hawk_dataset, batch_size=self.batch_sizes,
-                                  shuffle=True, num_workers=4)
-        hawk_test_dataset = datasets.ImageFolder(root=self.test_path,
-                                                 transform=self.data_transform_test)
-        print("hawk_test_dataset = ", len(self.hawk_test_dataset))
-        test_loader = DataLoader(hawk_test_dataset, batch_size=self.batch_sizes,
-                                 shuffle=True, num_workers=4)
-        # classes = ('sparrow hawk','red kite','peregrine falcon','kestrel','golden eagle','buzzard')
+
         classes = ('buzzard', 'golden eagle', 'kestrel', 'peregrine falcon',
                    'red kite', 'sparrow hawk')
         classesTest = ('buzzard', 'golden eagle', 'kestrel', 'peregrine falcon',
