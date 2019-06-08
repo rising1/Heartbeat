@@ -12,8 +12,7 @@ weight_decay = 0.0001 # used in HeartbeatClean
 dropout_factor = 0.1 # used in Unit
 snapshot_point = 20
 faff = 'false'
-dataPathRootTrain = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
-dataPathRootVal = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
+dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
 num_epochs = 1 # used in HeartbeatClean
 batch_sizes = 64 # used in HeartbeatClean
 
@@ -35,9 +34,9 @@ if cuda_avail:
 optimizer = Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 loss_fn = nn.CrossEntropyLoss()
 
-train_loader_class = HawkDataLoader.DataLoaderHeartbeatTrain( \
-                dataPathRootTrain,batch_sizes)
-train_loader = train_loader_class.train_loader
+train_loader_class = HawkDataLoader.HawkLoader( \
+                dataPathRoot,batch_sizes)
+train_loader = train_loader_class.dataloader["train"]
 
 def train(num_epochs):
     best_acc = 0.0
@@ -65,8 +64,8 @@ def train(num_epochs):
             _, prediction = torch.max(outputs.data, 1)
             train_acc += torch.sum(prediction == labels.data)
         # adjust_learning_rate(epoch)
-        train_acc = train_acc.cpu().numpy() / len(hawk_dataset)
-        train_loss = train_loss / len(hawk_dataset)
+        # train_acc = train_acc.cpu().numpy() / len(hawk_dataset)
+        # train_loss = train_loss / len(hawk_dataset)
         if ((epoch) % (num_epochs / snapshot_point) == 0) or (epoch == num_epochs):
             loopcount = loopcount + 1
             time_elapsed = time.time() - since
