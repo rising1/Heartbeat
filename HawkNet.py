@@ -1,3 +1,15 @@
+import torch
+import torchvision
+from torch import nn
+from torch.autograd import Variable
+import numpy as np
+from matplotlib import pyplot as plt
+import ConvNet
+import HawkDataLoader
+from torch.optim import Adam
+import time
+
+
 # Hyperparameters
 colour_channels = 3 # used in SimpleNet
 no_feature_detectors = 12 # used in ??????
@@ -14,29 +26,29 @@ snapshot_point = 20
 faff = 'false'
 dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
 num_epochs = 1 # used in HeartbeatClean
-batch_sizes = 64 # used in HeartbeatClean
+batch_sizes = 4 # used in HeartbeatClean
 
 SimpleNetArgs = [kernel_sizes,stride_pixels,padding_pixels,dropout_factor,
                  output_classes,colour_channels,pic_size,pooling_factor]
 
-import torch
-from torch import nn
-from torch.autograd import Variable
-import ConvNet
-import HawkDataLoader
-from torch.optim import Adam
-import time
-
 cuda_avail = torch.cuda.is_available()
 model = ConvNet.SimpleNet(SimpleNetArgs)
 if cuda_avail:
+    print("cuda is available")
     model.cuda()
 optimizer = Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 loss_fn = nn.CrossEntropyLoss()
 
 train_loader_class = HawkDataLoader.HawkLoader( \
                 dataPathRoot,batch_sizes)
-train_loader = train_loader_class.dataloader["train"]
+
+train_loader = train_loader_class.dataloaders["train"]
+
+# Get a batch of training data
+inputs, classes = next(iter(train_loader))
+
+# Make a grid from batch
+out = torchvision.utils.make_grid(inputs)
 
 def train(num_epochs):
     best_acc = 0.0
@@ -49,9 +61,9 @@ def train(num_epochs):
         train_acc = 0.0
         train_loss = 0.0
         for (images, labels) in enumerate(train_loader):
-            #if cuda_avail:
-            #    images = Variable(images.cuda())
-            #    labels = Variable(labels.cuda())
+            if cuda_avail:
+                images = Variable(images.cuda())
+                labels = Variable(labels.cuda())
                 # optimizer.zero_grad()
             outputs = model(images)
             loss = loss_fn(outputs, labels)
@@ -77,6 +89,23 @@ def train(num_epochs):
             # Accuracy Curves
             train_history.append(train_acc)
 
-#train(num_epochs)
+
+def imshow(inp, title=None):
+    """Imshow for Tensor."""
+    inp = inp.numpy().transpose((1, 2, 0))
+    mean = np.array([0.485, 0.456, 0.406])
+    std = np.array([0.229, 0.224, 0.225])
+    inp = std * inp + mean
+    inp = np.clip(inp, 0, 1)
+    plt.imshow(inp)
+    if title is not None:
+        plt.title(title)
+    plt.pause(0.001)  # pause a bit so that plots are updated
+
+
+imshow(out, title=[x for x in train_loader_class.classes])
+
+# train(num_epochs)
 if __name__ == "__main__":
+
     train(num_epochs)

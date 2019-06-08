@@ -1,6 +1,8 @@
 from torch import nn
+
+
 class Unit(nn.Module):
-    def __init__(self,argslist, in_channels,out_channels ):
+    def __init__(self, argslist, in_channels, out_channels):
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.kernel_sizes = argslist[0]
@@ -10,8 +12,8 @@ class Unit(nn.Module):
 
         super(Unit, self).__init__()
 
-        self.conv = nn.Conv2d(in_channels=self.in_channels, out_channels= \
-            self.out_channels, kernel_size=self.kernel_sizes, \
+        self.conv = nn.Conv2d(in_channels=self.in_channels, out_channels=
+                              self.out_channels, kernel_size=self.kernel_sizes,
                               stride=self.stride_pixels, padding=self.padding_pixels)
         self.bn = nn.BatchNorm2d(num_features=self.out_channels)
         self.relu = nn.ReLU()
