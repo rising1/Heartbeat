@@ -57,27 +57,40 @@ def train(num_epochs):
     test_history = []
     loopcount = 0
     for epoch in range(num_epochs):
-        model.train()
-        train_acc = 0.0
-        train_loss = 0.0
-        for (images, labels) in enumerate(train_loader):
-            if cuda_avail:
-                images = Variable(images.cuda())
-                labels = Variable(labels.cuda())
-                # optimizer.zero_grad()
-            outputs = model(images)
-            loss = loss_fn(outputs, labels)
-            loss.backward()
-            optimizer.step()
-            # print("images.size(0)=",images.size(0))
-            # print("loss.item().cpu().data[0]=",loss.item().cpu().data[0])
-            train_loss += loss.cpu().item() * images.size(0)
-            # train_loss += loss.cpu().data[0] * images.size(0)
-            _, prediction = torch.max(outputs.data, 1)
-            train_acc += torch.sum(prediction == labels.data)
-        # adjust_learning_rate(epoch)
-        # train_acc = train_acc.cpu().numpy() / len(hawk_dataset)
-        # train_loss = train_loss / len(hawk_dataset)
+        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        print('-' * 10)
+
+        # Each epoch has a training and validation phase
+        for phase in ['train', 'val']:
+            if phase == 'train':
+                scheduler.step()
+                model.train()  # Set model to training mode
+            else:
+                model.eval()   # Set model to evaluate mode
+
+            running_loss = 0.0
+            running_corrects = 0
+
+            # Iterate over data.
+            for inputs, labels in dataloaders[phase]:
+                inputs = inputs.to(device)
+                labels = labels.to(device)
+
+                # zero the parameter gradients
+                optimizer.zero_grad()
+
+                # forward
+                # track history if only in train
+                with torch.set_grad_enabled(phase == 'train'):
+                    outputs = model(inputs)
+                    _, preds = torch.max(outputs, 1)
+                    loss = criterion(outputs, labels)
+
+                    # backward + optimize only if in training phase
+                    if phase == 'train':
+                        loss.backward()
+                        optimizer.step()
+
         if ((epoch) % (num_epochs / snapshot_point) == 0) or (epoch == num_epochs):
             loopcount = loopcount + 1
             time_elapsed = time.time() - since

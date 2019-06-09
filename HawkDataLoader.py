@@ -24,7 +24,7 @@ class HawkLoader:
         }
 
         # transforms.RandomResizedCrop(120,(1,1),(1,1),2),
-
+        # print(os.path.join(self.dir_path, 'train'))
         image_datasets = {x: datasets.ImageFolder(os.path.join(self.dir_path, x),
                                                   data_transforms[x])
                           for x in ['train', 'val']}
@@ -33,6 +33,7 @@ class HawkLoader:
                             batch_size=self.batch_sizes,
                             shuffle=True, num_workers=0)
                        for x in ['train', 'val']}
+        #print(type(self.dataloaders["train"][0]))
         self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
 
         self.classes = ('buzzard', 'golden eagle', 'kestrel', 'peregrine falcon',
