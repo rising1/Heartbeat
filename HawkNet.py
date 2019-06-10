@@ -73,7 +73,7 @@ def train(num_epochs):
             running_corrects = 0
 
             # Iterate over data.
-            for inputs, labels in train_loader_class.dataloaders[phase]
+            for inputs, labels in train_loader_class.dataloaders[phase]:
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
@@ -91,7 +91,12 @@ def train(num_epochs):
                     if phase == 'train':
                         loss.backward()
                         optimizer.step()
-
+                # statistics
+                running_loss += loss.item() * inputs.size(0)
+                running_corrects += torch.sum(preds == labels.data)
+            train_loss = running_loss / train_loader_class.dataset_sizes[phase]
+            train_acc = running_corrects.double() / \
+                        train_loader_class.dataset_sizes[phase]
         if ((epoch) % (num_epochs / snapshot_point) == 0) or (epoch == num_epochs):
             loopcount = loopcount + 1
             time_elapsed = time.time() - since
