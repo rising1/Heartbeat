@@ -85,7 +85,7 @@ def train(num_epochs):
                 with torch.set_grad_enabled(phase == 'train'):
                     outputs = model(inputs)
                     _, preds = torch.max(outputs, 1)
-                    loss = criterion(outputs, labels)
+                    loss = loss_fn(outputs, labels)
 
                     # backward + optimize only if in training phase
                     if phase == 'train':
