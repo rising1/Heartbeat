@@ -7,6 +7,8 @@ from matplotlib import pyplot as plt
 import ConvNet
 import HawkDataLoader
 from torch.optim import Adam
+import torch.optim as optim
+from torch.optim import lr_scheduler
 import time
 
 
@@ -31,16 +33,15 @@ batch_sizes = 4 # used in HeartbeatClean
 SimpleNetArgs = [kernel_sizes,stride_pixels,padding_pixels,dropout_factor,
                  output_classes,colour_channels,pic_size,pooling_factor]
 
-cuda_avail = torch.cuda.is_available()
 model = ConvNet.SimpleNet(SimpleNetArgs)
-if cuda_avail:
-    print("cuda is available")
-    model.cuda()
-optimizer = Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+
+optimizer = Adam(model.parameters(), lr=learning_rate,
+                 weight_decay=weight_decay)
 loss_fn = nn.CrossEntropyLoss()
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 train_loader_class = HawkDataLoader.HawkLoader( \
-                dataPathRoot,batch_sizes)
+                dataPathRoot, batch_sizes)
 
 train_loader = train_loader_class.dataloaders["train"]
 
@@ -63,7 +64,7 @@ def train(num_epochs):
         # Each epoch has a training and validation phase
         for phase in ['train', 'val']:
             if phase == 'train':
-                scheduler.step()
+                # scheduler.step()
                 model.train()  # Set model to training mode
             else:
                 model.eval()   # Set model to evaluate mode
@@ -72,7 +73,7 @@ def train(num_epochs):
             running_corrects = 0
 
             # Iterate over data.
-            for inputs, labels in dataloaders[phase]:
+            for inputs, labels in train_loader_class.dataloaders[phase]
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
