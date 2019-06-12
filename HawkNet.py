@@ -28,7 +28,7 @@ snapshot_point = 20
 faff = 'false'
 dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
 num_epochs = 1 # used in HeartbeatClean
-batch_sizes = 2 # used in HeartbeatClean
+batch_sizes = 7 # used in HeartbeatClean
 
 SimpleNetArgs = [kernel_sizes,stride_pixels,padding_pixels,dropout_factor,
                  output_classes,colour_channels,pic_size,pooling_factor]
@@ -38,11 +38,7 @@ model = ConvNet.SimpleNet(SimpleNetArgs)
 optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
 loss_fn = nn.CrossEntropyLoss()
-cuda_avail = torch.cuda.is_available()
-if cuda_avail:
-  torch.cuda.empty_cache()
-  model.cuda()
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 train_loader_class = HawkDataLoader.HawkLoader(
                 dataPathRoot, batch_sizes)
