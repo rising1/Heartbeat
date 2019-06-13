@@ -79,26 +79,29 @@ class SimpleNet(nn.Module):
         self.avgpool = nn.AvgPool2d(kernel_size=4)
                                    #  (self.pooling_factor * 2) + 1)
 
-        self.net = nn.Sequential(self.unit1, self.unit2, self.unit3, \
-                                 self.pool1, self.unit4, self.unit5, self.unit6, \
-                                 self.unit7, self.pool2, self.unit8, self.unit9, \
-                                 self.unit10, self.unit11, self.pool3, \
-                                 self.unit12, self.unit13, self.unit14, \
+        self.net = nn.Sequential(self.unit1, self.unit2, self.unit3,
+                                 self.pool1, self.unit4, self.unit5, self.unit6,
+                                 self.unit7, self.pool2, self.unit8, self.unit9,
+                                 self.unit10, self.unit11, self.pool3,
+                                 self.unit12, self.unit13, self.unit14,
                                  self.avgpool)
 
-        self.fc = nn.Linear(in_features=int(self.pic_size / (self.pooling_factor ** 3 * \
-                                                        (self.pooling_factor * 2 + 1)) * \
-                                            self.pic_size / (self.pooling_factor ** 3 * \
-                                                        (self.pooling_factor * 2 + 1)) * \
-                                            self.pic_size * 4), out_features=self.num_classes)
+        self.fc = nn.Linear(in_features=480, out_features=self.num_classes)
+
+        #self.fc = nn.Linear(in_features=int(self.pic_size / (self.pooling_factor ** 3 * \
+        #                                                (self.pooling_factor * 2 + 1)) * \
+        #                                    self.pic_size / (self.pooling_factor ** 3 * \
+        #                                                (self.pooling_factor * 2 + 1)) * \
+        #                                    self.pic_size * 4), out_features=self.num_classes)
 
     def forward(self, input):
         output = self.net(input)
-        output = output.view(-1,
-                             int(self.pic_size / (self.pooling_factor ** 3 * \
-                                             (self.pooling_factor * 2 + 1)) * \
-                                 self.pic_size / (self.pooling_factor ** 3 * \
-                                             (self.pooling_factor * 2 + 1)) * \
-                                 self.pic_size * 4))
+        output = output.view(-1,480)
+        #output = output.view(-1,
+        #                     int(self.pic_size / (self.pooling_factor ** 3 * \
+        #                                     (self.pooling_factor * 2 + 1)) * \
+        #                         self.pic_size / (self.pooling_factor ** 3 * \
+        #                                     (self.pooling_factor * 2 + 1)) * \
+        #                         self.pic_size * 4))
         output = self.fc(output)
         return output

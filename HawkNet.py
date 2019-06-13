@@ -26,7 +26,7 @@ weight_decay = 0.0001 # used in HeartbeatClean
 dropout_factor = 0.1 # used in Unit
 snapshot_point = 20
 faff = 'false'
-dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
+dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
 num_epochs = 1 # used in HeartbeatClean
 batch_sizes = 7 # used in HeartbeatClean
 
@@ -38,7 +38,7 @@ model = ConvNet.SimpleNet(SimpleNetArgs)
 optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
 loss_fn = nn.CrossEntropyLoss()
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 train_loader_class = HawkDataLoader.HawkLoader(
                 dataPathRoot, batch_sizes)
