@@ -36,7 +36,7 @@ class HawkLoader:
         #print(type(self.dataloaders["train"][0]))
         self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
 
-        self.classes = ('buzzard', 'golden eagle', 'kestrel', 'peregrine falcon',
+        self.classes = ('buzzard', 'golden eagle', 'harris hawk', 'kestrel', 'peregrine falcon',
                         'red kite', 'sparrow hawk')
-        self.classesTest = ('buzzard', 'golden eagle', 'kestrel', 'peregrine falcon',
+        self.classesTest = ('buzzard', 'golden eagle', 'harris hawk','kestrel', 'peregrine falcon',
                             'red kite', 'sparrow hawk')
