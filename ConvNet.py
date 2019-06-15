@@ -64,7 +64,8 @@ class SimpleNet(nn.Module):
 
     def forward(self, input):
         output = self.net(input)
-        output = output.view(-1,480)
+        #  output = output.view(-1,480)
+        output = output.view(-1,int(self.pic_size * 4))
         #output = output.view(-1,
         #                     int(self.pic_size / (self.pooling_factor ** 3 * \
         #                                     (self.pooling_factor * 2 + 1)) * \
