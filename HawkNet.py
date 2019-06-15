@@ -19,16 +19,16 @@ kernel_sizes = 3 # used in Unit
 stride_pixels = 1 # used in Unit
 padding_pixels = 1 # used in Unit
 pooling_factor = 2 # used in SimpleNet
-pic_size = 120 # used in SimpleNet
+pic_size = 32 # used in SimpleNet
 output_classes = 6 # used in SimpleNet
 learning_rate = 0.0001 # used in HeartbeatClean
 weight_decay = 0.0001 # used in HeartbeatClean
 dropout_factor = 0.1 # used in Unit
 snapshot_point = 20
 faff = 'false'
-dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
-num_epochs = 1 # used in HeartbeatClean
-batch_sizes = 7 # used in HeartbeatClean
+dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
+num_epochs = 2 # used in HeartbeatClean
+batch_sizes = 4 # used in HeartbeatClean
 
 SimpleNetArgs = [kernel_sizes,stride_pixels,padding_pixels,dropout_factor,
                  output_classes,colour_channels,pic_size,pooling_factor]
@@ -39,6 +39,8 @@ optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
 loss_fn = nn.CrossEntropyLoss()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+if torch.cuda.is_available():
+    model.cuda()
 
 train_loader_class = HawkDataLoader.HawkLoader(
                 dataPathRoot, batch_sizes)
@@ -50,6 +52,7 @@ inputs, classes = next(iter(train_loader))
 
 # Make a grid from batch
 out = torchvision.utils.make_grid(inputs)
+
 
 def train(num_epochs):
     best_acc = 0.0
@@ -74,6 +77,8 @@ def train(num_epochs):
 
             # Iterate over data.
             for inputs, labels in train_loader_class.dataloaders[phase]:
+                # print("inputs size=",inputs.shape)
+                # print("labels size=",labels.shape)
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
@@ -100,9 +105,9 @@ def train(num_epochs):
         if ((epoch) % (num_epochs / snapshot_point) == 0) or (epoch == num_epochs):
             loopcount = loopcount + 1
             time_elapsed = time.time() - since
-            print("Epoch {:4},Train Accuracy: {:.4f},TrainLoss: {:.4f}," \
-                  .format(epoch, train_acc, \
-                          train_loss), 'time {:.0f}m {:.0f}s'.format( \
+            print("Epoch {:4},Train Accuracy: {:.4f},TrainLoss: {:.4f},"
+                  .format(epoch, train_acc,
+                          train_loss), 'time {:.0f}m {:.0f}s'.format(
                 time_elapsed // 60, time_elapsed % 60))
             # print('Best val Acc: {:4f}'.format(best_acc))
             # Accuracy Curves
