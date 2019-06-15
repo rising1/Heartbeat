@@ -20,20 +20,20 @@ kernel_sizes = 3 # used in Unit
 stride_pixels = 1 # used in Unit
 padding_pixels = 1 # used in Unit
 pooling_factor = 2 # used in SimpleNet
-pic_size = 64 # used in SimpleNet
+pic_size = 120 # used in SimpleNet
 output_classes = 6 # used in SimpleNet
 learning_rate = 0.0001 # used in HeartbeatClean
 weight_decay = 0.0001 # used in HeartbeatClean
 dropout_factor = 0.1 # used in Unit
-snapshot_point = 20
+snapshot_point = 50
 faff = 'false'
 dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
 if not (os.path.exists(dataPathRoot)):
     print("dataPathRoot doesn't exist")
 
 
-num_epochs = 50 # used in HeartbeatClean
-batch_sizes = 32 # used in HeartbeatClean
+num_epochs = 200 # used in HeartbeatClean
+batch_sizes = 24 # used in HeartbeatClean
 
 SimpleNetArgs = [kernel_sizes,stride_pixels,padding_pixels,dropout_factor,
                  output_classes,colour_channels,pic_size,pooling_factor]
@@ -43,10 +43,10 @@ model = ConvNet.SimpleNet(SimpleNetArgs)
 optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
 loss_fn = nn.CrossEntropyLoss()
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda: 0" if torch.cuda.is_available() else "cpu")
 if torch.cuda.is_available():
     torch.cuda.empty_cache()
-    model.cuda()
+    model.to(device)
 
 train_loader_class = HawkDataLoader.HawkLoader(
                 dataPathRoot, batch_sizes)
