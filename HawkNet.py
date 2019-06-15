@@ -9,6 +9,7 @@ import HawkDataLoader
 from torch.optim import Adam
 import torch.optim as optim
 from torch.optim import lr_scheduler
+import os
 import time
 
 
@@ -19,7 +20,7 @@ kernel_sizes = 3 # used in Unit
 stride_pixels = 1 # used in Unit
 padding_pixels = 1 # used in Unit
 pooling_factor = 2 # used in SimpleNet
-pic_size = 32 # used in SimpleNet
+pic_size = 64 # used in SimpleNet
 output_classes = 6 # used in SimpleNet
 learning_rate = 0.0001 # used in HeartbeatClean
 weight_decay = 0.0001 # used in HeartbeatClean
@@ -27,8 +28,12 @@ dropout_factor = 0.1 # used in Unit
 snapshot_point = 20
 faff = 'false'
 dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
-num_epochs = 2 # used in HeartbeatClean
-batch_sizes = 4 # used in HeartbeatClean
+if not (os.path.exists(dataPathRoot)):
+    print("dataPathRoot doesn't exist")
+
+
+num_epochs = 50 # used in HeartbeatClean
+batch_sizes = 32 # used in HeartbeatClean
 
 SimpleNetArgs = [kernel_sizes,stride_pixels,padding_pixels,dropout_factor,
                  output_classes,colour_channels,pic_size,pooling_factor]
@@ -40,6 +45,7 @@ optimizer = Adam(model.parameters(), lr=learning_rate,
 loss_fn = nn.CrossEntropyLoss()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 if torch.cuda.is_available():
+    torch.cuda.empty_cache()
     model.cuda()
 
 train_loader_class = HawkDataLoader.HawkLoader(
@@ -124,7 +130,7 @@ def imshow(inp, title=None):
     plt.imshow(inp)
     if title is not None:
         plt.title(title)
-    plt.pause(0.001)  # pause a bit so that plots are updated
+    plt.pause(0.1)  # pause a bit so that plots are updated
 
 
 imshow(out, title=[x for x in train_loader_class.classes])
