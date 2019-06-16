@@ -143,18 +143,20 @@ loss_fn = nn.CrossEntropyLoss()
 def adjust_learning_rate(epoch):
     lr = learning_rate
 
-    if epoch > 180:
+    if epoch > 500:
         lr = lr / 2
     elif epoch > 350:
         lr = lr / 2
     elif epoch > 220:
         lr = lr / 2
+    elif epoch > 180:
+        lr = lr / 2
     elif epoch > 90:
         lr = lr / 2
     elif epoch > 60:
         lr = lr / 2
-    # elif epoch > 30:
-    #    lr = lr / 2
+    elif epoch > 30:
+        lr = lr / 2
 
     for param_group in optimizer.param_groups:
         param_group["lr"] = lr
@@ -228,6 +230,10 @@ def test():
     return test_accT
 
 
+def save_models(epoch):
+    torch.save(model.state_dict(), "Birdies_model_{}.model".format(epoch))
+    print("Chekcpoint saved")
+
 def train(num_epochs):
     best_acc = 0.0
     since = time.time()
@@ -257,15 +263,15 @@ def train(num_epochs):
         train_acc = train_acc.cpu().numpy() / len(hawk_dataset)
         train_loss = train_loss / len(hawk_dataset)
         test_acc = test()
-        # if test_acc > best_acc:
-        #    save_models(epoch)
-        #    best_acc = test_acc
+        if test_acc > best_acc:
+            save_models(epoch)
+            best_acc = test_acc
         if ((epoch) % (num_epochs / snapshot_point) == 0) or (epoch == num_epochs):
             loopcount = loopcount + 1
             time_elapsed = time.time() - since
-            print("Epoch {:4},Train Accuracy: {:.4f},TrainLoss: {:.4f}," \
-                  "Test Accuracy:{:.4f}".format(epoch, train_acc, \
-                                                train_loss, test_acc), 'time {:.0f}m {:.0f}s'.format( \
+            print("Epoch {:4},Train Accuracy: {:.4f},TrainLoss: {:.4f},"
+                  "Test Accuracy:{:.4f}".format(epoch, train_acc,
+                                                train_loss, test_acc), 'time {:.0f}m {:.0f}s'.format(
                 time_elapsed // 60, time_elapsed % 60))
             # print('Best val Acc: {:4f}'.format(best_acc))
             # Accuracy Curves
@@ -284,4 +290,3 @@ def train(num_epochs):
 
 if __name__ == "__main__":
     train(10)
-save_models(0)

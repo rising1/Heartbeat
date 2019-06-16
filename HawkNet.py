@@ -32,7 +32,7 @@ if not (os.path.exists(dataPathRoot)):
     print("dataPathRoot doesn't exist")
 
 
-num_epochs = 200 # used in HeartbeatClean
+num_epochs = 3 # used in HeartbeatClean
 batch_sizes = 24 # used in HeartbeatClean
 
 SimpleNetArgs = [kernel_sizes,stride_pixels,padding_pixels,dropout_factor,
@@ -59,6 +59,9 @@ inputs, classes = next(iter(train_loader))
 # Make a grid from batch
 out = torchvision.utils.make_grid(inputs)
 
+def save_models(epoch):
+    torch.save(model.state_dict(), "Birdies_model_{}.model".format(epoch))
+    print("Chekcpoint saved")
 
 def train(num_epochs):
     best_acc = 0.0
@@ -67,8 +70,8 @@ def train(num_epochs):
     test_history = []
     loopcount = 0
     for epoch in range(num_epochs):
-        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
-        print('-' * 10)
+        #print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        #print('-' * 10)
 
         # Each epoch has a training and validation phase
         for phase in ['train', 'val']:
