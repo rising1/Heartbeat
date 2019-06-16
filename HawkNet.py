@@ -25,7 +25,7 @@ output_classes = 6 # used in SimpleNet
 learning_rate = 0.0001 # used in HeartbeatClean
 weight_decay = 0.0001 # used in HeartbeatClean
 dropout_factor = 0.1 # used in Unit
-snapshot_point = 50
+snapshot_point = 3
 faff = 'false'
 dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
 if not (os.path.exists(dataPathRoot)):
@@ -33,7 +33,8 @@ if not (os.path.exists(dataPathRoot)):
 
 
 num_epochs = 3 # used in HeartbeatClean
-batch_sizes = 24 # used in HeartbeatClean
+#  batch_sizes = 24 # used in HeartbeatClean
+batch_sizes = 6 # used in HeartbeatClean
 
 SimpleNetArgs = [kernel_sizes,stride_pixels,padding_pixels,dropout_factor,
                  output_classes,colour_channels,pic_size,pooling_factor]
@@ -48,10 +49,15 @@ if torch.cuda.is_available():
     torch.cuda.empty_cache()
     model.to(device)
 
-train_loader_class = HawkDataLoader.HawkLoader(
-                dataPathRoot, batch_sizes)
-
+train_loader_class = \
+        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes)
+val_loader_class = \
+        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes)
+test_loader_class = \
+        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes)
 train_loader = train_loader_class.dataloaders["train"]
+val_loader = val_loader_class.dataloaders["val"]
+test_loader = test_loader_class.dataloaders["test"]
 
 # Get a batch of training data
 inputs, classes = next(iter(train_loader))
@@ -108,9 +114,19 @@ def train(num_epochs):
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)
+
             train_loss = running_loss / train_loader_class.dataset_sizes[phase]
             train_acc = running_corrects.double() / \
                         train_loader_class.dataset_sizes[phase]
+
+            # Evaluate on the test set
+            test_acc = test()
+
+            # Save the model if the test acc is greater than our current best
+            if test_acc > best_acc:
+                save_models(epoch)
+                best_acc = test_acc
+
         if ((epoch) % (num_epochs / snapshot_point) == 0) or (epoch == num_epochs):
             loopcount = loopcount + 1
             time_elapsed = time.time() - since
@@ -122,6 +138,26 @@ def train(num_epochs):
             # Accuracy Curves
             train_history.append(train_acc)
 
+
+def test():
+    model.eval()
+    test_acc = 0.0
+    for i, (images, labels) in enumerate(test_loader):
+
+        if torch.cuda.is_available():
+            images = Variable(images.cuda())
+            labels = Variable(labels.cuda())
+
+        # Predict classes using images from the test set
+        outputs = model(images)
+        _, prediction = torch.max(outputs.data, 1)
+
+        test_acc += torch.sum(prediction == labels.data)
+
+    # Compute the average acc and loss over all 10000 test images
+    test_acc = test_acc / 30
+
+    return test_acc
 
 def imshow(inp, title=None):
     """Imshow for Tensor."""

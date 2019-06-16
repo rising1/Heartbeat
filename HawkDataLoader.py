@@ -22,22 +22,28 @@ class HawkLoader:
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
+            'test': transforms.Compose([
+                transforms.Resize(120),
+                transforms.CenterCrop(63),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ]),
         }
 
         # transforms.RandomResizedCrop(120,(1,1),(1,1),2),
         # print(os.path.join(self.dir_path, 'train'))
         image_datasets = {x: datasets.ImageFolder(os.path.join(self.dir_path, x),
                                                   data_transforms[x])
-                          for x in ['train', 'val']}
+                          for x in ['train', 'val', 'test']}
         self.dataloaders = {x: torch.utils.data.DataLoader(
                             image_datasets[x],
                             batch_size=self.batch_sizes,
                             shuffle=True, num_workers=0)
-                       for x in ['train', 'val']}
+                       for x in ['train', 'val', 'test']}
         #print(type(self.dataloaders["train"][0]))
-        self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val']}
+        self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val', 'test']}
 
-        self.classes = ('buzzard', 'golden eagle', 'harris hawk', 'kestrel', 'peregrine falcon',
+        self.classes = ('buzzard', 'golden eagle', 'kestrel', 'peregrine falcon',
                         'red kite', 'sparrow hawk')
-        self.classesTest = ('buzzard', 'golden eagle', 'harris hawk','kestrel', 'peregrine falcon',
+        self.classesTest = ('buzzard', 'golden eagle','kestrel', 'peregrine falcon',
                             'red kite', 'sparrow hawk')
