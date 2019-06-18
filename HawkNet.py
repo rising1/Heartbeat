@@ -20,7 +20,7 @@ kernel_sizes = 3 # used in Unit
 stride_pixels = 1 # used in Unit
 padding_pixels = 1 # used in Unit
 pooling_factor = 2 # used in SimpleNet
-pic_size = 120 # used in SimpleNet
+pic_size = 70 # used in SimpleNet
 output_classes = 6 # used in SimpleNet
 learning_rate = 0.0001 # used in HeartbeatClean
 weight_decay = 0.0001 # used in HeartbeatClean
@@ -32,9 +32,9 @@ dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in Dat
 if not (os.path.exists(dataPathRoot)):
     dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
 
-num_epochs = 3 # used in HeartbeatClean
-#  batch_sizes = 24 # used in HeartbeatClean
-batch_sizes = 6 # used in HeartbeatClean
+num_epochs = 200 # used in HeartbeatClean
+batch_sizes = 36 # used in HeartbeatClean
+#  batch_sizes = 6 # used in HeartbeatClean
 
 SimpleNetArgs = [kernel_sizes,stride_pixels,padding_pixels,dropout_factor,
                  output_classes,colour_channels,pic_size,pooling_factor]
@@ -50,11 +50,11 @@ if torch.cuda.is_available():
     model.to(device)
 
 train_loader_class = \
-        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes)
+        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
 val_loader_class = \
-        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes)
+        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
 test_loader_class = \
-        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes)
+        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
 train_loader = train_loader_class.dataloaders["train"]
 val_loader = val_loader_class.dataloaders["val"]
 test_loader = test_loader_class.dataloaders["test"]
@@ -126,6 +126,7 @@ def train(num_epochs):
             if test_acc > best_acc:
                 save_models(epoch)
                 best_acc = test_acc
+                print("best accuracy= ",best_acc)
 
         if ((epoch) % (num_epochs / snapshot_point) == 0) or (epoch == num_epochs):
             loopcount = loopcount + 1
@@ -176,5 +177,4 @@ imshow(out, title=[x for x in train_loader_class.classes])
 
 # train(num_epochs)
 if __name__ == "__main__":
-
     train(num_epochs)

@@ -5,12 +5,13 @@ import torch
 import os
 
 class HawkLoader:
-    def __init__(self, dir_path, batch_sizes):
+    def __init__(self, dir_path, batch_sizes, pic_size):
         self.batch_sizes = batch_sizes
         self.dir_path = dir_path
+        self.pic_size = pic_size
         data_transforms = {
             'train': transforms.Compose([
-                transforms.RandomResizedCrop(63),
+                transforms.RandomResizedCrop(self.pic_size),
                 #  transforms.CenterCrop(63),
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
@@ -18,13 +19,13 @@ class HawkLoader:
             ]),
             'val': transforms.Compose([
                 transforms.Resize(120),
-                transforms.CenterCrop(63),
+                transforms.CenterCrop(self.pic_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
             'test': transforms.Compose([
                 transforms.Resize(120),
-                transforms.CenterCrop(63),
+                transforms.CenterCrop(self.pic_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
