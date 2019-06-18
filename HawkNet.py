@@ -27,10 +27,10 @@ weight_decay = 0.0001 # used in HeartbeatClean
 dropout_factor = 0.1 # used in Unit
 snapshot_point = 3
 faff = 'false'
+
 dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
 if not (os.path.exists(dataPathRoot)):
-    print("dataPathRoot doesn't exist")
-
+    dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
 
 num_epochs = 3 # used in HeartbeatClean
 #  batch_sizes = 24 # used in HeartbeatClean
