@@ -14,27 +14,27 @@ import time
 
 
 # Hyperparameters
-colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 12  # used in ??????
-kernel_sizes = 3  # used in Unit
-stride_pixels = 1  # used in Unit
-padding_pixels = 1  # used in Unit
-pooling_factor = 2  # used in SimpleNet
-pic_size = 32  # used in SimpleNet
-output_classes = 6  # used in SimpleNet
-learning_rate = 0.0001  # used in HeartbeatClean
-weight_decay = 0.0001  # used in HeartbeatClean
-dropout_factor = 0.1  # used in Unit
-snapshot_point = 10
+colour_channels = 3 # used in SimpleNet
+no_feature_detectors = 12 # used in ??????
+kernel_sizes = 3 # used in Unit
+stride_pixels = 1 # used in Unit
+padding_pixels = 1 # used in Unit
+pooling_factor = 2 # used in SimpleNet
+pic_size = 70 # used in SimpleNet
+output_classes = 6 # used in SimpleNet
+learning_rate = 0.0001 # used in HeartbeatClean
+weight_decay = 0.0001 # used in HeartbeatClean
+dropout_factor = 0.1 # used in Unit
 faff = 'false'
 
-dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
+dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
 if not (os.path.exists(dataPathRoot)):
     dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
 
-num_epochs = 10 # used in HeartbeatClean
-#  batch_sizes = 36 # used in HeartbeatClean
-batch_sizes = 6 # used in HeartbeatClean
+num_epochs = 100 # used in HeartbeatClean
+snapshot_points = num_epochs / 1
+batch_sizes = 36 # used in HeartbeatClean
+#  batch_sizes = 6 # used in HeartbeatClean
 
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
                  output_classes, colour_channels, pic_size, pooling_factor]
@@ -75,7 +75,6 @@ def train(num_epochs):
     best_acc = 0.0
     since = time.time()
     train_history = []
-    test_history = []
     loopcount = 0
     for epoch in range(num_epochs):
         #  print('Epoch {}/{}'.format(epoch, num_epochs - 1))
@@ -130,12 +129,12 @@ def train(num_epochs):
                 best_acc = test_acc
                 print("best accuracy= ", best_acc)
 
-        if ((epoch) % (num_epochs / snapshot_point) == 0) or (epoch == num_epochs):
+        if ((epoch) % (num_epochs / snapshot_points) == 0) or (epoch == num_epochs):
             loopcount = loopcount + 1
             time_elapsed = time.time() - since
-            print("Epoch {:4}, ".format(epoch))
-            print( phase, " Accuracy: {:.4f},TrainLoss: {:.4f},"
-                  .format(epoch, train_acc,
+            print("Epoch {:4}, ".format(epoch),
+                 phase, " Accuracy: {:.4f},TrainLoss: {:.4f},"
+                  .format( train_acc,
                           train_loss), 'time {:.0f}m {:.0f}s'.format(
                           time_elapsed // 60, time_elapsed % 60))
             print('Best val Acc: {:4f}'.format(best_acc))
@@ -145,23 +144,25 @@ def train(num_epochs):
 
 def test():
     model.eval()
-    test_acc = 0.0
-    for i, (images, labels) in enumerate(test_loader):
+    test_acct = 0.0
+    test_history = []
+    images, labels = next(iter(test_loader))
 
-        if torch.cuda.is_available():
+    if torch.cuda.is_available():
             images = Variable(images.cuda())
             labels = Variable(labels.cuda())
 
-        # Predict classes using images from the test set
-        outputs = model(images)
-        _, prediction = torch.max(outputs.data, 1)
+    #  Predict classes using images from the test set
+    outputs = model(images)
+    _, prediction = torch.max(outputs.data, 1)
 
-        test_acc += torch.sum(prediction == labels.data)
-
-        # Compute the average acc and loss over all 10000 test images
-        test_acc = test_acc / 30
-
-    return test_acc
+    test_acct += torch.sum(prediction == labels.data)
+    #  print("test_acct= ",  (test_acct).cpu().numpy())
+    #  Compute the average acc and loss over all 10000 test images
+    test_acct = test_acct.cpu().numpy() / 30
+    test_history.append(test_acct)
+    #  print("in test")
+    return test_acct
 
 
 def imshow(inp, title=None):
