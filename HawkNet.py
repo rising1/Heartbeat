@@ -147,15 +147,15 @@ def test():
     test_acc = 0.0
     for i, (images, labels) in enumerate(test_loader):
 
-        if torch.cuda.is_available():
+    if torch.cuda.is_available():
             images = Variable(images.cuda())
             labels = Variable(labels.cuda())
 
-        # Predict classes using images from the test set
-        outputs = model(images)
-        _, prediction = torch.max(outputs.data, 1)
+    # Predict classes using images from the test set
+    outputs = model(images)
+    _, prediction = torch.max(outputs.data, 1)
 
-        test_acc += torch.sum(prediction == labels.data)
+    test_acc += torch.sum(prediction == labels.data)
 
     # Compute the average acc and loss over all 10000 test images
     test_acc = test_acc / 30
