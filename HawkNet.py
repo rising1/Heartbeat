@@ -136,8 +136,8 @@ def train(num_epochs):
             print("Epoch {:4}, ", phase, " Accuracy: {:.4f},TrainLoss: {:.4f},"
                   .format(epoch, train_acc,
                           train_loss), 'time {:.0f}m {:.0f}s'.format(
-                time_elapsed // 60, time_elapsed % 60))
-            # print('Best val Acc: {:4f}'.format(best_acc))
+                          time_elapsed // 60, time_elapsed % 60))
+            print('Best val Acc: {:4f}'.format(best_acc))
             # Accuracy Curves
             train_history.append(train_acc)
 
@@ -147,18 +147,18 @@ def test():
     test_acc = 0.0
     for i, (images, labels) in enumerate(test_loader):
 
-    if torch.cuda.is_available():
+        if torch.cuda.is_available():
             images = Variable(images.cuda())
             labels = Variable(labels.cuda())
 
-    # Predict classes using images from the test set
-    outputs = model(images)
-    _, prediction = torch.max(outputs.data, 1)
+        # Predict classes using images from the test set
+        outputs = model(images)
+        _, prediction = torch.max(outputs.data, 1)
 
-    test_acc += torch.sum(prediction == labels.data)
+        test_acc += torch.sum(prediction == labels.data)
 
-    # Compute the average acc and loss over all 10000 test images
-    test_acc = test_acc / 30
+        # Compute the average acc and loss over all 10000 test images
+        test_acc = test_acc / 30
 
     return test_acc
 
