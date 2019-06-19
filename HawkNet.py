@@ -20,7 +20,7 @@ kernel_sizes = 3  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
-pic_size = 70  # used in SimpleNet
+pic_size = 32  # used in SimpleNet
 output_classes = 6  # used in SimpleNet
 learning_rate = 0.0001  # used in HeartbeatClean
 weight_decay = 0.0001  # used in HeartbeatClean
@@ -133,7 +133,8 @@ def train(num_epochs):
         if ((epoch) % (num_epochs / snapshot_point) == 0) or (epoch == num_epochs):
             loopcount = loopcount + 1
             time_elapsed = time.time() - since
-            print("Epoch {:4}, ", phase, " Accuracy: {:.4f},TrainLoss: {:.4f},"
+            print("Epoch {:4}, ".format(epoch))
+            print( phase, " Accuracy: {:.4f},TrainLoss: {:.4f},"
                   .format(epoch, train_acc,
                           train_loss), 'time {:.0f}m {:.0f}s'.format(
                           time_elapsed // 60, time_elapsed % 60))
