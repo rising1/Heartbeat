@@ -14,30 +14,30 @@ import time
 
 
 # Hyperparameters
-colour_channels = 3 # used in SimpleNet
-no_feature_detectors = 12 # used in ??????
-kernel_sizes = 3 # used in Unit
-stride_pixels = 1 # used in Unit
-padding_pixels = 1 # used in Unit
-pooling_factor = 2 # used in SimpleNet
-pic_size = 70 # used in SimpleNet
-output_classes = 6 # used in SimpleNet
-learning_rate = 0.0001 # used in HeartbeatClean
-weight_decay = 0.0001 # used in HeartbeatClean
-dropout_factor = 0.1 # used in Unit
-snapshot_point = 3
+colour_channels = 3  # used in SimpleNet
+no_feature_detectors = 12  # used in ??????
+kernel_sizes = 3  # used in Unit
+stride_pixels = 1  # used in Unit
+padding_pixels = 1  # used in Unit
+pooling_factor = 2  # used in SimpleNet
+pic_size = 70  # used in SimpleNet
+output_classes = 6  # used in SimpleNet
+learning_rate = 0.0001  # used in HeartbeatClean
+weight_decay = 0.0001  # used in HeartbeatClean
+dropout_factor = 0.1  # used in Unit
+snapshot_point = 10
 faff = 'false'
 
-dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
+dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
 if not (os.path.exists(dataPathRoot)):
     dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
 
-num_epochs = 200 # used in HeartbeatClean
-batch_sizes = 36 # used in HeartbeatClean
-#  batch_sizes = 6 # used in HeartbeatClean
+num_epochs = 10 # used in HeartbeatClean
+#  batch_sizes = 36 # used in HeartbeatClean
+batch_sizes = 6 # used in HeartbeatClean
 
-SimpleNetArgs = [kernel_sizes,stride_pixels,padding_pixels,dropout_factor,
-                 output_classes,colour_channels,pic_size,pooling_factor]
+SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
+                 output_classes, colour_channels, pic_size, pooling_factor]
 
 model = ConvNet.SimpleNet(SimpleNetArgs)
 
@@ -65,9 +65,11 @@ inputs, classes = next(iter(train_loader))
 # Make a grid from batch
 out = torchvision.utils.make_grid(inputs)
 
+
 def save_models(epoch):
     torch.save(model.state_dict(), "Birdies_model_{}.model".format(epoch))
     print("Chekcpoint saved")
+
 
 def train(num_epochs):
     best_acc = 0.0
@@ -76,8 +78,8 @@ def train(num_epochs):
     test_history = []
     loopcount = 0
     for epoch in range(num_epochs):
-        #print('Epoch {}/{}'.format(epoch, num_epochs - 1))
-        #print('-' * 10)
+        #  print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        #  print('-' * 10)
 
         # Each epoch has a training and validation phase
         for phase in ['train', 'val']:
@@ -126,12 +128,12 @@ def train(num_epochs):
             if test_acc > best_acc:
                 save_models(epoch)
                 best_acc = test_acc
-                print("best accuracy= ",best_acc)
+                print("best accuracy= ", best_acc)
 
         if ((epoch) % (num_epochs / snapshot_point) == 0) or (epoch == num_epochs):
             loopcount = loopcount + 1
             time_elapsed = time.time() - since
-            print("Epoch {:4},Train Accuracy: {:.4f},TrainLoss: {:.4f},"
+            print("Epoch {:4}, ", phase, " Accuracy: {:.4f},TrainLoss: {:.4f},"
                   .format(epoch, train_acc,
                           train_loss), 'time {:.0f}m {:.0f}s'.format(
                 time_elapsed // 60, time_elapsed % 60))
@@ -159,6 +161,7 @@ def test():
     test_acc = test_acc / 30
 
     return test_acc
+
 
 def imshow(inp, title=None):
     """Imshow for Tensor."""
