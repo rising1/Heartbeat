@@ -1,5 +1,6 @@
 import torch
 import ConvNet
+import os
 
 # Hyperparameters
 colour_channels = 3 # used in SimpleNet
@@ -22,7 +23,14 @@ model = ConvNet.SimpleNet(SimpleNetArgs)
 model.load_state_dict(torch.load('Birdies_model_(90)_299.model',map_location='cpu'))
 model.eval()
 
+dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
+if not (os.path.exists(dataPathRoot)):
+    dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
+f = open(dataPathRoot + 'photo.jpg', 'r+')
+jpgdata = f.read()
+f.close()
+
 #  Predict classes using images from the test set
-outputs = model(images)
+outputs = model(jpgdata)
 _, prediction = torch.max(outputs.data, 1)
 
