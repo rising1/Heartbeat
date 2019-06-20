@@ -1,6 +1,11 @@
-import torch
+import torch, torchvision
+from torchvision import transforms, datasets
 import ConvNet
 import os
+from matplotlib import pyplot as plt
+import numpy as np
+import PIL
+from PIL import Image
 
 # Hyperparameters
 colour_channels = 3 # used in SimpleNet
@@ -20,17 +25,29 @@ SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
                  output_classes, colour_channels, pic_size, pooling_factor]
 
 model = ConvNet.SimpleNet(SimpleNetArgs)
-model.load_state_dict(torch.load('Birdies_model_(90)_299.model',map_location='cpu'))
+model.load_state_dict(torch.load('Birdies_model_299.model',map_location='cpu'))
 model.eval()
+
+def imshow(img):
+    img = img  / 2 + 0.5  # unnormalize
+    npimg = img.numpy()
+    plt.imshow(np.transpose(npimg, (1, 2, 0)))
+    plt.show()
 
 dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
 if not (os.path.exists(dataPathRoot)):
     dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
-f = open(dataPathRoot + 'photo.jpg', 'r+')
-jpgdata = f.read()
-f.close()
+
+data_transform = transforms.Compose([
+                transforms.Resize(120),
+                transforms.CenterCrop(72),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+
+image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot, 'photo.jpg'), data_transform)
+imshow(torchvision.utils.make_grid(image_dataset))
 
 #  Predict classes using images from the test set
-outputs = model(jpgdata)
+outputs = model(image_dataset)
 _, prediction = torch.max(outputs.data, 1)
 
