@@ -39,8 +39,8 @@ batch_sizes = 32 # used in HeartbeatClean
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
                  output_classes, colour_channels, pic_size, pooling_factor]
 model = ConvNet.SimpleNet(SimpleNetArgs)
-if  (os.path.exists('Birdies_model_(90)_299.model')):
-    model.load_state_dict(torch.load('Birdies_model_(90)_299.model', map_location='cpu'))
+if  (os.path.exists('Birdies_model_299.model')):
+    model.load_state_dict(torch.load('Birdies_model_299.model', map_location='cpu'))
     print("using saved model")
 else:
     print("using new model")
@@ -59,9 +59,12 @@ val_loader_class = \
         HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
 test_loader_class = \
         HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+single_loader_class = \
+        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
 train_loader = train_loader_class.dataloaders["train"]
 val_loader = val_loader_class.dataloaders["val"]
 test_loader = test_loader_class.dataloaders["test"]
+
 
 # Get a batch of training data
 inputs, classes = next(iter(train_loader))
@@ -146,7 +149,7 @@ def train(num_epochs):
             train_history.append(train_acc)
 
 
-def test():
+def test_train():
     model.eval()
     test_acct = 0.0
     test_history = []
@@ -168,6 +171,21 @@ def test():
     #  print("in test")
     return test_acct
 
+def test():
+    model.eval()
+    test_acct = 0.0
+    test_history = []
+    images, labels = next(iter(test_loader))
+
+    if torch.cuda.is_available():
+            images = Variable(images.cuda())
+            labels = Variable(labels.cuda())
+
+    #  Predict classes using images from the test set
+    outputs = model(images)
+    _, prediction = torch.max(outputs.data, 1)
+    print("prediction=",single_loader_class.classes[int(prediction.cpu().numpy())])
+
 
 def imshow(inp, title=None):
     """Imshow for Tensor."""
@@ -186,4 +204,5 @@ imshow(out, title=[x for x in train_loader_class.classes])
 
 # train(num_epochs)
 if __name__ == "__main__":
-    train(num_epochs)
+    #  train(num_epochs)
+    test()
