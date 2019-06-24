@@ -74,22 +74,3 @@ if __name__ == "__main__":
 #  i + i+1
 #  iimage.save(loc_data + query + str(i) + '.jpg')
 
-# clean directories
-#import os
-#rootDir = '/content/drive/My Drive/' \
-#  'Colab Notebooks/BirdiesData/birdpix/'
-#for dirName, subdirList, fileList in os.walk(rootDir):
-#    #print('Found directory: %s' % dirName)
-#    for filename in fileList:
-#      #print('\t%s' % filename)
-#      testFile = dirName + '/' + filename
-#      print(testFile)
-#      try:
-#        im = Image.open(testFile)
-#        im.verify() #I perform also verify, don't know if he sees other types o defects
-#        im.close() #reload is necessary in my case
-#        #im = Image.load(filename)
-#        #im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
-#        #im.close()
-#      except:
-#        os.remove(testFile)
