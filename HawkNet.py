@@ -21,17 +21,17 @@ stride_pixels = 1 # used in Unit
 padding_pixels = 1 # used in Unit
 pooling_factor = 2 # used in SimpleNet
 pic_size = 72 # used in SimpleNet
-output_classes = 6 # used in SimpleNet
+output_classes = 622 # used in SimpleNet
 learning_rate = 0.0001 # used in HeartbeatClean
 weight_decay = 0.0001 # used in HeartbeatClean
 dropout_factor = 0.1 # used in Unit
 faff = 'false'
+dataPathRoot = 'F:/BirdiesData/' # used in DataLoaderHeartbeat
+#dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
+#if not (os.path.exists(dataPathRoot)):
+#    dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
 
-dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
-if not (os.path.exists(dataPathRoot)):
-    dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
-
-num_epochs = 10 # used in HeartbeatClean
+num_epochs = 3 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
 batch_sizes = 32 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
@@ -39,11 +39,11 @@ batch_sizes = 32 # used in HeartbeatClean
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
                  output_classes, colour_channels, pic_size, pooling_factor]
 model = ConvNet.SimpleNet(SimpleNetArgs)
-if  (os.path.exists('Birdies_model_299.model')):
-    model.load_state_dict(torch.load('Birdies_model_299.model', map_location='cpu'))
-    print("using saved model")
-else:
-    print("using new model")
+#if  (os.path.exists('Birdies_model_299.model')):
+#    model.load_state_dict(torch.load('Birdies_model_299.model', map_location='cpu'))
+#    print("using saved model")
+#else:
+#    print("using new model")
 
 optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
@@ -204,5 +204,5 @@ imshow(out, title=[x for x in train_loader_class.classes])
 
 # train(num_epochs)
 if __name__ == "__main__":
-    #  train(num_epochs)
-    test()
+      train(num_epochs)
+    #test()
