@@ -128,7 +128,7 @@ def train(num_epochs):
                         train_loader_class.dataset_sizes[phase]
 
             # Evaluate on the test set
-            test_acc = test()
+            test_acc = test_train()
 
             # Save the model if the test acc is greater than our current best
             if test_acc > best_acc:
