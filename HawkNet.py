@@ -26,14 +26,14 @@ learning_rate = 0.0001 # used in HeartbeatClean
 weight_decay = 0.0001 # used in HeartbeatClean
 dropout_factor = 0.1 # used in Unit
 faff = 'false'
-dataPathRoot = 'F:/BirdiesData/' # used in DataLoaderHeartbeat
-#dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
-#if not (os.path.exists(dataPathRoot)):
-#    dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
+#dataPathRoot = 'F:/BirdiesData/' # used in DataLoaderHeartbeat
+dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
+if not (os.path.exists(dataPathRoot)):
+    dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
 
 num_epochs = 3 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 32 # used in HeartbeatClean
+batch_sizes = 16 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
@@ -49,6 +49,7 @@ optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
 loss_fn = nn.CrossEntropyLoss()
 device = torch.device("cuda: 0" if torch.cuda.is_available() else "cpu")
+print("device=",device)
 if torch.cuda.is_available():
     torch.cuda.empty_cache()
     model.to(device)

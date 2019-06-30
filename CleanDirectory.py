@@ -24,4 +24,5 @@ class CleanDirectories:
                     os.remove(self.testFile)
 
 if __name__ == "__main__":
-    CleanDirectories("F:/BirdiesData/train")
+    CleanDirectories("C:/Users/phfro/Documents/python/data/BirdiesData/train")
+    #  CleanDirectories("F:/BirdiesData/train")
