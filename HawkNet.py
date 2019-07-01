@@ -33,7 +33,7 @@ faff = 'false'
 dataPathRoot = '/content/drive/My Drive/Colab Notebooks/BirdiesData'
 num_epochs = 300 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 64 # used in HeartbeatClean
+batch_sizes = 256 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
