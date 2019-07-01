@@ -31,9 +31,9 @@ faff = 'false'
 #if not (os.path.exists(dataPathRoot)):
 #    dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
 dataPathRoot = '/content/drive/My Drive/Colab Notebooks/BirdiesData'
-num_epochs = 3 # used in HeartbeatClean
+num_epochs = 300 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 16 # used in HeartbeatClean
+batch_sizes = 64 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
