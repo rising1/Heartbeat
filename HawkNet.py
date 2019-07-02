@@ -201,7 +201,7 @@ def imshow(inp, title=None):
     plt.pause(0.1)  # pause a bit so that plots are updated
 
 
-imshow(out, title=[x for x in train_loader_class.classes])
+#imshow(out, title=[x for x in train_loader_class.classes])
 
 # train(num_epochs)
 if __name__ == "__main__":
