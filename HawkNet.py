@@ -80,6 +80,7 @@ def save_models(epoch):
 
 
 def train(num_epochs):
+    print("In train")
     best_acc = 0.0
     since = time.time()
     train_history = []
