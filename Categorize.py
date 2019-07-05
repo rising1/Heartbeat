@@ -8,9 +8,13 @@ class Categorize:
         self.typeName = []
         #  self.catType = catType
         for dirPath, dirNames, fileNames in os.walk(self.rootDir):
+            print(dirNames)
+            print("length dirNames= ",len(dirNames))
             for dirN in dirNames:
-                print(dirN)
-
+                counter = 0
+                for i in range(9):
+                    print(dirN)
+                counter = counter + 1
                 self.typeName.append(dirN.split(dirN)[0])
         print(self.typeName)
             #for letter in ascii_lowercase:
