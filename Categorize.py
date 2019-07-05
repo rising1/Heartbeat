@@ -15,4 +15,4 @@ class Categorize:
 
 
 if __name__ == "__main__":
-    Categorize('root directory','target directory','alphabetic')
+    Categorize('root directory','target directory')
