@@ -5,14 +5,19 @@ class Categorize:
     def __init__(self, rootDir,targetDir):
         self.rootDir = rootDir
         self.targetDir = targetDir
-        self.catType = catType
+        self.typeName = []
+        #  self.catType = catType
         for dirPath, dirNames, fileNames in os.walk(self.rootDir):
-            print(dirNames)
-            for letter in ascii_lowercase:
-                if not ( os.path.isdir(self.targetDir + '/' + letter)):
-                    print(self.targetDir + '/' + letter)
-                    #  os.mkdir(os.path.isdir(self.targetDir + '/' + letter))
+            for dirN in dirNames:
+                print(dirN)
+
+                self.typeName.append(dirN.split(dirN)[0])
+        print(self.typeName)
+            #for letter in ascii_lowercase:
+            #    if not ( os.path.isdir(self.targetDir + '/' + letter)):
+            #        print(self.targetDir + '/' + letter)
+            #        os.mkdir(os.path.isdir(self.targetDir + '/' + letter))
 
 
 if __name__ == "__main__":
-    Categorize('root directory','target directory')
+    Categorize('D:/birdiesdata/train','D:/birdiesdata/train')
