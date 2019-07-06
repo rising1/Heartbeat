@@ -10,18 +10,24 @@ class Categorize:
         for dirPath, dirNames, fileNames in os.walk(self.rootDir):
             print(dirNames)
             print("length dirNames= ",len(dirNames))
-            for dirN in dirNames:
-                counter = 0
-                for i in range(9):
-                    print(dirN)
-                counter = counter + 1
-                self.typeName.append(dirN.split(dirN)[0])
+            counter = 0
+            while counter < (len(dirNames)-1):
+                for j in range(9):
+                    #  print(dirNames[counter])
+                    dirName = dirNames[counter].split()
+                    #  print(type(dirName),"  ",len(dirName),"  ",dirName)
+                    birdType = dirName[len(dirName)-1]
+                    print(birdType)
+                    if birdType not in self.typeName:
+                        self.typeName.append(birdType)
+                    counter = counter + 1
         print(self.typeName)
-            #for letter in ascii_lowercase:
+        print("length of birdType= ",len(self.typeName))
+            #  for letter in ascii_lowercase:
             #    if not ( os.path.isdir(self.targetDir + '/' + letter)):
             #        print(self.targetDir + '/' + letter)
             #        os.mkdir(os.path.isdir(self.targetDir + '/' + letter))
 
 
 if __name__ == "__main__":
-    Categorize('D:/birdiesdata/train','D:/birdiesdata/train')
+    Categorize('H:/birdiesdata/train','H:/birdiesdata/train')
