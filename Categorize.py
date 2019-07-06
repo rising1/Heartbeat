@@ -8,8 +8,8 @@ class Categorize:
         self.typeNames = []
         #  self.catType = catType
         for dirPath, dirNames, fileNames in os.walk(self.rootDir):
-            print(dirNames)
-            print("length dirNames= ",len(dirNames))
+            #  print(dirNames)
+            #  print("length dirNames= ",len(dirNames))
             counter = 0
             while counter < (len(dirNames)-1):
                 for j in range(9):
@@ -18,18 +18,22 @@ class Categorize:
                     #  print(type(dirName),"  ",len(dirName),"  ",dirName)
                     birdType = dirName[len(dirName)-1]
                     print(birdType)
-                    if birdType not in self.typeNames:
-                        self.typeNames.append(birdType)
+                    if not ( os.path.isdir(self.targetDir + '/' + birdType)):
+                    #    print(self.targetDir + '/' + birdType )
+                        os.mkdir(self.targetDir + '/' + birdType )
+                    if not ( os.path.isdir(self.targetDir + '/' + birdType + '/train')):
+                    #    print(self.targetDir + '/' + birdType )
+                        os.mkdir(self.targetDir + '/' + birdType + '/train')
                     counter = counter + 1
-        self.create_dir()
-        print("length of birdType= ",len(self.typeNames))
+            #  while counter < (len(dirNames)-1):
+                #  select the last name of the directory
 
-    def create_dir(self):
-            for tname in self.typeNames:
-               if not ( os.path.isdir(self.targetDir + '/' + tname)):
-                    print(self.targetDir + '/' + tname + '/train/)
-            #        os.mkdir(os.path.isdir(self.targetDir + '/' + letter + '/train/))
+                #  browse the list of target directories and locate the one with the same last name
+
+                #  check each file and copy it if it doesnt already exist
+
+
 
 
 if __name__ == "__main__":
-    Categorize('H:/birdiesdata/train','H:/birdiesdata')
+    Categorize('F:/birdiesdata/train','F:/birdiesdata')
