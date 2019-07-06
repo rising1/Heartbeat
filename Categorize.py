@@ -5,7 +5,7 @@ class Categorize:
     def __init__(self, rootDir,targetDir):
         self.rootDir = rootDir
         self.targetDir = targetDir
-        self.typeName = []
+        self.typeNames = []
         #  self.catType = catType
         for dirPath, dirNames, fileNames in os.walk(self.rootDir):
             print(dirNames)
@@ -18,16 +18,18 @@ class Categorize:
                     #  print(type(dirName),"  ",len(dirName),"  ",dirName)
                     birdType = dirName[len(dirName)-1]
                     print(birdType)
-                    if birdType not in self.typeName:
-                        self.typeName.append(birdType)
+                    if birdType not in self.typeNames:
+                        self.typeNames.append(birdType)
                     counter = counter + 1
-        print(self.typeName)
-        print("length of birdType= ",len(self.typeName))
-            #  for letter in ascii_lowercase:
-            #    if not ( os.path.isdir(self.targetDir + '/' + letter)):
-            #        print(self.targetDir + '/' + letter)
-            #        os.mkdir(os.path.isdir(self.targetDir + '/' + letter))
+        self.create_dir()
+        print("length of birdType= ",len(self.typeNames))
+
+    def create_dir(self):
+            for tname in self.typeNames:
+               if not ( os.path.isdir(self.targetDir + '/' + tname)):
+                    print(self.targetDir + '/' + tname + '/train/)
+            #        os.mkdir(os.path.isdir(self.targetDir + '/' + letter + '/train/))
 
 
 if __name__ == "__main__":
-    Categorize('H:/birdiesdata/train','H:/birdiesdata/train')
+    Categorize('H:/birdiesdata/train','H:/birdiesdata')
