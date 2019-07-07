@@ -6,31 +6,39 @@ class Categorize:
         self.rootDir = rootDir
         self.targetDir = targetDir
         self.typeNames = []
+        self.counter = 0
         #  self.catType = catType
         for dirPath, dirNames, fileNames in os.walk(self.rootDir):
             #  print(dirNames)
-            #  print("length dirNames= ",len(dirNames))
-            counter = 0
-            while counter < (len(dirNames)-1):
-                for j in range(9):
+            print("length dirNames= ",len(dirNames))
+            if len(dirNames)>0:
+                while self.counter < (len(dirNames)-1):
                     #  print(dirNames[counter])
-                    dirName = dirNames[counter].split()
+                    dirName = dirNames[self.counter].split()
                     #  print(type(dirName),"  ",len(dirName),"  ",dirName)
                     birdType = dirName[len(dirName)-1]
                     print(birdType)
                     if not ( os.path.isdir(self.targetDir + '/' + birdType)):
-                    #    print(self.targetDir + '/' + birdType )
+                        #    print(self.targetDir + '/' + birdType )
                         os.mkdir(self.targetDir + '/' + birdType )
                     if not ( os.path.isdir(self.targetDir + '/' + birdType + '/train')):
-                    #    print(self.targetDir + '/' + birdType )
+                        #    print(self.targetDir + '/' + birdType )
                         os.mkdir(self.targetDir + '/' + birdType + '/train')
-                    counter = counter + 1
-            #  while counter < (len(dirNames)-1):
-                #  select the last name of the directory
+                    self.counter = self.counter + 1
+                #  Now walk the target directory
+                for tdirPath, tdirNames, tfileNames in os.walk(self.targetDir):
+                #  If the name of the target directory = last name of the source directory
 
-                #  browse the list of target directories and locate the one with the same last name
+                #       Then iterate through the source directory
 
-                #  check each file and copy it if it doesnt already exist
+                #           pick out each source file, prefix it with iteration no,
+                #           and test if exists in the target
+
+                #               if not exists in target then copy source file into the target
+
+                #               Dont touch the train directory
+
+
 
 
 
