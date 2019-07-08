@@ -56,7 +56,9 @@ class Categorize:
                 #               if not exists in target then copy source file into the target
 
                 #               Dont touch the train directory
-
+#  exclude = set([...])
+#  for root, dirs, files in os.walk(top, topdown=True):
+#    dirs[:] = [d for d in dirs if d not in exclude]
 
 
 
