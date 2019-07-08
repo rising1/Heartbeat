@@ -14,14 +14,15 @@ class Categorize:
         #  self.catType = catType
         for dirPath, dirNames, fileNames in os.walk(self.rootDir):
             #  print(dirNames)
-            print("length dirNames= ",len(dirNames))
+            #  print("length dirNames= ",len(dirNames))
             if len(dirNames)>0:
+                print("length dirNames= ", len(dirNames))
                 while self.counter < (len(dirNames)-1):
                     #  print(dirNames[counter])
                     dirName = dirNames[self.counter].split()
                     #  print(type(dirName),"  ",len(dirName),"  ",dirName)
                     self.birdType = dirName[len(dirName)-1]
-                    print(self.birdType)
+                    #  print(self.birdType)
                     if not ( os.path.isdir(self.targetDir + '/' + self.birdType)):
                         #    print(self.targetDir + '/' + birdType )
                         os.mkdir(self.targetDir + '/' + self.birdType )
@@ -31,18 +32,20 @@ class Categorize:
                     self.counter = self.counter + 1
                 #  Now walk the target directory
                 for tdirPath, tdirNames, tfileNames in os.walk(self.targetDir):
-                    for sdirPath, sdirNames, sfileNames in os.walk(self.rootDir):
+                    if len(tdirNames) > 3:
                         print("length tdirNames= ", len(tdirNames))
-                        while self.tcounter < (len(tdirNames) - 1):
-                            if len(sdirNames) > 0:
-                                print("length sdirNames= ", len(sdirNames))
-                                while self.scounter < (len(sdirNames) - 1):
-                                    sdirName = sdirNames[self.scounter].split()
-                                    self.sbirdType = sdirName[len(sdirName) - 1]
-                                    if self.sbirdType == tdirNames[self.tcounter]:
-                                        print("tcounter=",self.sbirdType)
-                                    self.scounter = self.scounter + 1
-                            self.tcounter = self.tcounter + 1
+                #    for sdirPath, sdirNames, sfileNames in os.walk(self.rootDir):
+                #        print("length tdirNames= ", len(tdirNames))
+                #        while self.tcounter < (len(tdirNames) - 1):
+                #            if len(sdirNames) > 0:
+                #                print("length sdirNames= ", len(sdirNames))
+                #                while self.scounter < (len(sdirNames) - 1):
+                #                    sdirName = sdirNames[self.scounter].split()
+                #                    self.sbirdType = sdirName[len(sdirName) - 1]
+                #                    if self.sbirdType == tdirNames[self.tcounter]:
+                #                        print("tcounter=",self.sbirdType)
+                #                    self.scounter = self.scounter + 1
+                #            self.tcounter = self.tcounter + 1
                 #  If the name of the target directory = last name of the source directory
 
                 #       Then iterate through the source directory
@@ -60,4 +63,4 @@ class Categorize:
 
 
 if __name__ == "__main__":
-    Categorize('F:/birdiesdata/train','F:/birdiesdata')
+    Categorize('d:/birdiesdata/train','d:/birdiesdata')
