@@ -31,13 +31,13 @@ class Categorize:
                         os.mkdir(self.targetDir + '/' + self.birdType + '/train')
                     self.counter = self.counter + 1
                 #  Now walk the target directory
-                exclude = set(["train","val","test"])
+                # exclude = set(["train","val","test"])
                 #  for tdirPath, tdirNames, tfileNames in os.walk(self.targetDir):
+                #  if len(tdirNames) > 3:
+                #  tdirNames[:] = [d for d in tdirNames if d not in exclude]
                 for tdirNames in next(os.walk(self.targetDir))[1] :
-                    #  if len(tdirNames) > 3:
-                        #  tdirNames[:] = [d for d in tdirNames if d not in exclude]
                     print("length tdirNames= ", len(tdirNames)," tdirName= ", tdirNames)
-                #    for sdirPath, sdirNames, sfileNames in os.walk(self.rootDir):
+                    for sdirNames in next(os.walk(self.rootDir))[1]:
                 #        print("length tdirNames= ", len(tdirNames))
                 #        while self.tcounter < (len(tdirNames) - 1):
                 #            if len(sdirNames) > 0:
