@@ -1,5 +1,6 @@
 import os
 from string import ascii_lowercase
+from PIL import Image
 
 class Categorize:
     def __init__(self, rootDir,targetDir):
@@ -47,7 +48,18 @@ class Categorize:
                             for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
                                 print("sfileNames=",sfileNames)
                                 #  check file
+                                try:
+                                    im = Image.open(self.rootDir + '/' + sdirNames + '/' + sfileNames)
+                                    im.verify()  # I perform also verify, don't know if he sees other types o defects
+                                    im.close()  # reload is necessary in my case
+                                    # im = Image.load(filename)
+                                    # im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+                                    # im.close()
+                                    print("sfileNames=", sfileNames, " -passed")
 
+                                except:
+                                    print("sfileNames=", sfileNames, " -failed")
+                                #    os.remove(self.testFile)
                                 #  copy file name with prefix sdirNames
 
 
