@@ -39,13 +39,9 @@ class Categorize:
                 #  if len(tdirNames) > 3:
                 #  tdirNames[:] = [d for d in tdirNames if d not in exclude]
                 for tdirNames in next(os.walk(self.targetDir))[1] :
-                    #  print("length tdirNames= ", len(tdirNames)," tdirName= ", tdirNames)
                     for sdirNames in next(os.walk(self.rootDir))[1]:
-                        #  print("lenth sdirNames=",len(sdirNames))
-                        #  print("sdirNames=",sdirNames)
                         sdirName = sdirNames.split()
                         lastsdirName = sdirName[len(sdirName)-1]
-                        #  print("tdirNames=",tdirNames," lastsdirName=",lastsdirName)
                         if tdirNames == lastsdirName:
                             print("found ",sdirName, " to copy to ", tdirNames)
                 #        print("length tdirNames= ", len(tdirNames))
