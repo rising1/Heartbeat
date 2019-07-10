@@ -30,7 +30,8 @@ class Categorize:
                     if not ( os.path.isdir(self.targetDir + '/' + self.birdType + '/train')):
                         #    print(self.targetDir + '/' + birdType )
                         os.mkdir(self.targetDir + '/' + self.birdType + '/train')
-                    self.counter = self.counter
+                    self.counter = self.counter + 1
+                print("directory creation complete")
                 ''' End of part creates all the necessary directory names  --------------------'''
                 #  Now walk the target directory
                 # exclude = set(["train","val","test"])
@@ -38,10 +39,14 @@ class Categorize:
                 #  if len(tdirNames) > 3:
                 #  tdirNames[:] = [d for d in tdirNames if d not in exclude]
                 for tdirNames in next(os.walk(self.targetDir))[1] :
-                    print("length tdirNames= ", len(tdirNames)," tdirName= ", tdirNames)
+                    #  print("length tdirNames= ", len(tdirNames)," tdirName= ", tdirNames)
                     for sdirNames in next(os.walk(self.rootDir))[1]:
-                        sdirName = sdirNames.split()[len(sdirNames) - 1]
-                        if tdirNames == sdirName:
+                        #  print("lenth sdirNames=",len(sdirNames))
+                        #  print("sdirNames=",sdirNames)
+                        sdirName = sdirNames.split()
+                        lastsdirName = sdirName[len(sdirName)-1]
+                        #  print("tdirNames=",tdirNames," lastsdirName=",lastsdirName)
+                        if tdirNames == lastsdirName:
                             print("found ",sdirName, " to copy to ", tdirNames)
                 #        print("length tdirNames= ", len(tdirNames))
                 #        while self.tcounter < (len(tdirNames) - 1):
@@ -73,5 +78,5 @@ class Categorize:
 
 
 if __name__ == "__main__":
-    #  Categorize('d:/birdiesdata/train','d:/birdiesdata')
-    Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
+    Categorize('d:/birdiesdata/train','d:/birdiesdata')
+    #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
