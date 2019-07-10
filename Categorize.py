@@ -44,30 +44,13 @@ class Categorize:
                         lastsdirName = sdirName[len(sdirName)-1]
                         if tdirNames == lastsdirName:
                             print("found ",sdirName, " to copy to ", tdirNames)
-                #        print("length tdirNames= ", len(tdirNames))
-                #        while self.tcounter < (len(tdirNames) - 1):
-                #            if len(sdirNames) > 0:
-                #                print("length sdirNames= ", len(sdirNames))
-                #                while self.scounter < (len(sdirNames) - 1):
-                #                    sdirName = sdirNames[self.scounter].split()
-                #                    self.sbirdType = sdirName[len(sdirName) - 1]
-                #                    if self.sbirdType == tdirNames[self.tcounter]:
-                #                        print("tcounter=",self.sbirdType)
-                #                    self.scounter = self.scounter + 1
-                #            self.tcounter = self.tcounter + 1
-                #  If the name of the target directory = last name of the source directory
+                            for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
+                                print("sfileNames=",sfileNames)
+                                #  check file
 
-                #       Then iterate through the source directory
+                                #  copy file name with prefix sdirNames
 
-                #           pick out each source file, prefix it with iteration no,
-                #           and test if exists in the target
 
-                #               if not exists in target then copy source file into the target
-
-                #               Dont touch the train directory
-#  exclude = set([...])
-#  for root, dirs, files in os.walk(top, topdown=True):
-#    dirs[:] = [d for d in dirs if d not in exclude]
 
 
 
