@@ -12,6 +12,7 @@ class Categorize:
         self.birdType = ""
         self.sbirdType = ""
         #  self.catType = catType
+        ''' This part creates all the necessary directory names  -----------------------------'''
         for dirPath, dirNames, fileNames in os.walk(self.rootDir):
             #  print(dirNames)
             #  print("length dirNames= ",len(dirNames))
@@ -29,7 +30,8 @@ class Categorize:
                     if not ( os.path.isdir(self.targetDir + '/' + self.birdType + '/train')):
                         #    print(self.targetDir + '/' + birdType )
                         os.mkdir(self.targetDir + '/' + self.birdType + '/train')
-                    self.counter = self.counter + 1
+                    self.counter = self.counter
+                ''' End of part creates all the necessary directory names  --------------------'''
                 #  Now walk the target directory
                 # exclude = set(["train","val","test"])
                 #  for tdirPath, tdirNames, tfileNames in os.walk(self.targetDir):
@@ -38,6 +40,9 @@ class Categorize:
                 for tdirNames in next(os.walk(self.targetDir))[1] :
                     print("length tdirNames= ", len(tdirNames)," tdirName= ", tdirNames)
                     for sdirNames in next(os.walk(self.rootDir))[1]:
+                        sdirName = sdirNames.split()[len(sdirNames) - 1]
+                        if tdirNames == sdirName:
+                            print("found ",sdirName, " to copy to ", tdirNames)
                 #        print("length tdirNames= ", len(tdirNames))
                 #        while self.tcounter < (len(tdirNames) - 1):
                 #            if len(sdirNames) > 0:
@@ -68,4 +73,5 @@ class Categorize:
 
 
 if __name__ == "__main__":
-    Categorize('d:/birdiesdata/train','d:/birdiesdata')
+    #  Categorize('d:/birdiesdata/train','d:/birdiesdata')
+    Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
