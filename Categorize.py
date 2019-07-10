@@ -62,6 +62,10 @@ class Categorize:
                                 #    os.remove(self.testFile)
                                 #  copy file name with prefix sdirNames
 
+                                #  if file doesnt exist
+
+                                # copy file into directory
+
 
 
 
