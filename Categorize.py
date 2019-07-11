@@ -51,12 +51,15 @@ class Categorize:
                                 try:
                                     im = Image.open(self.rootDir + '/' + sdirNames + '/' + sfileNames)
                                     im.verify()  # I perform also verify, don't know if he sees other types o defects
-                                    im.close()  # reload is necessary in my case
+                                    #  im.close()  # reload is necessary in my case
                                     # im = Image.load(filename)
                                     # im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
                                     # im.close()
                                     print("sfileNames=", sfileNames, " -passed")
-
+                                    filepath_name = self.targetDir + '/' + tdirNames + '/train' + sfileNames
+                                    if not os.path.isfile(filepath_name):
+                                        im.save(filepath_name)
+                                    im.close()
                                 except:
                                     print("sfileNames=", sfileNames, " -failed")
                                 #    os.remove(self.testFile)
