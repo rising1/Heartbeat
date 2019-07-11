@@ -18,15 +18,15 @@ class Categorize:
             #  print(dirNames)
             #  print("length dirNames= ",len(dirNames))
             if len(dirNames)>0:
-                print("length dirNames= ", len(dirNames))
-                while self.counter < (len(dirNames)-1):
+                #  print("length dirNames= ", len(dirNames))
+                while self.counter < (len(dirNames)):
                     #  print(dirNames[counter])
                     dirName = dirNames[self.counter].split()
                     #  print(type(dirName),"  ",len(dirName),"  ",dirName)
                     self.birdType = dirName[len(dirName)-1]
-                    #  print(self.birdType)
+                    #  print(self.targetDir + '/' + self.birdType)
                     if not ( os.path.isdir(self.targetDir + '/' + self.birdType)):
-                        #    print(self.targetDir + '/' + birdType )
+                        #  print(self.targetDir + '/' + self.birdType )
                         os.mkdir(self.targetDir + '/' + self.birdType )
                     if not ( os.path.isdir(self.targetDir + '/' + self.birdType + '/train')):
                         #    print(self.targetDir + '/' + birdType )
@@ -56,12 +56,14 @@ class Categorize:
                                     # im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
                                     # im.close()
                                     print("sfileNames=", sfileNames, " -passed")
-                                    filepath_name = self.targetDir + '/' + tdirNames + '/train' + sfileNames
+                                    filepath_name = self.targetDir + '/' + tdirNames + '/train/' + sfileNames
+                                    print("filepath_name= ",filepath_name)
                                     if not os.path.isfile(filepath_name):
                                         im.save(filepath_name)
+                                        print("saved---- ",filepath_name)
                                     im.close()
-                                except:
-                                    print("sfileNames=", sfileNames, " -failed")
+                                except Exception as e:
+                                    print(e," --sfileNames=", sfileNames, " -failed")
                                 #    os.remove(self.testFile)
                                 #  copy file name with prefix sdirNames
 
@@ -76,5 +78,6 @@ class Categorize:
 
 
 if __name__ == "__main__":
-    Categorize('d:/birdiesdata/train','d:/birdiesdata')
+    Categorize('d:/birdiesTest/train','d:/birdiesTest')
+    #  Categorize('d:/birdiesdata/train','d:/birdiesdata')
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
