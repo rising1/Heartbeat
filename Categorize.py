@@ -1,6 +1,7 @@
 import os
 from string import ascii_lowercase
 from PIL import Image
+from shutil import copyfile
 
 class Categorize:
     def __init__(self, rootDir,targetDir):
@@ -49,32 +50,21 @@ class Categorize:
                                 print("sfileNames=",sfileNames)
                                 #  check file
                                 try:
-                                    im = Image.open(self.rootDir + '/' + sdirNames + '/' + sfileNames)
-                                    im.verify()  # I perform also verify, don't know if he sees other types o defects
-                                    #  im.close()  # reload is necessary in my case
-                                    # im = Image.load(filename)
-                                    # im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
-                                    # im.close()
                                     print("sfileNames=", sfileNames, " -passed")
+                                    sourcepath_name = self.rootDir + '/' + sdirNames + '/' + sfileNames
                                     filepath_name = self.targetDir + '/' + tdirNames + '/train/' + sfileNames
                                     print("filepath_name= ",filepath_name)
-                                    if not os.path.isfile(filepath_name):
-                                        im.save(filepath_name)
-                                        print("saved---- ",filepath_name)
-                                    im.close()
+                                    exists =  os.path.isfile(filepath_name)
+                                    print("exists=",exists)
+                                    if not exists:
+                                        print("trying to open ",sourcepath_name)
+                                        im = Image.open(sourcepath_name)
+                                        im.verify()  # I perform also verify, don't know if he sees other types o defects
+                                        im.close()  # reload is necessary in my case
+                                        copyfile(sourcepath_name,filepath_name)
                                 except Exception as e:
                                     print(e," --sfileNames=", sfileNames, " -failed")
                                 #    os.remove(self.testFile)
-                                #  copy file name with prefix sdirNames
-
-                                #  if file doesnt exist
-
-                                # copy file into directory
-
-
-
-
-
 
 
 if __name__ == "__main__":
