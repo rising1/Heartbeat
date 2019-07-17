@@ -44,6 +44,7 @@ class Categorize:
                     for sdirNames in next(os.walk(self.rootDir))[1]:
                         sdirName = sdirNames.split()
                         lastsdirName = sdirName[len(sdirName)-1]
+                        firstdirName = sdirName[0]
                         if tdirNames == lastsdirName:
                             print("found ",sdirName, " to copy to ", tdirNames)
                             for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
@@ -52,7 +53,8 @@ class Categorize:
                                 try:
                                     print("sfileNames=", sfileNames, " -passed")
                                     sourcepath_name = self.rootDir + '/' + sdirNames + '/' + sfileNames
-                                    filepath_name = self.targetDir + '/' + tdirNames + '/train/' + sfileNames
+                                    filepath_name = self.targetDir + '/' + tdirNames + '/train/' \
+                                                    + firstdirName + '_' + sfileNames
                                     print("filepath_name= ",filepath_name)
                                     exists =  os.path.isfile(filepath_name)
                                     print("exists=",exists)
@@ -68,6 +70,6 @@ class Categorize:
 
 
 if __name__ == "__main__":
-    Categorize('d:/birdiesTest/train','d:/birdiesTest')
-    #  Categorize('d:/birdiesdata/train','d:/birdiesdata')
+    #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
+  Categorize('d:/birdiesdata/train','d:/birdiesdata')
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
