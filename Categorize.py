@@ -29,9 +29,9 @@ class Categorize:
                     if not ( os.path.isdir(self.targetDir + '/' + self.birdType)):
                         #  print(self.targetDir + '/' + self.birdType )
                         os.mkdir(self.targetDir + '/' + self.birdType )
-                    if not ( os.path.isdir(self.targetDir + '/' + self.birdType + '/train')):
+                    #  if not ( os.path.isdir(self.targetDir + '/' + self.birdType + '/train')):
                         #    print(self.targetDir + '/' + birdType )
-                        os.mkdir(self.targetDir + '/' + self.birdType + '/train')
+                    #      os.mkdir(self.targetDir + '/' + self.birdType + '/train')
                     self.counter = self.counter + 1
                 print("directory creation complete")
                 ''' End of part creates all the necessary directory names  --------------------'''
@@ -71,5 +71,5 @@ class Categorize:
 
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
-  Categorize('d:/birdiesdata/train','d:/birdiesdata')
+  Categorize('d:/birdiesdata/train','d:/birdiesdata2')
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
