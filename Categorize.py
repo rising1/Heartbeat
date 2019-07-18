@@ -53,7 +53,7 @@ class Categorize:
                                 try:
                                     print("sfileNames=", sfileNames, " -passed")
                                     sourcepath_name = self.rootDir + '/' + sdirNames + '/' + sfileNames
-                                    filepath_name = self.targetDir + '/' + tdirNames + '/train/' \
+                                    filepath_name = self.targetDir + '/' + tdirNames + '/'  \
                                                     + firstdirName + '_' + sfileNames
                                     print("filepath_name= ",filepath_name)
                                     exists =  os.path.isfile(filepath_name)
