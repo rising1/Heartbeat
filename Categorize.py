@@ -72,6 +72,6 @@ class Categorize:
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
     #  Categorize('d:/birdiesdata/train','d:/birdiesdata2')
-    Categorize('/content/drive/My Drive/Colab Notebooks/BirdiesData/train', \
+    Categorize('/content/drive/My Drive/Colab Notebooks/BirdiesData/train',
                '/content/drive/My Drive/Colab Notebooks/BirdiesData2')
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
