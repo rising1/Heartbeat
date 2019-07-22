@@ -75,17 +75,18 @@ class Categorize:
         class_file = open(self.targetDir + "/" + "Class_validate.txt", "w")
         for tdirNames in next(os.walk(self.targetDir + "/train"))[1]:
             #  print("tdirNames=",tdirNames)
-            first_image = os.listdir(self.targetDir + "/train" +
-                                     "/" + tdirNames)[0]
-            sourcepath_name = self.targetDir + "/train" + \
+            for tfileNames in next(os.walk(self.targetDir + "/train" + "/" \
+                                           + tdirNames))[2]:
+                first_image = tfileNames[0]
+                sourcepath_name = self.targetDir + "/train" + \
                                      "/" + tdirNames + "/" + \
                                      first_image
-            filepath_name = self.targetDir + "/val" + \
+                filepath_name = self.targetDir + "/val" + \
                                      "/" + tdirNames + "/" + \
                                      first_image
-            exists = os.path.isfile(filepath_name)
-            if not exists:
-                copyfile(sourcepath_name, filepath_name)
+                exists = os.path.isfile(filepath_name)
+                if not exists:
+                    copyfile(sourcepath_name, filepath_name)
             class_file.write(tdirNames + ",")
         class_file.close()
         with open(self.targetDir + "/" + "Class_validate.txt", 'rb+')\
@@ -101,7 +102,7 @@ if __name__ == "__main__":
     #  categorize = Categorize('/content/drive/My Drive/Colab Notebooks/BirdiesData/train',
     #           '/content/drive/My Drive/Colab Notebooks/')
     categorize = Categorize('/content/drive/My Drive/Colab Notebooks/train',
-               '/content/drive/My Drive/Colab Notebooks')
+               '/content/drive/My Drive/Colab NotebooksK')
     #  categorize.build_directories()
     categorize.create_test()
 
