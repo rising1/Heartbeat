@@ -75,6 +75,8 @@ class Categorize:
         class_file = open(self.targetDir + "/" + "Class_validate.txt", "w")
         for tdirNames in next(os.walk(self.targetDir + "/train"))[1]:
             #  print("tdirNames=",tdirNames)
+            first_image = os.listdir(self.targetDir + "/train" +
+                                     "/" + tdirNames)
             class_file.write(tdirNames + ",")
         class_file.close()
         with open(self.targetDir + "/" + "Class_validate.txt", 'rb+')\
@@ -87,7 +89,11 @@ class Categorize:
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
     #  Categorize('d:/birdiesdata/train','d:/birdiesdata2')
-    categorize = Categorize('/content/drive/My Drive/Colab Notebooks/BirdiesData/train',
-               '/content/drive/My Drive/Colab Notebooks/')
-    categorize.create_test()
+    #  categorize = Categorize('/content/drive/My Drive/Colab Notebooks/BirdiesData/train',
+    #           '/content/drive/My Drive/Colab Notebooks/')
+    categorize = Categorize('/content/drive/My Drive/Colab Notebooks/train',
+               '/content/drive/My Drive/Colab Notebooks/val')
+    categorize.build_directories()
+    #  categorize.create_test()
+
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
