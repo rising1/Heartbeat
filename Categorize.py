@@ -75,7 +75,8 @@ class Categorize:
         class_file = open(self.targetDir + "/" + "Class_validate.txt", "w")
         for tdirNames in next(os.walk(self.targetDir + "/train"))[1]:
             #  print("tdirNames=",tdirNames)
-            class_file.write(tdirNames)
+            class_file.write(tdirNames + ",")
+        class_file.close()
         #  Copy the first item from each directory into the val directory
 
 if __name__ == "__main__":
