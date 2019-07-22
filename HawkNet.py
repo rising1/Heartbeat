@@ -30,7 +30,8 @@ faff = 'false'
 #dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
 #if not (os.path.exists(dataPathRoot)):
 #    dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
-dataPathRoot = '/content/drive/My Drive/Colab Notebooks/BirdiesData'
+#  dataPathRoot = '/content/drive/My Drive/Colab Notebooks/BirdiesData'
+dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 num_epochs = 300 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
 batch_sizes = 64 # used in HeartbeatClean
