@@ -77,6 +77,11 @@ class Categorize:
             #  print("tdirNames=",tdirNames)
             class_file.write(tdirNames + ",")
         class_file.close()
+        with open(self.targetDir + "/" + "Class_validate.txt", 'rb+')\
+                as filehandle:
+            filehandle.seek(-1, os.SEEK_END)
+            filehandle.truncate()
+            filehandle.close()
         #  Copy the first item from each directory into the val directory
 
 if __name__ == "__main__":
