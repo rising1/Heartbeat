@@ -92,7 +92,7 @@ if __name__ == "__main__":
     #  categorize = Categorize('/content/drive/My Drive/Colab Notebooks/BirdiesData/train',
     #           '/content/drive/My Drive/Colab Notebooks/')
     categorize = Categorize('/content/drive/My Drive/Colab Notebooks/train',
-               '/content/drive/My Drive/Colab Notebooks/val')
+               '/content/drive/My Drive/Colab Notebooks/test')
     categorize.build_directories()
     #  categorize.create_test()
 
