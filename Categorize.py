@@ -74,6 +74,7 @@ class Categorize:
         #  walk the target directory and create a list of the directory names and save into a file
         class_file = open(self.targetDir + "/" + "Class_validate.txt", "w")
         for tdirNames in next(os.walk(self.targetDir))[1]:
+            print("tdirNames=",tdirNames)
             class_file.write(tdirNames)
         #  Copy the first item from each directory into the val directory
 
