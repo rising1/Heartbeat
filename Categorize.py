@@ -15,6 +15,7 @@ class Categorize:
         self.sbirdType = ""
         #  self.catType = catType
         ''' This part creates all the necessary directory names  -----------------------------'''
+    def build_directories(self):
         for dirPath, dirNames, fileNames in os.walk(self.rootDir):
             #  print(dirNames)
             #  print("length dirNames= ",len(dirNames))
@@ -35,6 +36,8 @@ class Categorize:
                     self.counter = self.counter + 1
                 print("directory creation complete")
                 ''' End of part creates all the necessary directory names  --------------------'''
+
+    def copy_and_clean(self):
                 #  Now walk the target directory
                 # exclude = set(["train","val","test"])
                 #  for tdirPath, tdirNames, tfileNames in os.walk(self.targetDir):
@@ -67,11 +70,17 @@ class Categorize:
                                 except Exception as e:
                                     print(e," --sfileNames=", sfileNames, " -failed")
                                 #    os.remove(self.testFile)
-
+    def create_test(self):
+        #  walk the target directory and create a list of the directory names and save into a file
+        class_file = open(self.targetDir + "/" + "Class_validate.txt", "rw")
+        for tdirNames in next(os.walk(self.targetDir))[1]:
+            class_file.write(tdirNames)
+        #  Copy the first item from each directory into the val directory
 
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
     #  Categorize('d:/birdiesdata/train','d:/birdiesdata2')
-    Categorize('/content/drive/My Drive/Colab Notebooks/BirdiesData/train',
-               '/content/drive/My Drive/Colab Notebooks/BirdiesData2')
+    categorize = Categorize('/content/drive/My Drive/Colab Notebooks/BirdiesData/train',
+               '/content/drive/My Drive/Colab Notebooks/')
+    categorize.create_test()
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
