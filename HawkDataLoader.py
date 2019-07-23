@@ -51,7 +51,7 @@ class HawkLoader:
         #                    'red kite', 'sparrow hawk')
         with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'r') as f:
             reader = csv.reader(f)
-            self.classes = list(reader)[0]
+            self.classes = (list(reader)[0]).sort()
         #  self.classes = open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt').read()
         print("self.classes=",self.classes)
         print("len self.classes=",len(self.classes))
