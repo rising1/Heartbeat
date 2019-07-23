@@ -44,6 +44,9 @@ class HawkLoader:
         #print(type(self.dataloaders["train"][0]))
         self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val', 'test']}
 
-        self.classes = open('BirdList.txt').read().splitlines()
-        self.classesTest = ('buzzard', 'golden eagle','kestrel', 'peregrine falcon',
-                            'red kite', 'sparrow hawk')
+        #  self.classes = open('BirdList.txt').read().splitlines()
+        #  self.classesTest = ('buzzard', 'golden eagle','kestrel', 'peregrine falcon',
+        #                    'red kite', 'sparrow hawk')
+        self.classes = open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt').read()
+        print("self.classes=",self.classes)
+
