@@ -78,7 +78,7 @@ class Categorize:
             #  print("tdirNames=",tdirNames)
             for tfileNames in next(os.walk(self.targetDir + "/train" + "/" \
                                            + tdirNames))[2]:
-                first_image = tfileNames[0]
+                first_image = tfileNames
                 sourcepath_name = self.targetDir + "/train" + \
                                      "/" + tdirNames + "/" + \
                                      first_image
