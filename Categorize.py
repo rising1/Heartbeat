@@ -70,7 +70,7 @@ class Categorize:
                                 except Exception as e:
                                     print(e," --sfileNames=", sfileNames, " -failed")
                                 #    os.remove(self.testFile)
-    def create_test(self):
+    def create_test(self,parent,number):
         #  walk the target directory and create a list of the directory names and save into a file
         class_file = open(self.targetDir + "/" + "Class_validate.txt", "w")
         for tdirNames in next(os.walk(self.targetDir + "/train"))[1]:
@@ -82,15 +82,15 @@ class Categorize:
                 sourcepath_name = self.targetDir + "/train" + \
                                      "/" + tdirNames + "/" + \
                                      first_image
-                filepath_name = self.targetDir + "/val" + \
+                filepath_name = self.targetDir + "/" + parent + \
                                      "/" + tdirNames + "/" + \
                                      first_image
-                if counter < 1:
+                if counter == number:
                     print("sourcepath_name=",sourcepath_name)
                     print("filepath_name=",filepath_name)
                     source_exists = os.path.isfile(sourcepath_name)
-                    exists = os.path.isfile(filepath_name)
-                    if source_exists and not exists:
+                    target_exists = os.path.isfile(filepath_name)
+                    if source_exists and not target_exists:
                         copyfile(sourcepath_name, filepath_name)
                 counter = counter + 1
             class_file.write(tdirNames + ",")
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     #           '/content/drive/My Drive/Colab Notebooks/')
     categorize = Categorize('/content/drive/My Drive/Colab Notebooks/train',
                '/content/drive/My Drive/Colab Notebooks')
-    categorize.build_directories('val')
-    categorize.create_test()
+    #  categorize.build_directories('val')
+    categorize.create_test("test",2)
 
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
