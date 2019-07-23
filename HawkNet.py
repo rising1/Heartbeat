@@ -87,7 +87,7 @@ def train(num_epochs):
     train_history = []
     loopcount = 0
     for epoch in range(num_epochs):
-        #  print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
         #  print('-' * 10)
 
         # Each epoch has a training and validation phase
