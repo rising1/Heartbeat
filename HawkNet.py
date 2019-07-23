@@ -103,8 +103,8 @@ def train(num_epochs):
 
             # Iterate over data.
             for inputs, labels in train_loader_class.dataloaders[phase]:
-                # print("inputs size=",inputs.shape)
-                # print("labels size=",labels.shape)
+                print("inputs size=",inputs.shape)
+                print("labels size=",labels.shape)
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
