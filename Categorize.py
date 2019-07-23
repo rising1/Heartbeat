@@ -84,8 +84,9 @@ class Categorize:
                 filepath_name = self.targetDir + "/val" + \
                                      "/" + tdirNames + "/" + \
                                      first_image
+                source_exists = os.path.isfile(sourcepath_name)
                 exists = os.path.isfile(filepath_name)
-                if not exists:
+                if source_exists and not exists:
                     copyfile(sourcepath_name, filepath_name)
             class_file.write(tdirNames + ",")
         class_file.close()
