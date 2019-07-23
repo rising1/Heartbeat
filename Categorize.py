@@ -15,7 +15,7 @@ class Categorize:
         self.sbirdType = ""
         #  self.catType = catType
         ''' This part creates all the necessary directory names  -----------------------------'''
-    def build_directories(self):
+    def build_directories(self,parent):
         for dirPath, dirNames, fileNames in os.walk(self.rootDir):
             #  print(dirNames)
             #  print("length dirNames= ",len(dirNames))
@@ -27,9 +27,9 @@ class Categorize:
                     #  print(type(dirName),"  ",len(dirName),"  ",dirName)
                     self.birdType = dirName[len(dirName)-1]
                     #  print(self.targetDir + '/' + self.birdType)
-                    if not ( os.path.isdir(self.targetDir + '/' + self.birdType)):
+                    if not ( os.path.isdir(self.targetDir + '/' + parent + '/' + self.birdType)):
                         #  print(self.targetDir + '/' + self.birdType )
-                        os.mkdir(self.targetDir + '/' + self.birdType )
+                        os.mkdir(self.targetDir + '/' + parent + '/' + self.birdType )
                     #  if not ( os.path.isdir(self.targetDir + '/' + self.birdType + '/train')):
                         #    print(self.targetDir + '/' + birdType )
                     #      os.mkdir(self.targetDir + '/' + self.birdType + '/train')
@@ -88,10 +88,10 @@ class Categorize:
                 if counter < 1:
                     print("sourcepath_name=",sourcepath_name)
                     print("filepath_name=",filepath_name)
-                source_exists = os.path.isfile(sourcepath_name)
-                exists = os.path.isfile(filepath_name)
-                if source_exists and not exists:
-                    copyfile(sourcepath_name, filepath_name)
+                    source_exists = os.path.isfile(sourcepath_name)
+                    exists = os.path.isfile(filepath_name)
+                    if source_exists and not exists:
+                        copyfile(sourcepath_name, filepath_name)
                 counter = counter + 1
             class_file.write(tdirNames + ",")
         class_file.close()
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     #           '/content/drive/My Drive/Colab Notebooks/')
     categorize = Categorize('/content/drive/My Drive/Colab Notebooks/train',
                '/content/drive/My Drive/Colab Notebooks')
-    #  categorize.build_directories()
+    categorize.build_directories('val')
     categorize.create_test()
 
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
