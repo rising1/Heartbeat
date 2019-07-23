@@ -47,6 +47,7 @@ class HawkLoader:
         #  self.classes = open('BirdList.txt').read().splitlines()
         #  self.classesTest = ('buzzard', 'golden eagle','kestrel', 'peregrine falcon',
         #                    'red kite', 'sparrow hawk')
-        self.classes = open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt').read()
+        self.classes = open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt').readLines()
         print("self.classes=",self.classes)
+        print("len self.classes=",len(self.classes))
 
