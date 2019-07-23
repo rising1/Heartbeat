@@ -2,6 +2,7 @@
 from torchvision import transforms, datasets
 from torch.utils.data import DataLoader
 import torch
+import csv
 import os
 
 
@@ -48,7 +49,10 @@ class HawkLoader:
         #  self.classes = open('BirdList.txt').read().splitlines()
         #  self.classesTest = ('buzzard', 'golden eagle','kestrel', 'peregrine falcon',
         #                    'red kite', 'sparrow hawk')
-        self.classes = open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt').read()
+        with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'rb') as f:
+            reader = csv.reader(f)
+            self.classes = list(reader)
+        #  self.classes = open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt').read()
         print("self.classes=",self.classes)
         print("len self.classes=",len(self.classes))
 
