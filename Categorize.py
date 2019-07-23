@@ -71,6 +71,7 @@ class Categorize:
                                     print(e," --sfileNames=", sfileNames, " -failed")
                                 #    os.remove(self.testFile)
     def create_test(self):
+        counter = 0
         #  walk the target directory and create a list of the directory names and save into a file
         class_file = open(self.targetDir + "/" + "Class_validate.txt", "w")
         for tdirNames in next(os.walk(self.targetDir + "/train"))[1]:
@@ -84,10 +85,14 @@ class Categorize:
                 filepath_name = self.targetDir + "/val" + \
                                      "/" + tdirNames + "/" + \
                                      first_image
+                if counter < 1:
+                    print("sourcepath_name=",sourcepath_name)
+                    print("filepath_name=",filepath_name)
                 source_exists = os.path.isfile(sourcepath_name)
                 exists = os.path.isfile(filepath_name)
                 if source_exists and not exists:
                     copyfile(sourcepath_name, filepath_name)
+                counter = counter + 1
             class_file.write(tdirNames + ",")
         class_file.close()
         with open(self.targetDir + "/" + "Class_validate.txt", 'rb+')\
