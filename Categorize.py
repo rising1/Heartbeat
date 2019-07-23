@@ -71,10 +71,10 @@ class Categorize:
                                     print(e," --sfileNames=", sfileNames, " -failed")
                                 #    os.remove(self.testFile)
     def create_test(self):
-        counter = 0
         #  walk the target directory and create a list of the directory names and save into a file
         class_file = open(self.targetDir + "/" + "Class_validate.txt", "w")
         for tdirNames in next(os.walk(self.targetDir + "/train"))[1]:
+            counter = 0
             #  print("tdirNames=",tdirNames)
             for tfileNames in next(os.walk(self.targetDir + "/train" + "/" \
                                            + tdirNames))[2]:
