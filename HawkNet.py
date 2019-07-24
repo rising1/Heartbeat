@@ -34,7 +34,7 @@ faff = 'false'
 dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 num_epochs = 300 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 64 # used in HeartbeatClean
+batch_sizes = 256 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 print("parameters loaded")
 
@@ -71,6 +71,7 @@ test_loader = test_loader_class.dataloaders["test"]
 
 # Get a batch of training data
 inputs, classes = next(iter(train_loader))
+print('len inputs=',len(inputs))
 
 # Make a grid from batch
 out = torchvision.utils.make_grid(inputs)
@@ -132,6 +133,8 @@ def train(num_epochs):
             train_loss = running_loss / train_loader_class.dataset_sizes[phase]
             train_acc = running_corrects.double() / \
                         train_loader_class.dataset_sizes[phase]
+            print('train_loss=',train_loss)
+            print('train_ac=',train_acc)
 
             # Evaluate on the test set
             test_acc = test_train()
