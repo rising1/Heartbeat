@@ -139,7 +139,7 @@ def train(num_epochs):
                       .format(running_loss, interim_fig,
                               running_corrects), 'time {:.0f}m {:.0f}s'.format(
                         time_elapsed // 60, time_elapsed % 60))
-                if epoch % 10 == 0:
+                if (epoch + 1) % 10 == 0:
                     interim = "_loss_" + str(running_loss / ((epoch + 1) * batch_counter))
                     print("saving at ",interim)
                     save_models(epoch, interim)
