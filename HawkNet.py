@@ -140,6 +140,7 @@ def train(num_epochs):
                         time_elapsed // 60, time_elapsed % 60))
                 if epoch % 10 == 0:
                     interim = "_loss_" + str(running_loss / ((epoch + 1) * batch_counter))
+                    print("saving at ",interim)
                     save_models(epoch, interim)
 
             train_loss = running_loss / train_loader_class.dataset_sizes[phase]
