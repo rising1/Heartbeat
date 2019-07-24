@@ -104,11 +104,14 @@ def train(num_epochs):
 
             running_loss = 0.0
             running_corrects = 0
-            counter = 0
+            batch_counter = 0
             # Iterate over data.
             for inputs, labels in train_loader_class.dataloaders[phase]:
-                print("inputs size=",inputs.shape)
-                print("labels size=",labels.shape)
+                batch_counter = batch_counter + 1
+                if batch_counter == 1:
+                    print("inputs size=",inputs.shape)
+                    print("labels size=",labels.shape)
+                print('Epoch='epoch,' batch=',batch_counter," of ",labels.shape)
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
@@ -128,7 +131,9 @@ def train(num_epochs):
                         optimizer.step()
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
+                print('running_loss=', running_loss, ' prev loss.item()=', loss.item(), ' x inputs.size(0)=', inputs.size(0))
                 running_corrects += torch.sum(preds == labels.data)
+                print('running_corrects=',running_corrects)
 
             train_loss = running_loss / train_loader_class.dataset_sizes[phase]
             train_acc = running_corrects.double() / \
