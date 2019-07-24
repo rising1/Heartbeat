@@ -131,15 +131,18 @@ def train(num_epochs):
                         optimizer.step()
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
-                print('running_loss=', running_loss, ' prev loss.item()=', loss.item(), ' x inputs.size(0)=', inputs.size(0))
+                print( ' prev loss.item()=', loss.item(), ' x inputs.size(0)=', inputs.size(0))
                 running_corrects += torch.sum(preds == labels.data)
-                print('running_corrects=',running_corrects)
+                time_elapsed = time.time() - since
+                print( phase, " Accuracy: {:.4f},TrainLoss: {:.4f},"
+                      .format(running_loss,
+                              running_corrects), 'time {:.0f}m {:.0f}s'.format(
+                        time_elapsed // 60, time_elapsed % 60))
 
             train_loss = running_loss / train_loader_class.dataset_sizes[phase]
             train_acc = running_corrects.double() / \
                         train_loader_class.dataset_sizes[phase]
-            print('train_loss=',train_loss)
-            print('train_ac=',train_acc)
+
 
             # Evaluate on the test set
             test_acc = test_train()
