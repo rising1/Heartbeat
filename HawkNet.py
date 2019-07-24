@@ -134,8 +134,9 @@ def train(num_epochs):
                 print( ' prev loss.item()=', loss.item(), ' x inputs.size(0)=', inputs.size(0))
                 running_corrects += torch.sum(preds == labels.data)
                 time_elapsed = time.time() - since
-                print( phase, " Running_loss: {:.4f},Running_corrects: {:.4f},"
-                      .format(running_loss,
+                interim = "_loss_" + str(running_loss / ((epoch + 1) * batch_counter))
+                print( phase, " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
+                      .format(running_loss, interim,
                               running_corrects), 'time {:.0f}m {:.0f}s'.format(
                         time_elapsed // 60, time_elapsed % 60))
                 if epoch % 10 == 0:
