@@ -139,7 +139,8 @@ def train(num_epochs):
                               running_corrects), 'time {:.0f}m {:.0f}s'.format(
                         time_elapsed // 60, time_elapsed % 60))
                 if epoch % 10 == 0:
-                    save_models(epoch, "interim")
+                    interim = "_loss_" + str(running_loss / ((epoch + 1) * batch_counter))
+                    save_models(epoch, interim)
 
             train_loss = running_loss / train_loader_class.dataset_sizes[phase]
             train_acc = running_corrects.double() / \
