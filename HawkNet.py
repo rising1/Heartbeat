@@ -111,7 +111,7 @@ def train(num_epochs):
                 if batch_counter == 1:
                     print("inputs size=",inputs.shape)
                     print("labels size=",labels.shape)
-                print('Epoch='epoch,' batch=',batch_counter," of ",labels.shape)
+                print('Epoch=',epoch,' batch=',batch_counter," of ",labels.shape)
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
