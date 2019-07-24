@@ -36,6 +36,7 @@ num_epochs = 300 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
 batch_sizes = 64 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
+print("parameters loaded")
 
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
                  output_classes, colour_channels, pic_size, pooling_factor]
@@ -95,12 +96,14 @@ def train(num_epochs):
             if phase == 'train':
                 # scheduler.step()
                 model.train()  # Set model to training mode
+                print('model set to train mode')
             else:
                 model.eval()   # Set model to evaluate mode
+                print('model set to eval mode')
 
             running_loss = 0.0
             running_corrects = 0
-
+            counter = 0
             # Iterate over data.
             for inputs, labels in train_loader_class.dataloaders[phase]:
                 print("inputs size=",inputs.shape)
