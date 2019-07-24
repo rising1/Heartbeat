@@ -78,7 +78,7 @@ out = torchvision.utils.make_grid(inputs)
 
 
 def save_models(epoch,save_point):
-    torch.save(model.state_dict(), "Birdies_model_{}.model".format(epoch) + save_point)
+    torch.save(model.state_dict(),dataPathRoot + "Birdies_model_{}.model".format(epoch) + save_point)
     print("Chekcpoint saved")
 
 
