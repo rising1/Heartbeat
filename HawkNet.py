@@ -77,8 +77,8 @@ print('len inputs=',len(inputs))
 out = torchvision.utils.make_grid(inputs)
 
 
-def save_models(epoch):
-    torch.save(model.state_dict(), "Birdies_model_{}.model".format(epoch))
+def save_models(epoch,save_point):
+    torch.save(model.state_dict(), "Birdies_model_{}.model".format(epoch) + save_point)
     print("Chekcpoint saved")
 
 
@@ -138,6 +138,8 @@ def train(num_epochs):
                       .format(running_loss,
                               running_corrects), 'time {:.0f}m {:.0f}s'.format(
                         time_elapsed // 60, time_elapsed % 60))
+                if epoch % 10 == 0:
+                    save_models(epoch, "interim")
 
             train_loss = running_loss / train_loader_class.dataset_sizes[phase]
             train_acc = running_corrects.double() / \
@@ -149,7 +151,7 @@ def train(num_epochs):
 
             # Save the model if the test acc is greater than our current best
             if test_acc > best_acc:
-                save_models(epoch)
+                save_models(epoch,"main")
                 best_acc = test_acc
                 print("best accuracy= ", best_acc)
 
