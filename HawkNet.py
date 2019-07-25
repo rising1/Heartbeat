@@ -42,12 +42,11 @@ print("parameters loaded")
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
                  output_classes, colour_channels, pic_size, pooling_factor]
 model = ConvNet.SimpleNet(SimpleNetArgs)
-if  (os.path.exists(dataPathRoot + 'Birdies_model_0.model_loss_1194.8392425537108')):
-    model.load_state_dict(torch.load('Birdies_model_0.model_loss_1194.8392425537108', map_location='cpu'))
-torch.save(model.state_dict(), dataPathRoot + "/" + "Birdies_model_{}.model".format(epoch) + save_point)
-#    print("using saved model")
-#else:
-#    print("using new model")
+if  (os.path.exists(dataPathRoot + "/" + 'Birdies_model_0.model_loss_1194.8392425537108')):
+    model.load_state_dict(torch.load(dataPathRoot + "/" + 'Birdies_model_0.model_loss_1194.8392425537108', map_location='gpu'))
+    print("using saved model")
+else:
+    print("using new model")
 
 optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
