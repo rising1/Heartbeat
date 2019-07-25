@@ -77,12 +77,7 @@ print('len inputs=',len(inputs))
 # Make a grid from batch
 out = torchvision.utils.make_grid(inputs)
 
-def open_models("Birdies_model_{}.model"):
-    files_path = os.path.join(folder, '*')
-    files = sorted(
-        glob.iglob(files_path), key=os.path.getctime, reverse=True)
-    print files[0]
-    Birdies_model_0.model_loss_1194.8392425537108
+
 
 def save_models(epoch,save_point):
     torch.save(model.state_dict(),dataPathRoot + "/" + "Birdies_model_{}.model".format(epoch) + save_point)
