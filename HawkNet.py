@@ -42,11 +42,29 @@ print("parameters loaded")
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
                  output_classes, colour_channels, pic_size, pooling_factor]
 model = ConvNet.SimpleNet(SimpleNetArgs)
-if  (os.path.exists(dataPathRoot + "/" + 'Birdies_model_0.model_loss_1194.8392425537108')):
-    model.load_state_dict(torch.load(dataPathRoot + "/" + 'Birdies_model_0.model_loss_1194.8392425537108'))
-    print("using saved model")
+
+def get_latest_file(path, *paths):
+    """Returns the name of the latest (most recent) file
+    of the joined path(s)"""
+    fullpath = os.path.join(path, *paths)
+    list_of_files = glob.glob(fullpath)  # You may use iglob in Python3
+    if not list_of_files:                # I prefer using the negation
+        return None                      # because it behaves like a shortcut
+    latest_file = max(list_of_files, key=os.path.getctime)
+    _, filename = os.path.split(latest_file)
+    return filename
+
+
+
+
+# load a saved model if one exists
+comp_root = dataPathRoot + "/saved_models"
+if  (os.path.exists ()):
+    model.load_state_dict(torch.load(comp_root + "/" + get_latest_file(comp_root ) ))
+    print("using saved model ",comp_root + "/" + get_latest_file(comp_root ) )
 else:
     print("using new model")
+#  finished deciding where the model comes from
 
 optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
@@ -78,8 +96,10 @@ print('len inputs=',len(inputs))
 out = torchvision.utils.make_grid(inputs)
 
 def save_models(epoch,save_point):
-    torch.save(model.state_dict(),dataPathRoot + "/" + "Birdies_model_{}.model".format(epoch) + save_point)
-    print("Chekcpoint saved")
+    torch.save(model.state_dict(),dataPathRoot + "/saved_models/" + "Birdies_model_{}.model".format(epoch) + save_point)
+    print("Checkpoint saved")
+
+
 
 def train(num_epochs):
     print("In train")
