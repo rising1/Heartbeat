@@ -162,6 +162,7 @@ def train(num_epochs):
                       .format(running_loss, interim_fig,
                               running_corrects), 'time {:.0f}m {:.0f}s'.format(
                         time_elapsed // 60, time_elapsed % 60))
+                print("Average_loss: {:.4f},Prev_average_loss: {:.4f}".format(interim_fig,interim_fig_prev))
                 if (interim_fig < interim_fig_prev):
                     interim_fig_prev = interim_fig
                     interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
