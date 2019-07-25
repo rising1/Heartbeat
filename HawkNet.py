@@ -59,6 +59,7 @@ def get_latest_file(path, *paths):
 
 # load a saved model if one exists
 comp_root = dataPathRoot + "/saved_models"
+print("latest filename=",get_latest_file(comp_root ))
 if  (os.path.exists (comp_root + "/" + get_latest_file(comp_root ))):
     model.load_state_dict(torch.load(comp_root + "/" + get_latest_file(comp_root ) ))
     print("using saved model ",comp_root + "/" + get_latest_file(comp_root ) )
