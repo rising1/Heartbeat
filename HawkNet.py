@@ -10,6 +10,7 @@ from torch.optim import Adam
 import torch.optim as optim
 from torch.optim import lr_scheduler
 import os
+import glob
 import time
 
 
@@ -41,8 +42,9 @@ print("parameters loaded")
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
                  output_classes, colour_channels, pic_size, pooling_factor]
 model = ConvNet.SimpleNet(SimpleNetArgs)
-#if  (os.path.exists('Birdies_model_299.model')):
-#    model.load_state_dict(torch.load('Birdies_model_299.model', map_location='cpu'))
+if  (os.path.exists(dataPathRoot + 'Birdies_model_0.model_loss_1194.8392425537108')):
+    model.load_state_dict(torch.load('Birdies_model_0.model_loss_1194.8392425537108', map_location='cpu'))
+torch.save(model.state_dict(), dataPathRoot + "/" + "Birdies_model_{}.model".format(epoch) + save_point)
 #    print("using saved model")
 #else:
 #    print("using new model")
@@ -76,6 +78,12 @@ print('len inputs=',len(inputs))
 # Make a grid from batch
 out = torchvision.utils.make_grid(inputs)
 
+def open_models("Birdies_model_{}.model"):
+    files_path = os.path.join(folder, '*')
+    files = sorted(
+        glob.iglob(files_path), key=os.path.getctime, reverse=True)
+    print files[0]
+    Birdies_model_0.model_loss_1194.8392425537108
 
 def save_models(epoch,save_point):
     torch.save(model.state_dict(),dataPathRoot + "/" + "Birdies_model_{}.model".format(epoch) + save_point)
@@ -140,7 +148,7 @@ def train(num_epochs):
                               running_corrects), 'time {:.0f}m {:.0f}s'.format(
                         time_elapsed // 60, time_elapsed % 60))
                 if (epoch + 1) % 10 == 0:
-                    interim = "_loss_" + str(running_loss / ((epoch + 1) * batch_counter))
+                    interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
                     print("saving at ",interim)
                     save_models(epoch, interim)
 
