@@ -43,7 +43,7 @@ SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
                  output_classes, colour_channels, pic_size, pooling_factor]
 model = ConvNet.SimpleNet(SimpleNetArgs)
 if  (os.path.exists(dataPathRoot + "/" + 'Birdies_model_0.model_loss_1194.8392425537108')):
-    model.load_state_dict(torch.load(dataPathRoot + "/" + 'Birdies_model_0.model_loss_1194.8392425537108', map_location='gpu'))
+    model.load_state_dict(torch.load(dataPathRoot + "/" + 'Birdies_model_0.model_loss_1194.8392425537108'))
     print("using saved model")
 else:
     print("using new model")
@@ -77,12 +77,9 @@ print('len inputs=',len(inputs))
 # Make a grid from batch
 out = torchvision.utils.make_grid(inputs)
 
-
-
 def save_models(epoch,save_point):
     torch.save(model.state_dict(),dataPathRoot + "/" + "Birdies_model_{}.model".format(epoch) + save_point)
     print("Chekcpoint saved")
-
 
 def train(num_epochs):
     print("In train")
