@@ -63,7 +63,7 @@ stub_name = "Birdies_model_0.model_loss_*"
 print("latest filename=",get_latest_file(comp_root,stub_name ))
 if  (os.path.exists (comp_root + "/" + get_latest_file(comp_root,stub_name ))):
     model.load_state_dict(torch.load(comp_root + "/" + get_latest_file(comp_root,stub_name ) ))
-    print("using saved model ",comp_root + "/" + get_latest_file(comp_root,stub_name ) )
+    print("using saved model ",comp_root + get_latest_file(comp_root,stub_name ) )
 else:
     print("using new model")
 #  finished deciding where the model comes from
