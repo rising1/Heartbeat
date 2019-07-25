@@ -154,11 +154,14 @@ def train(num_epochs):
                 running_corrects += torch.sum(preds == labels.data)
                 time_elapsed = time.time() - since
                 interim_fig = running_loss / ((epoch + 1) * batch_counter)
+                if batch_counter == 1:
+                    interim_fig_prev = interim_fig
                 print( phase, " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
                       .format(running_loss, interim_fig,
                               running_corrects), 'time {:.0f}m {:.0f}s'.format(
                         time_elapsed // 60, time_elapsed % 60))
-                if (epoch + 1) % 10 == 0:
+                if (interim_fig < interim_fig_prev):
+                    interim_fig_prev = interim_fig
                     interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
                     print("saving at ",interim)
                     save_models(epoch, interim)
@@ -173,7 +176,8 @@ def train(num_epochs):
 
             # Save the model if the test acc is greater than our current best
             if test_acc > best_acc:
-                save_models(epoch,"main")
+                main_acc = "_best_acc_{:.4f} ".format(test_acc)
+                save_models(epoch,main_acc)
                 best_acc = test_acc
                 print("best accuracy= ", best_acc)
 
