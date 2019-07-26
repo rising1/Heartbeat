@@ -63,7 +63,6 @@ if torch.cuda.is_available():
     torch.cuda.empty_cache()
     model.to(device)
 
-
 # load a saved model if one exists
 comp_root = dataPathRoot + "/saved_models/"
 stub_name = "Birdies_model_*"
@@ -177,7 +176,7 @@ def train(num_epochs):
                 running_corrects += torch.sum(preds == labels.data)
                 time_elapsed = time.time() - since
                 interim_fig = running_loss / ((epoch + 1) * batch_counter)
-                if batch_counter == 5:
+                if batch_counter == 1:
                     interim_fig_prev = interim_fig
                 print( phase, " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
                       .format(running_loss, interim_fig,
