@@ -140,11 +140,12 @@ def train(num_epochs):
             running_loss = 0.0
             running_corrects = 0
             batch_counter = 0
+            interim_fig_prev = 0
             # Iterate over data.
             for inputs, labels in train_loader_class.dataloaders[phase]:
                 no_of_batches = len(train_loader_class.dataloaders[phase])/len(labels)
                 batch_counter = batch_counter + 1
-                interim_fig_prev = 0
+
                 if batch_counter == 1:
                     print("inputs size=",inputs.shape)
                     print("labels size=",labels.shape)
