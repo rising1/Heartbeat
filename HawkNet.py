@@ -129,6 +129,7 @@ def train(num_epochs):
             # Iterate over data.
             for inputs, labels in train_loader_class.dataloaders[phase]:
                 batch_counter = batch_counter + 1
+                interim_fig_prev = 0
                 if batch_counter == 1:
                     print("inputs size=",inputs.shape)
                     print("labels size=",labels.shape)
