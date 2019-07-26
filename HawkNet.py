@@ -37,6 +37,7 @@ num_epochs = 300 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
 batch_sizes = 256 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
+loadfile = False
 print("parameters loaded")
 
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
@@ -62,7 +63,7 @@ comp_root = dataPathRoot + "/saved_models/"
 stub_name = "Birdies_model_*"
 print("latest filename=",get_latest_file(comp_root,stub_name ))
 
-if  (os.path.exists (comp_root + "/" + get_latest_file(comp_root,stub_name ))):
+if  (os.path.exists (comp_root + "/" + get_latest_file(comp_root,stub_name )) and loadfile == True):
     checkpoint = torch.load(comp_root + "/" + get_latest_file(comp_root,stub_name))
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
