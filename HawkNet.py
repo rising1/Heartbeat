@@ -43,7 +43,9 @@ print("parameters loaded")
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
                  output_classes, colour_channels, pic_size, pooling_factor]
 model = ConvNet.SimpleNet(SimpleNetArgs)
-
+optimizer = Adam(model.parameters(), lr=learning_rate,
+                 weight_decay=weight_decay)
+loss_fn = nn.CrossEntropyLoss()
 def get_latest_file(path, *paths):
     """Returns the name of the latest (most recent) file
     of the joined path(s)"""
@@ -54,9 +56,6 @@ def get_latest_file(path, *paths):
     latest_file = max(list_of_files, key=os.path.getctime)
     _, filename = os.path.split(latest_file)
     return filename
-
-
-
 
 # load a saved model if one exists
 comp_root = dataPathRoot + "/saved_models/"
@@ -75,9 +74,7 @@ else:
     print("using new model")
 #  finished deciding where the model comes from
 
-optimizer = Adam(model.parameters(), lr=learning_rate,
-                 weight_decay=weight_decay)
-loss_fn = nn.CrossEntropyLoss()
+
 device = torch.device("cuda: 0" if torch.cuda.is_available() else "cpu")
 print("device=",device)
 if torch.cuda.is_available():
