@@ -59,7 +59,7 @@ def get_latest_file(path, *paths):
 
 # load a saved model if one exists
 comp_root = dataPathRoot + "/saved_models/"
-stub_name = "Birdies_model_0.model_loss_*"
+stub_name = "Birdies_model_*"
 print("latest filename=",get_latest_file(comp_root,stub_name ))
 if  (os.path.exists (comp_root + "/" + get_latest_file(comp_root,stub_name ))):
     model.load_state_dict(torch.load(comp_root + "/" + get_latest_file(comp_root,stub_name ) ))
@@ -156,7 +156,7 @@ def train(num_epochs):
                 running_corrects += torch.sum(preds == labels.data)
                 time_elapsed = time.time() - since
                 interim_fig = running_loss / ((epoch + 1) * batch_counter)
-                if batch_counter == 1:
+                if batch_counter == 5:
                     interim_fig_prev = interim_fig
                 print( phase, " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
                       .format(running_loss, interim_fig,
