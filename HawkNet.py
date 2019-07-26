@@ -57,6 +57,13 @@ def get_latest_file(path, *paths):
     _, filename = os.path.split(latest_file)
     return filename
 
+device = torch.device("cuda: 0" if torch.cuda.is_available() else "cpu")
+print("device=",device)
+if torch.cuda.is_available():
+    torch.cuda.empty_cache()
+    model.to(device)
+
+
 # load a saved model if one exists
 comp_root = dataPathRoot + "/saved_models/"
 stub_name = "Birdies_model_*"
@@ -66,6 +73,10 @@ if  (os.path.exists (comp_root + "/" + get_latest_file(comp_root,stub_name )) an
     checkpoint = torch.load(comp_root + "/" + get_latest_file(comp_root,stub_name))
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    for state in optimizer.state.values():
+        for k, v in state.items():
+            if isinstance(v, torch.Tensor):
+                state[k] = v.to(device)
     epoch = checkpoint['epoch']
     loss = checkpoint['loss']
     model.train()
@@ -75,11 +86,7 @@ else:
 #  finished deciding where the model comes from
 
 
-device = torch.device("cuda: 0" if torch.cuda.is_available() else "cpu")
-print("device=",device)
-if torch.cuda.is_available():
-    torch.cuda.empty_cache()
-    model.to(device)
+
 
 train_loader_class = \
         HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
