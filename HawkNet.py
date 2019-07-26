@@ -61,8 +61,14 @@ def get_latest_file(path, *paths):
 comp_root = dataPathRoot + "/saved_models/"
 stub_name = "Birdies_model_*"
 print("latest filename=",get_latest_file(comp_root,stub_name ))
+
 if  (os.path.exists (comp_root + "/" + get_latest_file(comp_root,stub_name ))):
-    model.load_state_dict(torch.load(comp_root + "/" + get_latest_file(comp_root,stub_name ) ))
+    checkpoint = torch.load(comp_root + "/" + get_latest_file(comp_root,stub_name))
+    model.load_state_dict(checkpoint['model_state_dict'])
+    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    epoch = checkpoint['epoch']
+    loss = checkpoint['loss']
+    model.train()
     print("using saved model ",comp_root + get_latest_file(comp_root,stub_name ) )
 else:
     print("using new model")
@@ -97,8 +103,15 @@ print('len inputs=',len(inputs))
 # Make a grid from batch
 out = torchvision.utils.make_grid(inputs)
 
-def save_models(epoch,save_point):
-    torch.save(model.state_dict(),dataPathRoot + "/saved_models/" + "Birdies_model_{}.model".format(epoch) + save_point)
+def save_models(epoch,loss,save_point):
+    save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}.model".format(epoch) + save_point
+    checkpoint = {
+            'epoch': epoch,
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            'loss': loss,
+            }
+    torch.save(checkpoint, save_PATH)
     print("Checkpoint saved")
 
 
@@ -168,7 +181,7 @@ def train(num_epochs):
                     interim_fig_prev = interim_fig
                     interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
                     print("saving at ",interim)
-                    save_models(epoch, interim)
+                    save_models(epoch, loss, interim)
 
             train_loss = running_loss / train_loader_class.dataset_sizes[phase]
             train_acc = running_corrects.double() / \
@@ -181,7 +194,7 @@ def train(num_epochs):
             # Save the model if the test acc is greater than our current best
             if test_acc > best_acc:
                 main_acc = "_best_acc_{:.4f} ".format(test_acc)
-                save_models(epoch,main_acc)
+                save_models(epoch,loss,main_acc)
                 best_acc = test_acc
                 print("best accuracy= ", best_acc)
 
