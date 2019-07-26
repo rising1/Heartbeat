@@ -37,7 +37,7 @@ num_epochs = 300 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
 batch_sizes = 256 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
-loadfile = False
+loadfile = True
 print("parameters loaded")
 
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
