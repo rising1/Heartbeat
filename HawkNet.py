@@ -142,12 +142,13 @@ def train(num_epochs):
             batch_counter = 0
             # Iterate over data.
             for inputs, labels in train_loader_class.dataloaders[phase]:
+                no_of_batches = len(train_loader_class.dataloaders[phase])/len(labels)
                 batch_counter = batch_counter + 1
                 interim_fig_prev = 0
                 if batch_counter == 1:
                     print("inputs size=",inputs.shape)
                     print("labels size=",labels.shape)
-                print('Epoch=',epoch,' batch=',batch_counter," of ",len(labels))
+                print('Epoch=',epoch,' batch=',batch_counter," of ",no_of_batches)
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
