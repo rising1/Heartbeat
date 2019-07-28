@@ -148,7 +148,7 @@ def train(num_epochs):
             interim_fig_prev = 0
             # Iterate over data.
             for inputs, labels in train_loader_class.dataloaders[phase]:
-                no_of_batches = train_loader_class.dataset_sizes[phase]
+                no_of_batches = int(train_loader_class.dataset_sizes[phase] / batch_sizes) + 1
                 batch_counter = batch_counter + 1
 
                 if batch_counter == 1:
@@ -187,7 +187,8 @@ def train(num_epochs):
                       .format(running_loss, interim_fig,
                               interim_corrects), 'time {:.0f}m {:.0f}s'.format(
                         time_elapsed // 60, time_elapsed % 60))
-                print("Average_loss: {:.4f},Prev_average_loss: {:.4f}".format(interim_fig,interim_fig_prev))
+                print("Average_loss: {:.4f},Prev_average_loss: {:.4f}, Learning_rate: {:.7f}".format(
+                        interim_fig,interim_fig_prev,learning_rate))
                 if (interim_fig < interim_fig_prev):
                     interim_fig_prev = interim_fig
                     interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
