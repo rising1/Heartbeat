@@ -84,16 +84,20 @@ if os.path.exists(comp_root + "/" + get_latest_file(comp_root, stub_name)) and l
     epoch = checkpoint['epoch']
     loss = checkpoint['loss']
     model.train()
-    print("using saved model ", comp_root + get_latest_file(comp_root, stub_name))
+    model_file_path = comp_root + get_latest_file(comp_root, stub_name)
+    interim_fig_prev_text = model_file_path[model_file_path.rfind('_'),len(model_file_path)]
+    interim_fig_prev = float(interim_fig_prev_text)
+    print("using saved model ", model_file_path, " Loss: {0.4f}".format(interim_fig_prev))
 else:
     print("using new model")
 #  finished deciding where the model comes from
 
-# For the given model
-# Print model's state_dict
-print("Model's state_dict:")
-for param_tensor in model.state_dict():
-    print(param_tensor, "\t", model.state_dict()[param_tensor].size())
+#  For the given model
+
+#  Print model's state_dict
+#  print("Model's state_dict:")
+#  for param_tensor in model.state_dict():
+#    print(param_tensor, "\t", model.state_dict()[param_tensor].size())
 
 # Print optimizer's state_dict
 print("Optimizer's state_dict:")
@@ -122,7 +126,8 @@ print('len inputs=', len(inputs))
 # Make a grid from batch
 out = torchvision.utils.make_grid(inputs)
 
-def save_models(epoch,loss,save_point):
+
+def save_models(epoch, loss, save_point):
     save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}.model".format(epoch) + save_point
     checkpoint = {
             'epoch': epoch,
@@ -133,8 +138,7 @@ def save_models(epoch,loss,save_point):
     torch.save(checkpoint, save_PATH)
     print("Checkpoint saved")
     if (os.path.exists(save_PATH)):
-        print("verified save ",save_PATH)
-
+        print("verified save ", save_PATH)
 
 
 def train(num_epochs):
@@ -194,10 +198,10 @@ def train(num_epochs):
                 time_elapsed = time.time() - since
                 interim_fig = running_loss / ((epoch + 1) * batch_counter)
                 interim_corrects = running_corrects / ((epoch + 1) * batch_counter)
-                if batch_counter == 1:
-                    interim_fig_prev = interim_fig
-                    save_models(epoch, loss, "_loss_{:.4f} ".format(interim_fig))
-                    print("first save ", "_loss_{:.4f} ".format(interim_fig))
+                #  if batch_counter == 1:
+                #    interim_fig_prev = interim_fig
+                #    save_models(epoch, loss, "_loss_{:.4f} ".format(interim_fig))
+                #    print("first save ", "_loss_{:.4f} ".format(interim_fig))
                 print( phase, " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
                       .format(running_loss, interim_fig,
                               interim_corrects), 'time {:.0f}m {:.0f}s'.format(
