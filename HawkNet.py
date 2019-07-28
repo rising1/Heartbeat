@@ -117,6 +117,8 @@ def save_models(epoch,loss,save_point):
             }
     torch.save(checkpoint, save_PATH)
     print("Checkpoint saved")
+    if (os.path.exists(save_PATH)):
+        print("verified save ",save_PATH)
 
 
 
@@ -146,7 +148,7 @@ def train(num_epochs):
             interim_fig_prev = 0
             # Iterate over data.
             for inputs, labels in train_loader_class.dataloaders[phase]:
-                no_of_batches = len(train_loader_class.dataloaders[phase])/len(labels)
+                no_of_batches = train_loader_class.dataset_sizes[phase]
                 batch_counter = batch_counter + 1
 
                 if batch_counter == 1:
@@ -176,13 +178,14 @@ def train(num_epochs):
                 running_corrects += torch.sum(preds == labels.data)
                 time_elapsed = time.time() - since
                 interim_fig = running_loss / ((epoch + 1) * batch_counter)
+                interim_corrects = running_corrects / ((epoch + 1) * batch_counter)
                 if batch_counter == 1:
                     interim_fig_prev = interim_fig
                     save_models(epoch, loss, "_loss_{:.4f} ".format(interim_fig))
                     print("first save ", "_loss_{:.4f} ".format(interim_fig))
                 print( phase, " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
                       .format(running_loss, interim_fig,
-                              running_corrects), 'time {:.0f}m {:.0f}s'.format(
+                              interim_corrects), 'time {:.0f}m {:.0f}s'.format(
                         time_elapsed // 60, time_elapsed % 60))
                 print("Average_loss: {:.4f},Prev_average_loss: {:.4f}".format(interim_fig,interim_fig_prev))
                 if (interim_fig < interim_fig_prev):
