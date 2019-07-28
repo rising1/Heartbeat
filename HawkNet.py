@@ -144,15 +144,19 @@ def save_models(epoch, loss, save_point):
 
 
 def train(num_epochs):
+    #  global variables used in this function
     global interim_fig_prev
+
     print("In train")
+
+    #  set some measurement variables
     best_acc = 0.0
     since = time.time()
     train_history = []
     loopcount = 0
+
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
-        #  print('-' * 10)
 
         # Each epoch has a training and validation phase
         for phase in ['train', 'val']:
@@ -170,6 +174,8 @@ def train(num_epochs):
 
             # Iterate over data.
             for inputs, labels in train_loader_class.dataloaders[phase]:
+
+                #  set up reporting variables
                 no_of_batches = int(train_loader_class.dataset_sizes[phase] / batch_sizes) + 1
                 batch_counter = batch_counter + 1
 
@@ -177,13 +183,14 @@ def train(num_epochs):
                     print("inputs size=",inputs.shape)
                     print("labels size=",labels.shape)
                 print('Epoch=',epoch,' batch=',batch_counter," of ",no_of_batches)
+
+                #  push the data to the GPU
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
                 # zero the parameter gradients
                 optimizer.zero_grad()
 
-                # forward
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
                     outputs = model(inputs)
@@ -194,8 +201,10 @@ def train(num_epochs):
                     if phase == 'train':
                         loss.backward()
                         optimizer.step()
+
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
+
                 print(' prev loss.item()=', loss.item(), ' x inputs.size(0)=', inputs.size(0))
                 running_corrects += torch.sum(preds == labels.data)
                 time_elapsed = time.time() - since
