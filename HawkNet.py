@@ -179,7 +179,7 @@ def train(num_epochs):
                 if batch_counter == 1:
                     interim_fig_prev = interim_fig
                     save_models(epoch, loss, "_loss_{:.4f} ".format(interim_fig))
-                    print("first save ", interim)
+                    print("first save ", "_loss_{:.4f} ".format(interim_fig))
                 print( phase, " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
                       .format(running_loss, interim_fig,
                               running_corrects), 'time {:.0f}m {:.0f}s'.format(
