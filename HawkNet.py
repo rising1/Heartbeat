@@ -87,7 +87,7 @@ if os.path.exists(comp_root + "/" + get_latest_file(comp_root, stub_name)) and l
     model_file_path = comp_root + get_latest_file(comp_root, stub_name)
     interim_fig_prev_text = model_file_path[(model_file_path.rfind('_') + 1):(len(model_file_path) - 1)]
     interim_fig_prev = float(interim_fig_prev_text)
-    print("using saved model ", model_file_path, " Loss: {0.4f}".format(interim_fig_prev))
+    print("using saved model ", model_file_path, " Loss: {:.4f}".format(interim_fig_prev))
 else:
     print("using new model")
 #  finished deciding where the model comes from
