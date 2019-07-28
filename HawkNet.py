@@ -15,30 +15,32 @@ import time
 
 
 # Hyperparameters
-colour_channels = 3 # used in SimpleNet
-no_feature_detectors = 12 # used in ??????
-kernel_sizes = 3 # used in Unit
-stride_pixels = 1 # used in Unit
-padding_pixels = 1 # used in Unit
-pooling_factor = 2 # used in SimpleNet
-pic_size = 72 # used in SimpleNet
-output_classes = 220 # used in SimpleNet
-learning_rate = 0.001 # used in HeartbeatClean
-weight_decay = 0.0001 # used in HeartbeatClean
-dropout_factor = 0.1 # used in Unit
+colour_channels = 3  # used in SimpleNet
+no_feature_detectors = 12  # used in ??????
+kernel_sizes = 3  # used in Unit
+stride_pixels = 1  # used in Unit
+padding_pixels = 1  # used in Unit
+pooling_factor = 2  # used in SimpleNet
+pic_size = 72  # used in SimpleNet
+output_classes = 220  # used in SimpleNet
+learning_rate = 0.001  # used in HeartbeatClean
+weight_decay = 0.0001  # used in HeartbeatClean
+dropout_factor = 0.1  # used in Unit
 faff = 'false'
-#dataPathRoot = 'F:/BirdiesData/' # used in DataLoaderHeartbeat
-#dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
-#if not (os.path.exists(dataPathRoot)):
-#    dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
-#  dataPathRoot = '/content/drive/My Drive/Colab Notebooks/BirdiesData'
-dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
-num_epochs = 300 # used in HeartbeatClean
+num_epochs = 300  # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 256 # used in HeartbeatClean
+batch_sizes = 256  # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
-print("parameters loaded")
+
+#  dataPathRoot = 'F:/BirdiesData/' # used in DataLoaderHeartbeat
+#  dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
+#  if not (os.path.exists(dataPathRoot)):
+#  dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
+#  dataPathRoot = '/content/drive/My Drive/Colab Notebooks/BirdiesData'
+dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
+
+print("parameters loaded and data root path set")
 
 SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
                  output_classes, colour_channels, pic_size, pooling_factor]
@@ -46,6 +48,8 @@ model = ConvNet.SimpleNet(SimpleNetArgs)
 optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
 loss_fn = nn.CrossEntropyLoss()
+
+
 def get_latest_file(path, *paths):
     """Returns the name of the latest (most recent) file
     of the joined path(s)"""
@@ -57,8 +61,9 @@ def get_latest_file(path, *paths):
     _, filename = os.path.split(latest_file)
     return filename
 
+
 device = torch.device("cuda: 0" if torch.cuda.is_available() else "cpu")
-print("device=",device)
+print("device=", device)
 if torch.cuda.is_available():
     torch.cuda.empty_cache()
     model.to(device)
@@ -66,10 +71,10 @@ if torch.cuda.is_available():
 # load a saved model if one exists
 comp_root = dataPathRoot + "/saved_models/"
 stub_name = "Birdies_model_*"
-print("latest filename=",get_latest_file(comp_root,stub_name ))
+print("latest filename=", get_latest_file(comp_root, stub_name))
 
-if  (os.path.exists (comp_root + "/" + get_latest_file(comp_root,stub_name )) and loadfile == True):
-    checkpoint = torch.load(comp_root + "/" + get_latest_file(comp_root,stub_name))
+if os.path.exists(comp_root + "/" + get_latest_file(comp_root, stub_name)) and loadfile == True:
+    checkpoint = torch.load(comp_root + "/" + get_latest_file(comp_root, stub_name))
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
     for state in optimizer.state.values():
@@ -79,11 +84,21 @@ if  (os.path.exists (comp_root + "/" + get_latest_file(comp_root,stub_name )) an
     epoch = checkpoint['epoch']
     loss = checkpoint['loss']
     model.train()
-    print("using saved model ",comp_root + get_latest_file(comp_root,stub_name ) )
+    print("using saved model ", comp_root + get_latest_file(comp_root, stub_name))
 else:
     print("using new model")
 #  finished deciding where the model comes from
 
+# For the given model
+# Print model's state_dict
+print("Model's state_dict:")
+for param_tensor in model.state_dict():
+    print(param_tensor, "\t", model.state_dict()[param_tensor].size())
+
+# Print optimizer's state_dict
+print("Optimizer's state_dict:")
+for var_name in optimizer.state_dict():
+    print(var_name, "\t", optimizer.state_dict()[var_name])
 
 
 
@@ -102,7 +117,7 @@ test_loader = test_loader_class.dataloaders["test"]
 
 # Get a batch of training data
 inputs, classes = next(iter(train_loader))
-print('len inputs=',len(inputs))
+print('len inputs=', len(inputs))
 
 # Make a grid from batch
 out = torchvision.utils.make_grid(inputs)
