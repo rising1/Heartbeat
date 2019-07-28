@@ -85,8 +85,7 @@ if os.path.exists(comp_root + "/" + get_latest_file(comp_root, stub_name)) and l
     loss = checkpoint['loss']
     model.train()
     model_file_path = comp_root + get_latest_file(comp_root, stub_name)
-    print(type(model_file_path.rfind('_')), type(len(model_file_path)))
-    interim_fig_prev_text = model_file_path[int(model_file_path.rfind('_')), len(model_file_path)]
+    interim_fig_prev_text = model_file_path[model_file_path.rfind('_'):len(model_file_path)]
     interim_fig_prev = float(interim_fig_prev_text)
     print("using saved model ", model_file_path, " Loss: {0.4f}".format(interim_fig_prev))
 else:
