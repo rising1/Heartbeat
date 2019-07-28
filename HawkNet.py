@@ -102,7 +102,8 @@ else:
 # Print optimizer's state_dict
 print("Optimizer's state_dict:")
 for var_name in optimizer.state_dict():
-    print(var_name, "\t", optimizer.state_dict()[var_name])
+    if var_name == "param_groups":
+        print(var_name, "\t", optimizer.state_dict()[var_name])
 
 
 
@@ -164,7 +165,7 @@ def train(num_epochs):
             running_loss = 0.0
             running_corrects = 0
             batch_counter = 0
-            interim_fig_prev = 0
+
             # Iterate over data.
             for inputs, labels in train_loader_class.dataloaders[phase]:
                 no_of_batches = int(train_loader_class.dataset_sizes[phase] / batch_sizes) + 1
@@ -193,7 +194,7 @@ def train(num_epochs):
                         optimizer.step()
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
-                print( ' prev loss.item()=', loss.item(), ' x inputs.size(0)=', inputs.size(0))
+                print(' prev loss.item()=', loss.item(), ' x inputs.size(0)=', inputs.size(0))
                 running_corrects += torch.sum(preds == labels.data)
                 time_elapsed = time.time() - since
                 interim_fig = running_loss / ((epoch + 1) * batch_counter)
@@ -207,8 +208,8 @@ def train(num_epochs):
                               interim_corrects), 'time {:.0f}m {:.0f}s'.format(
                         time_elapsed // 60, time_elapsed % 60))
                 print("Average_loss: {:.4f},Prev_average_loss: {:.4f}, Learning_rate: {:.7f}".format(
-                        interim_fig,interim_fig_prev,learning_rate))
-                if (interim_fig < interim_fig_prev):
+                        interim_fig, interim_fig_prev, learning_rate))
+                if interim_fig < interim_fig_prev:
                     interim_fig_prev = interim_fig
                     interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
                     print("saving at ",interim)
