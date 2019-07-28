@@ -13,6 +13,7 @@ import os
 import glob
 import time
 
+global interim_fig_prev
 
 # Hyperparameters
 colour_channels = 3  # used in SimpleNet
