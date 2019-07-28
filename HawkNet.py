@@ -13,7 +13,7 @@ import os
 import glob
 import time
 
-global interim_fig_prev
+
 
 # Hyperparameters
 colour_channels = 3  # used in SimpleNet
@@ -144,6 +144,7 @@ def save_models(epoch, loss, save_point):
 
 
 def train(num_epochs):
+    global interim_fig_prev
     print("In train")
     best_acc = 0.0
     since = time.time()
