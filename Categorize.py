@@ -102,14 +102,26 @@ class Categorize:
             filehandle.close()
         #  Copy the first item from each directory into the val directory
 
+
+    def summarise(self):
+
+        for tdirNames in next(os.walk(self.targetDir))[1]:
+            counter = 0
+            #  print("tdirNames=",tdirNames)
+            for tfileNames in next(os.walk(self.targetDir  + "/" \
+                                           + tdirNames))[2]:
+                counter = counter +1
+            print(tdirNames + "\t" + str(counter))
+
+
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
-    #  Categorize('d:/birdiesdata/train','d:/birdiesdata2')
+    #  categorize = Categorize('d:/birdiesdata/train','d:/birdiesdata2')
     #  categorize = Categorize('/content/drive/My Drive/Colab Notebooks/BirdiesData/train',
     #           '/content/drive/My Drive/Colab Notebooks/')
     categorize = Categorize('/content/drive/My Drive/Colab Notebooks/train',
-               '/content/drive/My Drive/Colab Notebooks')
+               '/content/drive/My Drive/Colab Notebooks/train')
     #  categorize.build_directories('val')
-    categorize.create_test("test",2)
-
+    #  categorize.create_test("test",2)
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
+    categorize.summarise()
