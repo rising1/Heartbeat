@@ -25,7 +25,6 @@ def predict_image(image_path):
         transforms.CenterCrop(224),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-
     ])
 
     # Preprocess the image
@@ -50,28 +49,12 @@ def predict_image(image_path):
 
 if __name__ == "__main__":
 
-    imagefile = "image.png"
-
-    imagepath = os.path.join(os.getcwd(), imagefile)
-    # Donwload image if it doesn't exist
-    if not os.path.exists(imagepath):
-        data = requests.get(
-            "https://github.com/OlafenwaMoses/ImageAI/raw/master/images/3.jpg", stream=True)
-
-        with open(imagepath, "wb") as file:
-            shutil.copyfileobj(data.raw, file)
-
-        del data
-
-    index_file = "class_index_map.json"
+    index_file = "class_map.txt"
 
     indexpath = os.path.join(os.getcwd(), index_file)
     # Donwload class index if it doesn't exist
     if not os.path.exists(indexpath):
-        data = requests.get('https://github.com/OlafenwaMoses/ImageAI/raw/master/imagenet_class_index.json')
-
-        with open(indexpath, "w", encoding="utf-8") as file:
-            file.write(data.text)
+        print("cant find image indeces")
 
     class_map = json.load(open(indexpath))
 
