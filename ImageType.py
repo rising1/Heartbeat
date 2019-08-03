@@ -58,4 +58,3 @@ class ImageType:
 
 #if __name__ == "__main__":
 #    ImageType("H:/birdiesdata2/Accentor/Alpine_1. 550px-prunella_collaris_collaris%2c_picos_de_europa.jpg")
-

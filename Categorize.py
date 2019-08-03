@@ -2,6 +2,7 @@ import os
 from string import ascii_lowercase
 from PIL import Image
 from shutil import copyfile
+import ImageType
 
 class Categorize:
     def __init__(self, rootDir,targetDir):
@@ -112,6 +113,19 @@ class Categorize:
                                            + tdirNames))[2]:
                 counter = counter +1
             print(tdirNames + "\t" + str(counter))
+
+    def is_it_a_bird(self):
+        index_file = "scan_results.txt"
+        indexpath = os.path.join(os.getcwd(), index_file)
+        with open(indexpath, "w") as f:
+            for sdirNames in next(os.walk(self.rootDir))[1]:
+                for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
+                    file_path = self.rootDir + '/' + sdirNames + '/' + sfileNames
+                    if os.path.isfile(file_path):
+                        result = ImageType.predict_image(file_path)
+                        print(result + "\t" + file_path)
+                        f.writelines(result,file_path)
+        f.close()
 
 
 if __name__ == "__main__":
