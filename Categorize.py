@@ -138,4 +138,4 @@ if __name__ == "__main__":
     #  categorize.build_directories('val')
     #  categorize.create_test("test",2)
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
-    categorize.summarise()
+    categorize.is_it_a_bird()
