@@ -125,6 +125,7 @@ class Categorize:
             for sdirNames in next(os.walk(self.rootDir))[1]:
                 for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
                     file_path = self.rootDir  + sdirNames + '/' + sfileNames
+                    print(file_path)
                     if os.path.isfile(file_path):
                         result = imageType.predict_image(file_path)
                         print(result + "\t" + file_path)
