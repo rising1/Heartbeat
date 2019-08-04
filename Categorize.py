@@ -117,21 +117,24 @@ class Categorize:
     def is_it_a_bird(self):
         index_file = "scan_results.txt"
         indexpath = os.path.join(os.getcwd(), index_file)
+        if os.path.exists(indexpath):
+            os.remove(indexpath)
+        imageType = ImageType.ImageType()
         with open(indexpath, "w") as f:
             for sdirNames in next(os.walk(self.rootDir))[1]:
                 for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
-                    file_path = self.rootDir + '/' + sdirNames + '/' + sfileNames
+                    file_path = self.rootDir  + sdirNames + '/' + sfileNames
                     if os.path.isfile(file_path):
-                        self.imageType = ImageType()
-                        result = self.imageType.predict_image(file_path)
+                        result = imageType.predict_image(file_path)
                         print(result + "\t" + file_path)
-                        f.writelines(result,file_path)
+                        f.write(result + "\t"  + "\t" + file_path + "\n" )
+                        f.flush()
         f.close()
 
 
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
-    #  categorize = Categorize('d:/birdiesdata/train','d:/birdiesdata2')
+    #  categorize = Categorize('f:/birdiesdata2/','f:/birdiesdata2')
     #  categorize = Categorize('/content/drive/My Drive/Colab Notebooks/BirdiesData/train',
     #           '/content/drive/My Drive/Colab Notebooks/')
     categorize = Categorize('/content/drive/My Drive/Colab Notebooks/train',

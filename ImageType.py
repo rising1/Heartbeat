@@ -3,6 +3,7 @@ import torch
 from torchvision.transforms import transforms
 from torch.autograd import Variable
 from torchvision.models import squeezenet1_1
+from torchvision.models import densenet161
 from io import open
 import os
 from PIL import Image
@@ -10,7 +11,8 @@ from PIL import Image
 
 class ImageType:
 
-    model = squeezenet1_1(pretrained=True)
+    #  model = squeezenet1_1(pretrained=True)
+    model = densenet161(pretrained=True)
     model.eval()
 
     def __init__(self):
@@ -32,7 +34,8 @@ class ImageType:
         transformation = transforms.Compose([
             transforms.CenterCrop(224),
             transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                 std=[0.229, 0.224, 0.225])
         ])
 
         # Preprocess the image
