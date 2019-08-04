@@ -127,7 +127,10 @@ class Categorize:
                     file_path = self.rootDir  + '/' + sdirNames + '/' + sfileNames
                     print(file_path)
                     if os.path.isfile(file_path):
-                        result = imageType.predict_image(file_path)
+                        try:
+                            result = imageType.predict_image(file_path)
+                        except RuntimeError:
+                            result = "PREDICT_FAILURE"
                         print(result + "\t" + file_path)
                         f.write(result + "\t"  + "\t" + file_path + "\n" )
                         f.flush()
