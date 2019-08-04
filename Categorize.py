@@ -116,7 +116,7 @@ class Categorize:
 
     def is_it_a_bird(self):
         index_file = "scan_results.txt"
-        indexpath = os.path.join(os.getcwd(), index_file)
+        indexpath = os.path.join(self.rootDir, index_file)
         print("index_path= ",indexpath)
         if os.path.exists(indexpath):
             os.remove(indexpath)
