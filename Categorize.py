@@ -135,7 +135,7 @@ class Categorize:
                         with open(indexpath, "w") as f:
                             f.write(result + "\t"  + "\t" + file_path + "\n" )
                             f.flush()
-                        f.close()
+                            f.close()
 
 
 if __name__ == "__main__":
