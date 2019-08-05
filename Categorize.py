@@ -131,9 +131,10 @@ class Categorize:
                             result = imageType.predict_image(file_path)
                         except RuntimeError:
                             result = "PREDICT_FAILURE"
-                        print(result + "\t" + file_path)
                         with open(indexpath, "w") as f:
-                            f.write(result + "\t"  + "\t" + file_path + "\n" )
+                            record_string = result + "\t"  + "\t" + file_path + "\n"
+                            f.write(record_string )
+                            print("written ",record_string)
                             f.flush()
                             f.close()
 
