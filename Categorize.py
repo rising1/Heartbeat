@@ -121,7 +121,7 @@ class Categorize:
         if os.path.exists(indexpath):
             os.remove(indexpath)
         imageType = ImageType.ImageType()
-        with open(indexpath, "w") as f:
+        #  with open(indexpath, "w") as f:
             for sdirNames in next(os.walk(self.rootDir))[1]:
                 for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
                     file_path = self.rootDir  + '/' + sdirNames + '/' + sfileNames
@@ -132,8 +132,9 @@ class Categorize:
                         except RuntimeError:
                             result = "PREDICT_FAILURE"
                         print(result + "\t" + file_path)
-                        f.write(result + "\t"  + "\t" + file_path + "\n" )
-                        f.flush()
+                        with open(indexpath, "w") as f:
+                            f.write(result + "\t"  + "\t" + file_path + "\n" )
+                            f.flush()
         f.close()
 
 
