@@ -132,7 +132,7 @@ class Categorize:
                         except RuntimeError:
                             result = "PREDICT_FAILURE"
                         with open(indexpath, "a") as f:
-                            record_string = result + "\t"  + "\t" + file_path + "\n"
+                            record_string = result.rstrip() + "\t" + file_path + "\n"
                             f.write(record_string )
                             print("written ",record_string)
                             f.flush()
