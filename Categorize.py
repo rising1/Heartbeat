@@ -143,7 +143,7 @@ class Categorize:
         f = open(os.path.join(self.rootDir, "Birds_file_index - scan_results.csv"))
         for line in f:
             file_path = line.split("\t")
-            file_list.append(file_path)
+            file_list.append(file_path.rstrip("\n"))
         print(file_list)
 
 if __name__ == "__main__":
