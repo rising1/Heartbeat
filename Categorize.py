@@ -138,6 +138,13 @@ class Categorize:
                             f.flush()
                         f.close()
 
+    def delete_irrelevant(self):
+        file_list = []
+        f = open("D:/Birds_file_index - scan_results.csv")
+        for line in f:
+            file_path = f.split("\t")
+            file_list.append(file_path)
+        print(file_list)
 
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
@@ -149,4 +156,5 @@ if __name__ == "__main__":
     #  categorize.build_directories('val')
     #  categorize.create_test("test",2)
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
-    categorize.is_it_a_bird()
+    #  categorize.is_it_a_bird()
+    categorize.delete_irrelevant()
