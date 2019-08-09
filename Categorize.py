@@ -145,7 +145,7 @@ class Categorize:
             file_path = line.rstrip("\n").split(",")
             file_list.append(file_path)
         print(file_list)
-        print(file_list[0][3])
+        print(file_list[0][3]," path ",file_list[0][2])
 
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
