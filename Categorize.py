@@ -144,8 +144,11 @@ class Categorize:
         for line in f:
             file_path = line.rstrip("\n").split(",")
             file_list.append(file_path)
-        print(file_list)
-        print(file_list[0][3]," path ",file_list[0][2])
+        #  print(file_list)
+        for bad_file in file_list:
+            if os.path.isfile(bad_file[2]):
+                print("removing ",bad_file[2])
+                os.remove(bad_file[2])
 
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
