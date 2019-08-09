@@ -146,9 +146,10 @@ class Categorize:
             file_list.append(file_path)
         #  print(file_list)
         for bad_file in file_list:
-            if os.path.isfile(bad_file[2]):
-                print("removing ",bad_file[2])
-                os.remove(bad_file[2])
+            if bad_file[3] != "bird":
+                if os.path.isfile(bad_file[2]):
+                    print("removing ",bad_file[2])
+                    os.remove(bad_file[2])
 
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
