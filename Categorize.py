@@ -130,6 +130,10 @@ class Categorize:
             file_list.append(file_path)
         #  print(file_list)
         for bird_type in file_list:
+            image_no = bird_type[1]
+            if image_no < 100:
+                req_no = 100 - image_no
+
             print(bird_type)
 
     def is_it_a_bird(self):
