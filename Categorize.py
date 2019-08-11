@@ -105,14 +105,22 @@ class Categorize:
 
 
     def summarise(self):
-
+        record_file = "image_count.txt"
+        record_path = os.path.join(self.rootDir, record_file)
         for tdirNames in next(os.walk(self.targetDir))[1]:
             counter = 0
             #  print("tdirNames=",tdirNames)
             for tfileNames in next(os.walk(self.targetDir  + "/" \
                                            + tdirNames))[2]:
                 counter = counter +1
-            print(tdirNames + "\t" + str(counter))
+            #  print(tdirNames + "\t" + str(counter))
+            with open(record_path, "a") as f:
+                record_string = tdirNames + "\t" + str(counter) + "\n"
+                f.write(record_string)
+                print("written ", record_string)
+                f.flush()
+            f.close()
+
 
     def is_it_a_bird(self):
         index_file = "scan_results.txt"
