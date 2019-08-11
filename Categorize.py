@@ -126,7 +126,7 @@ class Categorize:
         file_list = []
         f = open(os.path.join(self.rootDir, "image_count.txt"))
         for line in f:
-            file_path = line.rstrip("\n").split(",")
+            file_path = line.rstrip("\n").split("\t")
             file_list.append(file_path)
         #  print(file_list)
         for bird_type in file_list:
