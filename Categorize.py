@@ -129,12 +129,11 @@ class Categorize:
             file_path = line.rstrip("\n").split("\t")
             file_list.append(file_path)
         #  print(file_list)
-        for bird_type in file_list:
-            image_no = bird_type[1]
-            if image_no < 100:
-                req_no = 100 - image_no
-
-            print(bird_type)
+        #  for bird_type in file_list:
+        #    image_no = bird_type[1]
+        #    if image_no < 100:
+        #        req_no = 100 - image_no
+        return file_list
 
     def is_it_a_bird(self):
         index_file = "scan_results.txt"
