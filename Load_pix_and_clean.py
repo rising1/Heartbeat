@@ -20,6 +20,15 @@ class Load_pix():
     def __init__(self,search_queries,loc_data):
         self.search_queries = search_queries
         self.loc_data = loc_data
+        # Driver Code
+        i = 99
+        for query in self.search_queries:
+            self.downloadimages(self,query)
+            print()
+        #  iimage = Image.open(BytesIO(response.content))
+        #  #plt.imshow(iimage)
+        #  i + i+1
+        #  iimage.save(loc_data + query + str(i) + '.jpg')
 
     def downloadimages(self,query):
         # keywords is the search query
@@ -59,13 +68,5 @@ class Load_pix():
             pass
 
 
-        # Driver Code
-        i = 99
-        for query in search_queries:
-            self.downloadimages(self,query)
-            print()
-        #  iimage = Image.open(BytesIO(response.content))
-        #  #plt.imshow(iimage)
-        #  i + i+1
-        #  iimage.save(loc_data + query + str(i) + '.jpg')
+
 
