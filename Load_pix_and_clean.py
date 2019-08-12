@@ -1,10 +1,6 @@
-# importing google_images_download module
-!pip install google_images_download
-from google.colab import drive
-drive.mount('/content/drive')
 from google_images_download import google_images_download
 
-loc_data = '/content/drive/My Drive/Colab Notebooks/BirdiesData/birdpix/raw_downloads/'
+loc_data = '/content/drive/My Drive/Colab Notebooks/trial'
 # creating object
 response = google_images_download.googleimagesdownload()
 
