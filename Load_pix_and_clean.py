@@ -16,17 +16,21 @@ search_queries = \
 
   ]
 
+class Load_pix():
+    def __init__(self,search_queries,loc_data):
+        self.search_queries = search_queries
+        self.loc_data = loc_data
 
-def downloadimages(query):
-  # keywords is the search query
-  # format is the image file format
-  # limit is the number of images to be downloaded
-  # print urs is to print the image file url
-  # size is the image size which can
-  # be specified manually ("large, medium, icon")
-  # aspect ratio denotes the height width ratio
-  # of images to download. ("tall, square, wide, panoramic")
-  arguments = {"keywords": query,
+    def downloadimages(self,query):
+        # keywords is the search query
+        # format is the image file format
+        # limit is the number of images to be downloaded
+        # print urs is to print the image file url
+        # size is the image size which can
+        # be specified manually ("large, medium, icon")
+        # aspect ratio denotes the height width ratio
+        # of images to download. ("tall, square, wide, panoramic")
+        arguments = {"keywords": query,
                "format": "jpg",
                "limit": 99,
                "print_urls": True,
@@ -34,34 +38,34 @@ def downloadimages(query):
                "type": "photo",
                "aspect_ratio": "square",
                "output_directory": loc_data}
-  try:
-    response.download(arguments)
+        try:
+            response.download(arguments)
 
-  # Handling File NotFound Error
-  except FileNotFoundError:
-    arguments = {"keywords": query,
+         # Handling File NotFound Error
+        except FileNotFoundError:
+            arguments = {"keywords": query,
                  "format": "jpg",
                  "limit": 4,
                  "print_urls": True,
                  "size": ">400*300",
                  "output_directory": loc_data}
 
-    # Providing arguments for the searched query
-    try:
-      # Downloading the photos based
-      # on the given arguments
-      response.download(arguments)
-    except:
-      pass
+        # Providing arguments for the searched query
+        try:
+            # Downloading the photos based
+            # on the given arguments
+            response.download(arguments)
+        except:
+            pass
 
 
-# Driver Code
-i = 99
-for query in search_queries:
-  downloadimages(query)
-  print()
-#  iimage = Image.open(BytesIO(response.content))
-#  #plt.imshow(iimage)
-#  i + i+1
-#  iimage.save(loc_data + query + str(i) + '.jpg')
+        # Driver Code
+        i = 99
+        for query in search_queries:
+            self.downloadimages(self,query)
+            print()
+        #  iimage = Image.open(BytesIO(response.content))
+        #  #plt.imshow(iimage)
+        #  i + i+1
+        #  iimage.save(loc_data + query + str(i) + '.jpg')
 
