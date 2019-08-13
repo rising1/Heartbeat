@@ -17,9 +17,10 @@ search_queries = \
   ]
 
 class Load_pix():
-    def __init__(self,search_queries,loc_data):
+    def __init__(self,search_queries,loc_data,image_count):
         self.search_queries = search_queries
         self.loc_data = loc_data
+        self.image_count = image_count
         # Driver Code
         i = 99
         for query in self.search_queries:
@@ -41,7 +42,7 @@ class Load_pix():
         # of images to download. ("tall, square, wide, panoramic")
         arguments = {"keywords": query,
                "format": "jpg",
-               "limit": 1,
+               "limit": self.image_count,
                "print_urls": True,
                "size": ">400*300",
                "type": "photo",
