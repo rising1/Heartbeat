@@ -17,6 +17,7 @@ search_queries = \
   ]
 
 class Load_pix():
+    global shortfall
     def __init__(self,search_queries,loc_data):
         self.search_queries = search_queries
         self.loc_data = loc_data
