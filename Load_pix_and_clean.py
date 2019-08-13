@@ -23,6 +23,7 @@ class Load_pix():
         # Driver Code
 
         for query in self.search_queries:
+            print(query[0])
             self.downloadimages(self,query[0])
             print()
         #  iimage = Image.open(BytesIO(response.content))
