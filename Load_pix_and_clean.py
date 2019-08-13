@@ -24,8 +24,8 @@ class Load_pix():
         # Driver Code
 
         for query in self.search_queries:
-            if query[1] < 100:
-                shortfall = 100 - query[1]
+            if int(query[1]) < 100:
+                shortfall = 100 - int(query[1])
             self.downloadimages(query[0])
             print()
         #  iimage = Image.open(BytesIO(response.content))
