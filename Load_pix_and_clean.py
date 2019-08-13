@@ -26,15 +26,15 @@ class Load_pix():
         for query in self.search_queries:
             if int(query[1]) < 100:
                 shortfall = 100 - int(query[1])
-            self.downloadimages(query[0])
+            self.downloadimages(query[0],shortfall)
             print()
         #  iimage = Image.open(BytesIO(response.content))
         #  #plt.imshow(iimage)
         #  i + i+1
         #  iimage.save(loc_data + query + str(i) + '.jpg')
 
-    def downloadimages(self,query):
-        global shortfall
+    def downloadimages(self,query, shortfall):
+
         # keywords is the search query
         # format is the image file format
         # limit is the number of images to be downloaded
