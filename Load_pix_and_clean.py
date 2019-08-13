@@ -25,8 +25,7 @@ class Load_pix():
         for query in self.search_queries:
             if int(query[1]) < 100:
                 no_of_shorts = 100 - int(query[1])
-            self.downloadimages(query[0],no_of_shorts)
-            print()
+                self.downloadimages(query[0],no_of_shorts)
         #  iimage = Image.open(BytesIO(response.content))
         #  #plt.imshow(iimage)
         #  i + i+1
