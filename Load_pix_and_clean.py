@@ -18,15 +18,13 @@ search_queries = \
 
 class Load_pix():
     def __init__(self,search_queries,loc_data):
-        global shortfall
         self.search_queries = search_queries
         self.loc_data = loc_data
         # Driver Code
-
         for query in self.search_queries:
             if int(query[1]) < 100:
-                shortfall = 100 - int(query[1])
-            self.downloadimages(query[0],shortfall)
+                self.shortfall = 100 - int(query[1])
+            self.downloadimages(query[0],self.shortfall)
             print()
         #  iimage = Image.open(BytesIO(response.content))
         #  #plt.imshow(iimage)
@@ -34,7 +32,6 @@ class Load_pix():
         #  iimage.save(loc_data + query + str(i) + '.jpg')
 
     def downloadimages(self,query, shortfall):
-
         # keywords is the search query
         # format is the image file format
         # limit is the number of images to be downloaded
