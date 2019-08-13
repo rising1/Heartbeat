@@ -24,6 +24,7 @@ class Load_pix():
 
         for query in self.search_queries:
             print(query[0])
+            print(query[1])
             self.downloadimages(query[0])
             print()
         #  iimage = Image.open(BytesIO(response.content))
