@@ -41,7 +41,7 @@ class Load_pix():
         # of images to download. ("tall, square, wide, panoramic")
         arguments = {"keywords": query,
                "format": "jpg",
-               "limit": 99,
+               "limit": 1,
                "print_urls": True,
                "size": ">400*300",
                "type": "photo",
