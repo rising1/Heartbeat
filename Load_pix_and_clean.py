@@ -22,7 +22,7 @@ class Load_pix():
         self.loc_data = loc_data
         self.image_count = image_count
         # Driver Code
-        i = 99
+
         for query in self.search_queries:
             self.downloadimages(self,query)
             print()
