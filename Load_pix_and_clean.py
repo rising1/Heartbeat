@@ -1,4 +1,6 @@
 from google_images_download import google_images_download
+import ImageType
+import os
 
 loc_data = '/content/drive/My Drive/Colab Notebooks/trial'
 # creating object
@@ -17,7 +19,7 @@ search_queries = \
   ]
 
 class Load_pix():
-
+    image_type = ImageType.ImageType()
     def __init__(self,search_queries,loc_data):
         self.search_queries = search_queries
         self.loc_data = loc_data
@@ -67,7 +69,13 @@ class Load_pix():
             response.download(arguments)
         except:
             pass
-
-
+        file_path = os.path.join(loc_data,query)
+        if os.path.isfile(file_path):
+            try:
+                result = imageType.predict_image(file_path)
+                # look up the result in an index and check
+                #whether a bird or not
+            except RuntimeError:
+                result = "PREDICT_FAILURE"
 
 
