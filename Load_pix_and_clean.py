@@ -20,6 +20,12 @@ search_queries = \
 
 class Load_pix():
     image_type = ImageType.ImageType()
+    file_list = []
+    f = open("Bird_Index.txt")
+    for line in f:
+        file_path = line.rstrip("\n").split(",")
+        file_list.append(file_path)
+        print(file_list)
     def __init__(self,search_queries,loc_data):
         self.search_queries = search_queries
         self.loc_data = loc_data
@@ -72,7 +78,7 @@ class Load_pix():
         file_path = os.path.join(loc_data,query)
         if os.path.isfile(file_path):
             try:
-                result = imageType.predict_image(file_path)
+                result = self.image_type.predict_image(file_path)
                 # look up the result in an index and check
                 #whether a bird or not
             except RuntimeError:
