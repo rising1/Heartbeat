@@ -51,7 +51,7 @@ class Load_pix():
         # be specified manually ("large, medium, icon")
         # aspect ratio denotes the height width ratio
         # of images to download. ("tall, square, wide, panoramic")
-        arguments = {"keywords": query  + "in flight",
+        arguments = {"keywords": query  + " in flight",
                "format": "jpg",
                "limit": no_of_shorts,
                "print_urls": True,
