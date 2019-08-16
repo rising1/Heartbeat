@@ -23,7 +23,8 @@ class Load_pix():
     file_list = []
     f = open("Bird_Index.txt")
     for line in f:
-        file_path = line.rstrip("\n").split(",")
+        #  file_path = line.rstrip("\n").split(",")
+        file_path = line.split(",")
         file_list.append(file_path)
         print(file_list)
     def __init__(self,search_queries,loc_data):
