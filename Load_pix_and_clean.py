@@ -78,6 +78,8 @@ class Load_pix():
             response.download(arguments)
         except:
             pass
+
+
         file_path = os.path.join(loc_data, query)
         if os.path.isfile(file_path):
             try:
