@@ -1,6 +1,7 @@
 from google_images_download import google_images_download
 import ImageType
 import os
+from shutil import copyfile
 
 loc_data = '/content/drive/My Drive/Colab Notebooks/trial'
 # creating object
@@ -23,13 +24,14 @@ class Load_pix():
     file_list = []
     f = open("Bird_Index.txt")
     for line in f:
-        #  file_path = line.rstrip("\n").split(",")
-        file_path = line.split(",")
+        file_path = line.rstrip("\n").split(",")
+        #  file_path = line.split(",")
         file_list.append(file_path)
         print(file_list)
-    def __init__(self,search_queries,loc_data):
+    def __init__(self,search_queries,loc_data,src_data):
         self.search_queries = search_queries
         self.loc_data = loc_data
+        self.src_data = src_data
         # Driver Code
         for query in self.search_queries:
             if int(query[1]) < 100:
@@ -49,7 +51,7 @@ class Load_pix():
         # be specified manually ("large, medium, icon")
         # aspect ratio denotes the height width ratio
         # of images to download. ("tall, square, wide, panoramic")
-        arguments = {"keywords": query,
+        arguments = {"keywords": query  + "in flight",
                "format": "jpg",
                "limit": no_of_shorts,
                "print_urls": True,
@@ -82,6 +84,9 @@ class Load_pix():
                 result = self.image_type.predict_image(file_path)
                 # look up the result in an index and check
                 #whether a bird or not
+                if result in self.file_list:
+                    copyfile(file_path,self.src_data + query +
+                             os.path.basename(file_path) )
             except RuntimeError:
                 result = "PREDICT_FAILURE"
 
