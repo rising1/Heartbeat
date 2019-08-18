@@ -11,8 +11,8 @@ from PIL import Image
 
 class ImageType:
 
-    model = squeezenet1_1(pretrained=True)
-    #  model = densenet161(pretrained=True)
+    #  model = squeezenet1_1(pretrained=True)
+    model = densenet161(pretrained=True)
     model.eval()
 
     def __init__(self):
