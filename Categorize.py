@@ -1,4 +1,5 @@
 import os
+import shutil
 from string import ascii_lowercase
 from PIL import Image
 from shutil import copyfile
@@ -175,7 +176,12 @@ class Categorize:
 
     def copy_top_up_images(self):
         for tdirNames in next(os.walk(self.targetDir + "/trial"))[1]:
-            print(tdirNames.split(" ")[0])
+            bird_dir = tdirNames.split(" ")[0]
+            source = self.targetDir + "/trial" + tdirNames
+            dest1 = self.rootDir + "/train" + bird_dir
+            files = os.listdir(source)
+            for f in files:
+                shutil.move(source + f, dest1)
 
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
