@@ -178,7 +178,10 @@ class Categorize:
         for tdirNames in next(os.walk(self.targetDir + "/trial"))[1]:
             bird_dir = tdirNames.split(" ")[0]
             source = self.targetDir + "/trial" + tdirNames
+            print("source=",source)
             dest1 = self.rootDir + "/train" + bird_dir
+            print("dest=",dest1)
+
             files = os.listdir(source)
             for f in files:
                 shutil.move(source + f, dest1)
