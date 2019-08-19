@@ -11,17 +11,19 @@ class CleanDirectories:
             for filename in fileList:
                 print('\t%s' % filename)
                 self.testFile = dirName + '/' + filename
-                print(self.testFile)
+
                 try:
                     im = Image.open(self.testFile)
                     im.verify() #I perform also verify, don't know if he sees other types o defects
                     im.close() #reload is necessary in my case
+                    print("passed ",self.testFile)
                     #im = Image.load(filename)
                     #im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
                     #im.close()
 
                 except:
                     os.remove(self.testFile)
+                    print("removed ",self.testFile)
 
 if __name__ == "__main__":
     CleanDirectories("C:/Users/phfro/Documents/python/data/BirdiesData/train")
