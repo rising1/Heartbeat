@@ -182,6 +182,7 @@ class Categorize:
             files = os.listdir(source)
             for f in files:
                 shutil.move(source + f, dest1)
+                print("copied ",source + f," to ",dest1)
 
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
