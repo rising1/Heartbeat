@@ -172,6 +172,11 @@ class Categorize:
                     print("removing ",bad_file[2])
                     os.remove(bad_file[2])
 
+
+    def copy_top_up_images(self):
+        for tdirNames in next(os.walk(self.targetDir + "/trial"))[1]:
+            print(tdirNames.split(" ")[0])
+
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
     #  categorize = Categorize('f:/birdiesdata2/','f:/birdiesdata2')
