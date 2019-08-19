@@ -177,7 +177,7 @@ class Categorize:
     def copy_top_up_images(self):
         for tdirNames in next(os.walk(self.targetDir + "/trial"))[1]:
             bird_dir = tdirNames.split(" ")[0]
-            source = self.targetDir + "trial/" + tdirNames
+            source = self.targetDir + "trial/" + tdirNames + "/"
             print("source=",source)
             dest1 = self.rootDir + "train/" + bird_dir
             print("dest=",dest1)
