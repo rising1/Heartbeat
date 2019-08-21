@@ -107,26 +107,26 @@ for var_name in optimizer.state_dict():
         print(var_name, "\t", optimizer.state_dict()[var_name])
 
 
-
-train_loader_class = \
+if(model.training):
+    train_loader_class = \
         HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
-val_loader_class = \
+    val_loader_class = \
         HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
-test_loader_class = \
+    test_loader_class = \
         HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
-single_loader_class = \
+    single_loader_class = \
         HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
-train_loader = train_loader_class.dataloaders["train"]
-val_loader = val_loader_class.dataloaders["val"]
-test_loader = test_loader_class.dataloaders["test"]
+    train_loader = train_loader_class.dataloaders["train"]
+    val_loader = val_loader_class.dataloaders["val"]
+    test_loader = test_loader_class.dataloaders["test"]
 
 
-# Get a batch of training data
-inputs, classes = next(iter(train_loader))
-print('len inputs=', len(inputs))
+    # Get a batch of training data
+    inputs, classes = next(iter(train_loader))
+    print('len inputs=', len(inputs))
 
-# Make a grid from batch
-out = torchvision.utils.make_grid(inputs)
+    # Make a grid from batch
+    out = torchvision.utils.make_grid(inputs)
 
 
 def save_models(epoch, loss, save_point):
