@@ -14,9 +14,10 @@ def imshow(img):
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
     plt.show()
 
-dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
+dataPathRoot = '/content/drive/My Drive/" \
+                     "Colab Notebooks/eval/' # used in DataLoaderHeartbeat
 if not (os.path.exists(dataPathRoot)):
-    dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
+    print(' data path doesnt exist')  # used in DataLoaderHeartbeat
 
 data_transform = transforms.Compose([
                 transforms.Resize(80),
