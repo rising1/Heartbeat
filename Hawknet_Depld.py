@@ -14,8 +14,8 @@ def imshow(img):
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
     plt.show()
 
-dataPathRoot = '/content/drive/My Drive/" \
-                     "Colab Notebooks/eval/' # used in DataLoaderHeartbeat
+dataPathRoot = '/content/drive/My Drive/' \
+                     'Colab Notebooks/eval/' # used in DataLoaderHeartbeat
 if not (os.path.exists(dataPathRoot)):
     print(' data path doesnt exist')  # used in DataLoaderHeartbeat
 
