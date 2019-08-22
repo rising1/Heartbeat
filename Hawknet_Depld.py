@@ -30,7 +30,7 @@ image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot), data_transform)
 imshow(torchvision.utils.make_grid(image_dataset[0][0]))
 
 #  Predict classes using images from the test set
-outputs = HawkNet.model(image_dataset[0][0])
+outputs = HawkNet.model(image_dataset[0][0].unsqueeze(0))
 _, prediction = torch.max(outputs.data, 1)
 print("prediction=",prediction)
 
