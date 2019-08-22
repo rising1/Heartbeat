@@ -7,48 +7,52 @@ from matplotlib import pyplot as plt
 import ConvNet
 import HawkDataLoader
 from torch.optim import Adam
-import torch.optim as optim
-from torch.optim import lr_scheduler
 import os
 import glob
 import time
 
+def build_model():
 
+    global faff, snapshot_points, batch_sizes, \
+            loadfile, dataPathRoot, model, \
+            optimizer, loss_fn, pic_size, epoch, \
+            loss, device, train_loader_class, \
+            learning_rate, test_loader, \
+            single_loader_class, num_epochs
 
-# Hyperparameters
-colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 12  # used in ??????
-kernel_sizes = 3  # used in Unit
-stride_pixels = 1  # used in Unit
-padding_pixels = 1  # used in Unit
-pooling_factor = 2  # used in SimpleNet
-pic_size = 72  # used in SimpleNet
-output_classes = 220  # used in SimpleNet
-learning_rate = 0.001  # used in HeartbeatClean
-weight_decay = 0.0001  # used in HeartbeatClean
-dropout_factor = 0.1  # used in Unit
-faff = 'false'
-num_epochs = 300  # used in HeartbeatClean
-snapshot_points = num_epochs / 1
-batch_sizes = 256  # used in HeartbeatClean
-#  batch_sizes = 6 # used in HeartbeatClean
-loadfile = True
+    # Hyperparameters
+    colour_channels = 3  # used in SimpleNet
+    no_feature_detectors = 12  # used in ??????
+    kernel_sizes = 3  # used in Unit
+    stride_pixels = 1  # used in Unit
+    padding_pixels = 1  # used in Unit
+    pooling_factor = 2  # used in SimpleNet
+    pic_size = 72  # used in SimpleNet
+    output_classes = 220  # used in SimpleNet
+    learning_rate = 0.001  # used in HeartbeatClean
+    weight_decay = 0.0001  # used in HeartbeatClean
+    dropout_factor = 0.1  # used in Unit
+    faff = 'false'
+    num_epochs = 300  # used in HeartbeatClean
+    snapshot_points = num_epochs / 1
+    batch_sizes = 256  # used in HeartbeatClean
+    #  batch_sizes = 6 # used in HeartbeatClean
+    loadfile = True
 
-#  dataPathRoot = 'F:/BirdiesData/' # used in DataLoaderHeartbeat
-#  dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
-#  if not (os.path.exists(dataPathRoot)):
-#  dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
-#  dataPathRoot = '/content/drive/My Drive/Colab Notebooks/BirdiesData'
-dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
+    #  dataPathRoot = 'F:/BirdiesData/' # used in DataLoaderHeartbeat
+    #  dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
+    #  if not (os.path.exists(dataPathRoot)):
+    #  dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
+    #  dataPathRoot = '/content/drive/My Drive/Colab Notebooks/BirdiesData'
+    dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
+    print("parameters loaded and data root path set")
 
-print("parameters loaded and data root path set")
-
-SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
+    SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
                  output_classes, colour_channels, pic_size, pooling_factor]
-model = ConvNet.SimpleNet(SimpleNetArgs)
-optimizer = Adam(model.parameters(), lr=learning_rate,
+    model = ConvNet.SimpleNet(SimpleNetArgs)
+    optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
-loss_fn = nn.CrossEntropyLoss()
+    loss_fn = nn.CrossEntropyLoss()
 
 
 def get_latest_file(path, *paths):
@@ -62,71 +66,70 @@ def get_latest_file(path, *paths):
     _, filename = os.path.split(latest_file)
     return filename
 
+def transfer_to_gpu():
+    device = torch.device("cuda: 0" if torch.cuda.is_available() else "cpu")
+    print("device=", device)
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        model.to(device)
 
-device = torch.device("cuda: 0" if torch.cuda.is_available() else "cpu")
-print("device=", device)
-if torch.cuda.is_available():
-    torch.cuda.empty_cache()
-    model.to(device)
+def load_latest_saved_model():
+    global dataPathRoot
+    # load a saved model if one exists
+    comp_root = dataPathRoot + "/saved_models/"
+    stub_name = "Birdies_model_*"
+    print("latest filename=", get_latest_file(comp_root, stub_name))
 
-# load a saved model if one exists
-comp_root = dataPathRoot + "/saved_models/"
-stub_name = "Birdies_model_*"
-print("latest filename=", get_latest_file(comp_root, stub_name))
+    if os.path.exists(comp_root + "/" + get_latest_file(comp_root, stub_name)) and loadfile == True:
+        checkpoint = torch.load(comp_root + "/" + get_latest_file(comp_root, stub_name))
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        for state in optimizer.state.values():
+            for k, v in state.items():
+                if isinstance(v, torch.Tensor):
+                    state[k] = v.to(device)
+        epoch = checkpoint['epoch']
+        loss = checkpoint['loss']
+        model.train()
+        model_file_path = comp_root + get_latest_file(comp_root, stub_name)
+        interim_fig_prev_text = model_file_path[(model_file_path.rfind('_') + 1):(len(model_file_path) - 1)]
+        interim_fig_prev = float(interim_fig_prev_text)
+        print("using saved model ", model_file_path, " Loss: {:.4f}".format(interim_fig_prev))
+    else:
+        print("using new model")
+    #  finished deciding where the model comes from
 
-if os.path.exists(comp_root + "/" + get_latest_file(comp_root, stub_name)) and loadfile == True:
-    checkpoint = torch.load(comp_root + "/" + get_latest_file(comp_root, stub_name))
-    model.load_state_dict(checkpoint['model_state_dict'])
-    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-    for state in optimizer.state.values():
-        for k, v in state.items():
-            if isinstance(v, torch.Tensor):
-                state[k] = v.to(device)
-    epoch = checkpoint['epoch']
-    loss = checkpoint['loss']
-    model.train()
-    model_file_path = comp_root + get_latest_file(comp_root, stub_name)
-    interim_fig_prev_text = model_file_path[(model_file_path.rfind('_') + 1):(len(model_file_path) - 1)]
-    interim_fig_prev = float(interim_fig_prev_text)
-    print("using saved model ", model_file_path, " Loss: {:.4f}".format(interim_fig_prev))
-else:
-    print("using new model")
-#  finished deciding where the model comes from
+    #  For the given model
 
-#  For the given model
+    #  Print model's state_dict
+    #  print("Model's state_dict:")
+    #  for param_tensor in model.state_dict():
+    #    print(param_tensor, "\t", model.state_dict()[param_tensor].size())
 
-#  Print model's state_dict
-#  print("Model's state_dict:")
-#  for param_tensor in model.state_dict():
-#    print(param_tensor, "\t", model.state_dict()[param_tensor].size())
+    # Print optimizer's state_dict
+    print("Optimizer's state_dict:")
+    for var_name in optimizer.state_dict():
+        if var_name == "param_groups":
+            print(var_name, "\t", optimizer.state_dict()[var_name])
 
-# Print optimizer's state_dict
-print("Optimizer's state_dict:")
-for var_name in optimizer.state_dict():
-    if var_name == "param_groups":
-        print(var_name, "\t", optimizer.state_dict()[var_name])
-
-
-if(model.training):
-    train_loader_class = \
-        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
-    val_loader_class = \
-        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
-    test_loader_class = \
-        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
-    single_loader_class = \
-        HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
-    train_loader = train_loader_class.dataloaders["train"]
-    val_loader = val_loader_class.dataloaders["val"]
-    test_loader = test_loader_class.dataloaders["test"]
-
-
-    # Get a batch of training data
-    inputs, classes = next(iter(train_loader))
-    print('len inputs=', len(inputs))
-
-    # Make a grid from batch
-    out = torchvision.utils.make_grid(inputs)
+def set_up_training():
+    if(model.training):
+        train_loader_class = \
+            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+        val_loader_class = \
+            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+        test_loader_class = \
+            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+        single_loader_class = \
+            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+        train_loader = train_loader_class.dataloaders["train"]
+        val_loader = val_loader_class.dataloaders["val"]
+        test_loader = test_loader_class.dataloaders["test"]
+        # Get a batch of training data
+        inputs, classes = next(iter(train_loader))
+        print('len inputs=', len(inputs))
+        # Make a grid from batch
+        out = torchvision.utils.make_grid(inputs)
 
 
 def save_models(epoch, loss, save_point):
@@ -309,5 +312,9 @@ def imshow(inp, title=None):
 
 # train(num_epochs)
 if __name__ == "__main__":
+      build_model()
+      transfer_to_gpu()
+      load_latest_saved_model()
+      set_up_training()
       train(num_epochs)
     #test()
