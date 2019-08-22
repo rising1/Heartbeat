@@ -11,14 +11,14 @@ import os
 import glob
 import time
 
-def build_model():
+global faff, snapshot_points, batch_sizes, \
+    loadfile, dataPathRoot, model, \
+    optimizer, loss_fn, pic_size, epoch, \
+    loss, device, train_loader_class, \
+    learning_rate, test_loader, \
+    single_loader_class, num_epochs
 
-    global faff, snapshot_points, batch_sizes, \
-            loadfile, dataPathRoot, model, \
-            optimizer, loss_fn, pic_size, epoch, \
-            loss, device, train_loader_class, \
-            learning_rate, test_loader, \
-            single_loader_class, num_epochs
+def build_model():
 
     # Hyperparameters
     colour_channels = 3  # used in SimpleNet
