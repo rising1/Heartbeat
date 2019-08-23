@@ -116,8 +116,14 @@ def load_latest_saved_model():
         if var_name == "param_groups":
             print(var_name, "\t", optimizer.state_dict()[var_name])
 
-def set_up_training():
-    if(model.training):
+def set_up_training(is_training):
+
+    global model, train_loader_class, val_loader_class, \
+            test_loader_class, single_loader_class, train_loader, \
+            val_loader, test_loader
+
+    if(is_training):
+        model.train()
         train_loader_class = \
             HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
         val_loader_class = \
@@ -134,7 +140,8 @@ def set_up_training():
         print('len inputs=', len(inputs))
         # Make a grid from batch
         out = torchvision.utils.make_grid(inputs)
-
+    else:
+        model.eval()
 
 def save_models(epoch, loss, save_point):
     save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}.model".format(epoch) + save_point
