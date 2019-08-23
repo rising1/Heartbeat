@@ -8,7 +8,7 @@ class test_an_image():
 
     def __init__(self,dataPathRoot):
         self.dataPathRoot = dataPathRoot
-        self.data_transformation(self,self.dataPathRoot)
+        self.data_transformation(self.dataPathRoot)
 
     def imshow(img):
         img = img  / 2 + 0.5  # unnormalize
