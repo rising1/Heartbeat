@@ -19,7 +19,7 @@ global faff, snapshot_points, batch_sizes, \
     single_loader_class, num_epochs
 
 def build_model():
-
+    global dataPathRoot
     # Hyperparameters
     colour_channels = 3  # used in SimpleNet
     no_feature_detectors = 12  # used in ??????
