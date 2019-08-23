@@ -69,6 +69,7 @@ def get_latest_file(path, *paths):
     return filename
 
 def transfer_to_gpu():
+    global device
     device = torch.device("cuda: 0" if torch.cuda.is_available() else "cpu")
     print("device=", device)
     if torch.cuda.is_available():
