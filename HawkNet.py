@@ -77,7 +77,7 @@ def transfer_to_gpu():
 
 def load_latest_saved_model():
     global dataPathRoot, loadfile, model, optimizer, \
-            epoch, loss
+            epoch, loss, device
     # load a saved model if one exists
     comp_root = dataPathRoot + "/saved_models/"
     stub_name = "Birdies_model_*"
