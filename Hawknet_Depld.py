@@ -1,37 +1,34 @@
 import torch, torchvision
 from torchvision import transforms, datasets
-import ConvNet
 import os
 from matplotlib import pyplot as plt
 import numpy as np
-import PIL
-from PIL import Image
-import HawkNet
 
-def imshow(img):
-    img = img  / 2 + 0.5  # unnormalize
-    npimg = img.numpy()
-    plt.imshow(np.transpose(npimg, (1, 2, 0)))
-    plt.show()
+class test_an_image():
 
-dataPathRoot = '/content/drive/My Drive/' \
-                     'Colab Notebooks/eval/' # used in DataLoaderHeartbeat
-if not (os.path.exists(dataPathRoot)):
-    print(' data path doesnt exist')  # used in DataLoaderHeartbeat
+    def __init__(self,dataPathRoot):
+        self.dataPathRoot = dataPathRoot
+        self.data_transformation(self,self.dataPathRoot)
 
-data_transform = transforms.Compose([
+    def imshow(img):
+        img = img  / 2 + 0.5  # unnormalize
+        npimg = img.numpy()
+        plt.imshow(np.transpose(npimg, (1, 2, 0)))
+        plt.show()
+
+    def data_transformation(self,dataPathRoot):
+        if not (os.path.exists(dataPathRoot)):
+            print(' data path doesnt exist')  # used in DataLoaderHeartbeat
+
+        data_transform = transforms.Compose([
                 transforms.Resize(80),
                 transforms.CenterCrop(72),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 
-#image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot, 'photo.jpg'), data_transform)
-image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot), data_transform)
-imshow(torchvision.utils.make_grid(image_dataset[0][0]))
+        #image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot, 'photo.jpg'), data_transform)
+        image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot), data_transform)
+        self.imshow(torchvision.utils.make_grid(image_dataset[0][0]))
+        return image_dataset
 
-#  Predict classes using images from the test set
-HawkNet.model.eval()
-outputs = HawkNet.model(image_dataset[0][0].unsqueeze(0))
-_, prediction = torch.max(outputs.data, 1)
-print("prediction=",prediction)
 

@@ -55,6 +55,7 @@ def build_model():
     optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
     loss_fn = nn.CrossEntropyLoss()
+    print("model now built")
 
 
 def get_latest_file(path, *paths):
@@ -75,6 +76,7 @@ def transfer_to_gpu():
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
         model.to(device)
+        print("model transferred to GPU")
 
 def load_latest_saved_model():
     global dataPathRoot, loadfile, model, optimizer, \
@@ -115,6 +117,7 @@ def load_latest_saved_model():
     for var_name in optimizer.state_dict():
         if var_name == "param_groups":
             print(var_name, "\t", optimizer.state_dict()[var_name])
+    print("model loaded")
 
 def set_up_training(is_training):
 
@@ -140,8 +143,10 @@ def set_up_training(is_training):
         print('len inputs=', len(inputs))
         # Make a grid from batch
         out = torchvision.utils.make_grid(inputs)
+        print("model in training mode")
     else:
         model.eval()
+        print("model in evaluation mode")
 
 def save_models(epoch, loss, save_point):
     save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}.model".format(epoch) + save_point
@@ -304,6 +309,13 @@ def test():
     outputs = model(images)
     _, prediction = torch.max(outputs.data, 1)
     print("prediction=",single_loader_class.classes[int(prediction.cpu().numpy())])
+
+def test_single(dataLoader):
+    images, labels = next(iter(dataLoader))
+    #  Predict classes using images from the test set
+    outputs = model(images[0][0].unsqueeze(0))
+    _, prediction = torch.max(outputs.data, 1)
+    print("prediction=",str(int(prediction.cpu().numpy())))
 
 
 def imshow(inp, title=None):
