@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 import ConvNet
 import HawkDataLoader
 from torch.optim import Adam
-import os
+import os, csv
 import glob
 import time
 
@@ -317,8 +317,17 @@ def test_single(images):
     print(type(images))
     outputs = model(images.unsqueeze(0))
     _, prediction = torch.max(outputs.data, 1)
-    print("prediction=",HawkDataLoader.HawkLoader.birds_listing()[int(prediction.cpu().numpy())])
+    print("prediction=",birds_listing()[int(prediction.cpu().numpy())])
 
+def birds_listing():
+    with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'r') as f:
+       reader = csv.reader(f)
+       classes = list(reader)[0]
+       classes.sort()
+       #  self.classes = open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt').read()
+       print("self.classes=",classes)
+       print("len self.classes=",len(classes))
+    return classes
 
 def imshow(inp, title=None):
     """Imshow for Tensor."""
