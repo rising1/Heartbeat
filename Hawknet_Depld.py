@@ -6,7 +6,9 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 class test_an_image():
+
     global test_image
+
     def __init__(self,dataPathRoot):
         global test_image
         self.dataPathRoot = dataPathRoot
