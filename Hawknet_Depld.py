@@ -18,6 +18,16 @@ class test_an_image():
         plt.imshow(np.transpose(npimg, (1, 2, 0)))
         plt.show()
 
+    def transfer_to_gpu(self,image_dataset):
+        global device
+        device = torch.device("cuda: 0" if torch.cuda.is_available() else "cpu")
+        print("device=", device)
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            image_dataset.to(device)
+            print("image transferred to GPU")
+        return image_dataset
+
     def data_transformation(self,dataPathRoot):
         if not (os.path.exists(dataPathRoot)):
             print(' data path doesnt exist')  # used in DataLoaderHeartbeat
@@ -31,6 +41,8 @@ class test_an_image():
         #image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot, 'photo.jpg'), data_transform)
         image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot), data_transform)
         self.imshow(torchvision.utils.make_grid(image_dataset[0][0]))
+        #  push the data to the GPU
+        image_dataset = self.transfer_to_gpu(image_dataset)
         return image_dataset
 
 
