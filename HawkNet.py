@@ -311,7 +311,7 @@ def test():
     print("prediction=",single_loader_class.classes[int(prediction.cpu().numpy())])
 
 def test_single(dataLoader):
-    images, labels = next(iter(dataLoader))
+    images, labels = next(dataLoader)
     #  Predict classes using images from the test set
     outputs = model(images[0][0].unsqueeze(0))
     _, prediction = torch.max(outputs.data, 1)

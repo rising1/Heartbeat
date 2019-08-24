@@ -1,5 +1,6 @@
 import torch, torchvision
 from torchvision import transforms, datasets
+from torch.utils.data import DataLoader
 import os
 from matplotlib import pyplot as plt
 import numpy as np
@@ -29,6 +30,10 @@ class test_an_image():
         #image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot, 'photo.jpg'), data_transform)
         image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot), data_transform)
         self.imshow(torchvision.utils.make_grid(image_dataset[0][0]))
-        return image_dataset
+        data_loader = torch.utils.data.DataLoader(
+            image_dataset,
+            1,
+            shuffle=True, num_workers=0)
+        return data_loader
 
 
