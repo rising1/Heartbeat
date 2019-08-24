@@ -16,7 +16,7 @@ class test_an_image():
         plt.imshow(np.transpose(npimg, (1, 2, 0)))
         plt.show()
 
-    def data_transformation(dataPathRoot):
+    def data_transformation(self,dataPathRoot):
         if not (os.path.exists(dataPathRoot)):
             print(' data path doesnt exist')  # used in DataLoaderHeartbeat
 
