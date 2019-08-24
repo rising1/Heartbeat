@@ -30,10 +30,6 @@ class test_an_image():
         #image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot, 'photo.jpg'), data_transform)
         image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot), data_transform)
         self.imshow(torchvision.utils.make_grid(image_dataset[0][0]))
-        data_loader = torch.utils.data.DataLoader(
-            image_dataset,
-            1,
-            shuffle=True, num_workers=0)
-        return data_loader
+        return image_dataset
 
 
