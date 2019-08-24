@@ -6,10 +6,11 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 class test_an_image():
-
+    global test_image
     def __init__(self,dataPathRoot):
+        global test_image
         self.dataPathRoot = dataPathRoot
-        self.data_transformation(self.dataPathRoot)
+        test_image = self.data_transformation(self.dataPathRoot)
 
     def imshow(self,img):
         img = img  / 2 + 0.5  # unnormalize
