@@ -317,7 +317,7 @@ def test_single(images):
     print(type(images))
     outputs = model(images.unsqueeze(0))
     _, prediction = torch.max(outputs.data, 1)
-    print("prediction=",HawkDataLoader.birds_listing()[int(prediction.cpu().numpy())])
+    print("prediction=",HawkDataLoader.HawkLoader.birds_listing()[int(prediction.cpu().numpy())])
 
 
 def imshow(inp, title=None):
