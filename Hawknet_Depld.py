@@ -24,9 +24,9 @@ class test_an_image():
         print("device=", device)
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
-            image_dataset.to(device)
+            image_dataset[0][0].to(device)
             print("image transferred to GPU")
-        return image_dataset
+        return image_dataset[0][0]
 
     def data_transformation(self,dataPathRoot):
         if not (os.path.exists(dataPathRoot)):
