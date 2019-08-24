@@ -312,6 +312,7 @@ def test():
 
 def test_single(images):
     #  Predict classes using images from the test set
+    print(type(images))
     outputs = model(images.unsqueeze(0))
     _, prediction = torch.max(outputs.data, 1)
     print("prediction=",str(int(prediction.cpu().numpy())))
