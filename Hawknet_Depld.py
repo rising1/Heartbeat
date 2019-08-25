@@ -42,7 +42,8 @@ class test_an_image():
         image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot), data_transform)
         self.imshow(torchvision.utils.make_grid(image_dataset[0][0]))
         #  push the data to the GPU
-        image_dataset = self.transfer_to_gpu(image_dataset)
+        #  image_dataset = self.transfer_to_gpu(image_dataset)
+        image_dataset = image_dataset[0][0]
         return image_dataset
 
 
