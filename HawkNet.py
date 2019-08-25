@@ -363,10 +363,14 @@ def show_images(images, cols=1, titles=None):
     fig = plt.figure()
     for n, (image, title) in enumerate(zip(images, titles)):
         a = fig.add_subplot(cols, np.ceil(n_images / float(cols)), n + 1)
+        a.set_title(title + " - " + test_single(image))
+        image = image  / 2 + 0.5  # unnormalize
+        npimg = image.numpy()
+        image = np.transpose(npimg, (1, 2, 0))
         if image.ndim == 2:
             plt.gray()
         plt.imshow(image)
-        a.set_title(title + " - " + test_single(image))
+
     fig.set_size_inches(np.array(fig.get_size_inches()) * n_images)
     plt.show()
 
