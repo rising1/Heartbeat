@@ -317,7 +317,9 @@ def test_single(images):
     print(type(images))
     outputs = model(images.unsqueeze(0))
     _, prediction = torch.max(outputs.data, 1)
-    print("prediction=",birds_listing()[int(prediction.cpu().numpy())])
+    guess = birds_listing()[int(prediction.cpu().numpy())]
+    print("prediction=",guess)
+    return guess
 
 def birds_listing():
     with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'r') as f:
@@ -364,7 +366,7 @@ def show_images(images, cols=1, titles=None):
         if image.ndim == 2:
             plt.gray()
         plt.imshow(image)
-        a.set_title(title)
+        a.set_title(title + " - " + test_single(image))
     fig.set_size_inches(np.array(fig.get_size_inches()) * n_images)
     plt.show()
 
