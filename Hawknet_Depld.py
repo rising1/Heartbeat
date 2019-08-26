@@ -5,19 +5,13 @@ import os
 from matplotlib import pyplot as plt
 import numpy as np
 
-class test_an_image():
+class test_images():
 
     def __init__(self,dataPathRoot):
 
         self.dataPathRoot = dataPathRoot
-        self.test_image = self.data_transformation(self.dataPathRoot)
-
-    def imshow(self,img):
-        img = img  / 2 + 0.5  # unnormalize
-        npimg = img.numpy()
-        plt.imshow(np.transpose(npimg, (1, 2, 0)))
-        plt.show()
-
+        self.data_loaded = self.data_loader(self.data_transformation(
+                            self.dataPathRoot))
 
     def data_transformation(self,dataPathRoot):
         if not (os.path.exists(dataPathRoot)):
@@ -31,10 +25,13 @@ class test_an_image():
 
         #image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot, 'photo.jpg'), data_transform)
         image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot), data_transform)
-        self.imshow(torchvision.utils.make_grid(image_dataset[0][0]))
+        #  self.imshow(torchvision.utils.make_grid(image_dataset[0][0]))
         #  self.imshow(torchvision.utils.make_grid(image_dataset))
         #  push the data to the GPU
-        image_dataset = image_dataset[0][0]
+        #  image_dataset = image_dataset[0][0]
         return image_dataset
+
+    def data_loader(self,image_dataset):
+        return DataLoader(image_dataset,batch_size=6,shuffle=False,num_workers=0)
 
 
