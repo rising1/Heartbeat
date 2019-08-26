@@ -10,8 +10,8 @@ class test_images():
     def __init__(self,dataPathRoot):
 
         self.dataPathRoot = dataPathRoot
-        self.data_loaded = self.data_loader(self.data_transformation(
-                            self.dataPathRoot))
+        self.test_images = self.data_transformation(
+                            self.dataPathRoot)
 
     def data_transformation(self,dataPathRoot):
         if not (os.path.exists(dataPathRoot)):
