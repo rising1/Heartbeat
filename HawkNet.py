@@ -311,15 +311,16 @@ def test():
     print("prediction=",single_loader_class.classes[int(prediction.cpu().numpy())])
 
 def test_single(images):
-    #  Predict classes using images from the test set
-    print(type(images))
-    images = images.to(device)
-    print(type(images))
-    outputs = model(images.unsqueeze(0))
-    _, prediction = torch.max(outputs.data, 1)
-    guess = birds_listing()[int(prediction.cpu().numpy())]
-    print("prediction=",guess)
-    return guess
+    for image in images:
+        #  Predict classes using images from the test set
+        print(type(image))
+        image = image.to(device)
+        print(type(image))
+        outputs = model(image.unsqueeze(0))
+        _, prediction = torch.max(outputs.data, 1)
+        guess = birds_listing()[int(prediction.cpu().numpy())]
+        print("prediction=",guess)
+
 
 def birds_listing():
     with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'r') as f:
