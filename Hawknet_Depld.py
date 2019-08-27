@@ -28,7 +28,8 @@ class test_images():
         #  self.imshow(torchvision.utils.make_grid(image_dataset[0][0]))
         #  self.imshow(torchvision.utils.make_grid(image_dataset))
         #  push the data to the GPU
-        image_dataset = image_dataset[0][0]
+        #  image_dataset = image_dataset[0][0] --> replaced 27.08.19
+        image_dataset = image_dataset[:][0]
         return image_dataset
 
     def data_loader(self,image_dataset):
