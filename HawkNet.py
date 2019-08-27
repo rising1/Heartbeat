@@ -314,7 +314,7 @@ def test_single(images):
     for image in images:
         #  Predict classes using images from the test set
         print(type(image))
-        image = image.to(device)
+        image = image[0].to(device)
         print(type(image))
         outputs = model(image.unsqueeze(0))
         _, prediction = torch.max(outputs.data, 1)
