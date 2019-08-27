@@ -316,6 +316,7 @@ def test_single(images):
         print(type(image))
         image = image[0].to(device)
         print(type(image))
+        imshow(image)
         outputs = model(image.unsqueeze(0))
         _, prediction = torch.max(outputs.data, 1)
         guess = birds_listing()[int(prediction.cpu().numpy())]
