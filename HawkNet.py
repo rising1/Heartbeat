@@ -311,17 +311,22 @@ def test():
     print("prediction=",single_loader_class.classes[int(prediction.cpu().numpy())])
 
 def test_single(images):
+    image_list = []
+    guess_list = []
     for image in images:
         #  Predict classes using images from the test set
         print(type(image))
         image = image[0].to(device)
         print(type(image))
         img = image.cpu()
+        image_list.append(img)
         outputs = model(image.unsqueeze(0))
         _, prediction = torch.max(outputs.data, 1)
         guess = birds_listing()[int(prediction.cpu().numpy())]
+        guess_list.append(guess)
         imshow(img, guess)
         #  print("prediction=",guess)
+    show_images(image_list,guess_list)
 
 
 def birds_listing():
@@ -347,7 +352,31 @@ def imshow(inp, title=None):
     plt.pause(0.1)  # pause a bit so that plots are updated
 
 
+def show_images(images, cols=1, titles=None):
+    """Display a list of images in a single figure with matplotlib.
 
+    Parameters
+    ---------
+    images: List of np.arrays compatible with plt.imshow.
+
+    cols (Default = 1): Number of columns in figure (number of rows is
+                        set to np.ceil(n_images/float(cols))).
+
+    titles: List of titles corresponding to each image. Must have
+            the same length as titles.
+    """
+    assert ((titles is None) or (len(images) == len(titles)))
+    n_images = len(images)
+    if titles is None: titles = ['Image (%d)' % i for i in range(1, n_images + 1)]
+    fig = plt.figure()
+    for n, (image, title) in enumerate(zip(images, titles)):
+        a = fig.add_subplot(cols, np.ceil(n_images / float(cols)), n + 1)
+        if image.ndim == 2:
+            plt.gray()
+        plt.imshow(image)
+        a.set_title(title)
+    fig.set_size_inches(np.array(fig.get_size_inches()) * n_images)
+    plt.show()
 
 # train(num_epochs)
 if __name__ == "__main__":
