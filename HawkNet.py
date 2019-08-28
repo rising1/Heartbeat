@@ -380,7 +380,8 @@ def show_images(images, cols=1, titles=None):
             plt.gray()
         plt.imshow(image)
         a.set_title(title)
-    fig.set_size_inches(np.array(fig.get_size_inches()) * n_images)
+    #  fig.set_size_inches(np.array(fig.get_size_inches()) * n_images)
+    fig = plt.figure(figsize=(6, 3))
     plt.show()
 
 # train(num_epochs)
