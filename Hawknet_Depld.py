@@ -32,8 +32,6 @@ class test_images():
         #  image_dataset = image_dataset[:][0]
         return image_dataset
 
-    def data_loader(self,image_dataset):
-        return DataLoader(image_dataset,batch_size=6,shuffle=False,num_workers=0)
 
 
 

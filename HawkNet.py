@@ -338,8 +338,8 @@ def birds_listing():
        classes = list(reader)[0]
        classes.sort()
        #  self.classes = open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt').read()
-       print("self.classes=",classes)
-       print("len self.classes=",len(classes))
+       #  print("self.classes=",classes)
+       #  print("len self.classes=",len(classes))
     return classes
 
 def imshow(inp, title=None):
