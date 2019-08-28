@@ -317,11 +317,11 @@ def test_single(images):
         image = image[0].to(device)
         print(type(image))
         img = image.cpu()
-        imshow(img)
         outputs = model(image.unsqueeze(0))
         _, prediction = torch.max(outputs.data, 1)
         guess = birds_listing()[int(prediction.cpu().numpy())]
-        print("prediction=",guess)
+        imshow(img, guess)
+        #  print("prediction=",guess)
 
 
 def birds_listing():
