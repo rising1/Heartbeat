@@ -326,7 +326,7 @@ def test_single(images):
         guess_list.append(guess)
         imshow(img, guess)
         #  print("prediction=",guess)
-    show_images(image_list,guess_list)
+    show_images(image_list,2,guess_list)
 
 
 def birds_listing():
