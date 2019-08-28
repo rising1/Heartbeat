@@ -315,9 +315,7 @@ def test_single(images):
     guess_list = []
     for image in images:
         #  Predict classes using images from the test set
-        print(type(image))
         image = image[0].to(device)
-        print(type(image))
         img = image.cpu()
         inp = img.numpy().transpose((1, 2, 0))
         mean = np.array([0.485, 0.456, 0.406])
@@ -329,7 +327,7 @@ def test_single(images):
         _, prediction = torch.max(outputs.data, 1)
         guess = birds_listing()[int(prediction.cpu().numpy())]
         guess_list.append(guess)
-        imshow(img, guess)
+        #  imshow(img, guess)
         #  print("prediction=",guess)
     show_images(image_list,2,guess_list)
 
