@@ -78,15 +78,18 @@ def transfer_to_gpu():
         model.to(device)
         print("model transferred to GPU")
 
-def load_latest_saved_model():
+def load_latest_saved_model(chosen_model = None):
     global dataPathRoot, loadfile, model, optimizer, \
             epoch, loss, device
     # load a saved model if one exists
     comp_root = dataPathRoot + "/saved_models/"
     stub_name = "Birdies_model_*"
     print("latest filename=", get_latest_file(comp_root, stub_name))
-
-    if os.path.exists(comp_root + "/" + get_latest_file(comp_root, stub_name)) and loadfile == True:
+    if chosen_model is not None:
+        selected_model = chosen_model
+    else:
+        selected_model = get_latest_file(comp_root, stub_name)
+    if os.path.exists(comp_root + "/" + selected_model) and loadfile == True:
         checkpoint = torch.load(comp_root + "/" + get_latest_file(comp_root, stub_name))
         model.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
