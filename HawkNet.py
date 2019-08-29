@@ -87,14 +87,14 @@ def load_latest_saved_model(chosen_model = None):
 
     if chosen_model is not None:
         selected_model = chosen_model
-        print("looking for ",comp_root + "/" + selected_model)
+        print("looking for ",comp_root + selected_model)
     else:
         stub_name = "Birdies_model_*"
         selected_model = get_latest_file(comp_root, stub_name)
         print("latest filename=", selected_model)
 
-    if os.path.exists(comp_root + "/" + selected_model) and loadfile == True:
-        checkpoint = torch.load(comp_root + "/" + selected_model)
+    if os.path.exists(comp_root + selected_model) and loadfile == True:
+        checkpoint = torch.load(comp_root +  selected_model)
         model.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         for state in optimizer.state.values():
