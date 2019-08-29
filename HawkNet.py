@@ -105,7 +105,7 @@ def load_latest_saved_model(chosen_model = None):
         epoch = checkpoint['epoch']
         loss = checkpoint['loss']
         model.train()
-        model_file_path = comp_root + get_latest_file(comp_root, stub_name)
+        model_file_path = comp_root + selected_model
         interim_fig_prev_text = model_file_path[(model_file_path.rfind('_') + 1):(len(model_file_path) - 1)]
         interim_fig_prev = float(interim_fig_prev_text)
         print("using saved model ", model_file_path, " Loss: {:.4f}".format(interim_fig_prev))
