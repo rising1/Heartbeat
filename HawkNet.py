@@ -87,6 +87,7 @@ def load_latest_saved_model(chosen_model = None):
 
     if chosen_model is not None:
         selected_model = chosen_model
+        print("looking for ",comp_root + "/" + selected_model)
     else:
         stub_name = "Birdies_model_*"
         selected_model = get_latest_file(comp_root, stub_name)
