@@ -46,7 +46,8 @@ def build_model():
     #  if not (os.path.exists(dataPathRoot)):
     #  dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
     #  dataPathRoot = '/content/drive/My Drive/Colab Notebooks/BirdiesData'
-    dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
+    #  dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
+    dataPathRoot = 'C:/Users/phfro/Documents/python/data'
     print("parameters loaded and data root path set")
 
     SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
@@ -78,7 +79,7 @@ def transfer_to_gpu():
         model.to(device)
         print("model transferred to GPU")
 
-def load_latest_saved_model(chosen_model = None):
+def load_latest_saved_model(chosen_model = None,is_eval = False):
     global dataPathRoot, loadfile, model, optimizer, \
             epoch, loss, device
     # load a saved model if one exists
@@ -104,11 +105,12 @@ def load_latest_saved_model(chosen_model = None):
                     state[k] = v.to(device)
         epoch = checkpoint['epoch']
         loss = checkpoint['loss']
-        model.train()
-        model_file_path = comp_root + selected_model
-        interim_fig_prev_text = model_file_path[(model_file_path.rfind('_') + 1):(len(model_file_path) - 1)]
-        interim_fig_prev = float(interim_fig_prev_text)
-        print("using saved model ", model_file_path, " Loss: {:.4f}".format(interim_fig_prev))
+        #  model.train()
+        if not is_eval:
+            model_file_path = comp_root + selected_model
+            interim_fig_prev_text = model_file_path[(model_file_path.rfind('_') + 1):(len(model_file_path) - 1)]
+            interim_fig_prev = float(interim_fig_prev_text)
+            print("using saved model ", model_file_path, " Loss: {:.4f}".format(interim_fig_prev))
     else:
         print("using new model")
     #  finished deciding where the model comes from
@@ -341,7 +343,8 @@ def test_single(images):
 
 
 def birds_listing():
-    with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'r') as f:
+    with open('C:/Users/phfro/Documents/python/data/Class_validate.txt', 'r') as f:
+    #  with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'r') as f:
        reader = csv.reader(f)
        classes = list(reader)[0]
        classes.sort()
