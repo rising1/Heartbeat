@@ -18,10 +18,11 @@ global faff, snapshot_points, batch_sizes, \
     learning_rate, test_loader, \
     single_loader_class, num_epochs
 
-def build_model():
-    global dataPathRoot, faff, snapshot_points, \
+def build_model(dataPathRoot_in):
+    global  dataPathRoot, faff, snapshot_points, \
             batch_sizes, loadfile, model, optimizer, \
             loss_fn
+
     # Hyperparameters
     colour_channels = 3  # used in SimpleNet
     no_feature_detectors = 12  # used in ??????
@@ -47,7 +48,8 @@ def build_model():
     #  dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
     #  dataPathRoot = '/content/drive/My Drive/Colab Notebooks/BirdiesData'
     #  dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
-    dataPathRoot = 'C:/Users/phfro/Documents/python/data'
+    #  dataPathRoot = 'C:/Users/phfro/Documents/python/data'
+    dataPathRoot = dataPathRoot_in
     print("parameters loaded and data root path set")
 
     SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
@@ -320,7 +322,7 @@ def test():
     _, prediction = torch.max(outputs.data, 1)
     print("prediction=",single_loader_class.classes[int(prediction.cpu().numpy())])
 
-def test_single(images):
+def test_single(images,validate_path):
     image_list = []
     guess_list = []
     for image in images:
@@ -335,17 +337,17 @@ def test_single(images):
         image_list.append(inp)
         outputs = model(image.unsqueeze(0))
         _, prediction = torch.max(outputs.data, 1)
-        raw_guess = outputs.data
-        guess = birds_listing()[int(prediction.cpu().numpy())]
-        guess_list.append(guess )
+        guess = birds_listing(validate_path)[int(prediction.cpu().numpy())]
+        guess_list.append(guess)
         #  imshow(img, guess)
         #  print("prediction=",guess)
     show_images(image_list,2,guess_list)
 
 
-def birds_listing():
-    with open('C:/Users/phfro/Documents/python/data/Class_validate.txt', 'r') as f:
-    #  with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'r') as f:
+def birds_listing(validate_path):
+    with open(validate_path,'r') as f:
+       #  with open('C:/Users/phfro/Documents/python/data/Class_validate.txt', 'r') as f:
+       #  with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'r') as f:
        reader = csv.reader(f)
        classes = list(reader)[0]
        classes.sort()
