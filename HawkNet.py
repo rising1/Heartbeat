@@ -320,7 +320,7 @@ def test():
     _, prediction = torch.max(outputs.data, 1)
     print("prediction=",single_loader_class.classes[int(prediction.cpu().numpy())])
 
-def test_single(images):
+def test_single(images,validate_path):
     image_list = []
     guess_list = []
     for image in images:
@@ -335,16 +335,17 @@ def test_single(images):
         image_list.append(inp)
         outputs = model(image.unsqueeze(0))
         _, prediction = torch.max(outputs.data, 1)
-        guess = birds_listing()[int(prediction.cpu().numpy())]
+        guess = birds_listing(validate_path)[int(prediction.cpu().numpy())]
         guess_list.append(guess)
         #  imshow(img, guess)
         #  print("prediction=",guess)
     show_images(image_list,2,guess_list)
 
 
-def birds_listing():
-    with open('C:/Users/phfro/Documents/python/data/Class_validate.txt', 'r') as f:
-    #  with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'r') as f:
+def birds_listing(validate_path):
+    with open(validate_path,'r') as f:
+       #  with open('C:/Users/phfro/Documents/python/data/Class_validate.txt', 'r') as f:
+       #  with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'r') as f:
        reader = csv.reader(f)
        classes = list(reader)[0]
        classes.sort()
