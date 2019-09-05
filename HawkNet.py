@@ -19,7 +19,7 @@ global faff, snapshot_points, batch_sizes, \
     single_loader_class, num_epochs
 
 def build_model(dataPathRoot_in):
-    global  datPathRoot, faff, snapshot_points, \
+    global  dataPathRoot, faff, snapshot_points, \
             batch_sizes, loadfile, model, optimizer, \
             loss_fn
 
