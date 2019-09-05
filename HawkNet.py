@@ -18,10 +18,11 @@ global faff, snapshot_points, batch_sizes, \
     learning_rate, test_loader, \
     single_loader_class, num_epochs
 
-def build_model():
-    global dataPathRoot, faff, snapshot_points, \
+def build_model(dataPathRoot_in):
+    global  datPathRoot, faff, snapshot_points, \
             batch_sizes, loadfile, model, optimizer, \
             loss_fn
+
     # Hyperparameters
     colour_channels = 3  # used in SimpleNet
     no_feature_detectors = 12  # used in ??????
@@ -47,7 +48,8 @@ def build_model():
     #  dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/BirdiesData/'  # used in DataLoaderHeartbeat
     #  dataPathRoot = '/content/drive/My Drive/Colab Notebooks/BirdiesData'
     #  dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
-    dataPathRoot = 'C:/Users/phfro/Documents/python/data'
+    #  dataPathRoot = 'C:/Users/phfro/Documents/python/data'
+    dataPathRoot = dataPathRoot_in
     print("parameters loaded and data root path set")
 
     SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
