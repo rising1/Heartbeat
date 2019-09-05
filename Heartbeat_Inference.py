@@ -19,6 +19,11 @@
 
 import HawkNet
 import Hawknet_Depld
+from flask import Flask
+app = Flask(__name__)
+@app.route("/")
+def hello():
+        return "Hello World!"
 
 HawkNet.build_model()
 HawkNet.transfer_to_gpu()
