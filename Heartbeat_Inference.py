@@ -19,14 +19,21 @@
 
 import HawkNet
 import Hawknet_Depld
+from flask import Flask, request, render_template
+
 validate_path = 'C:/Users/phfro/Documents/python/data/Class_validate.txt'
 dataPathRoot = 'C:/Users/phfro/Documents/python/data'
 
-from flask import Flask
+
 app = Flask(__name__)
-@app.route("/")
+@app.route("/",methods=['GET','POST'])
 def hello():
-        return "Hello World!"
+        if request.method == 'GET':
+                return render_template('index.html', value='hello')
+        if request.method == 'POST':
+                predicted_bird = 'Blackbird'
+                return render_template('result.html', bird=predicted_bird)
+
 
 HawkNet.build_model(dataPathRoot)
 HawkNet.transfer_to_gpu()
