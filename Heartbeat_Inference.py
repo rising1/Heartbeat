@@ -26,7 +26,7 @@ dataPathRoot = 'C:/Users/phfro/Documents/python/data'
 
 
 app = Flask(__name__)
-@app.route("/",methods=['GET','POST'])
+@app.route("/C:/Users/phfro/PycharmProjects/heartbeat/venv/",methods=['GET','POST'])
 def hello():
         if request.method == 'GET':
                 return render_template('index.html', value='hello')
