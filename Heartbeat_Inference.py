@@ -23,10 +23,13 @@ from flask import Flask, request, render_template
 
 validate_path = 'C:/Users/phfro/Documents/python/data/Class_validate.txt'
 dataPathRoot = 'C:/Users/phfro/Documents/python/data'
-app_route = 'C:/Users/phfro/PycharmProjects/heartbeat/venv/'
+app_route = '/'
 
 
 app = Flask(__name__)
+print("app.root_path=",app.root_path)
+print("app.instance_path=",app.instance_path)
+#  @app.route('/',methods=['GET','POST'])
 @app.route(app_route,methods=['GET','POST'])
 def hello():
         if request.method == 'GET':
