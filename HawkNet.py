@@ -344,6 +344,7 @@ def test_single(images,validate_path):
     show_images(image_list,2,guess_list)
 
 
+
 def birds_listing(validate_path):
     with open(validate_path,'r') as f:
        #  with open('C:/Users/phfro/Documents/python/data/Class_validate.txt', 'r') as f:
@@ -393,7 +394,7 @@ def show_images(images, cols=1, titles=None):
         plt.imshow(image)
         a.set_title(title)
     #  fig.set_size_inches(np.array(fig.get_size_inches()) * n_images)
-    fig = plt.figure(figsize=(6, 3))
+    #  fig = plt.figure(figsize=(6, 3))
     plt.show()
 
 # train(num_epochs)
