@@ -24,9 +24,9 @@ from flask import Flask, request, render_template
 #  validate_path = 'C:/Users/phfro/Documents/python/data/Class_validate.txt'
 validate_path = 'C:/Users/peter.frost/Downloads/Class_validate.txt'
 #  dataPathRoot = 'C:/Users/phfro/Documents/python/data'
-dataPathRoot = 'C:/Users/peter.frost/Downloads'
+dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/birdiesdata'
 #  test_image = 'C:/Users/phfro/Documents/python/data/eval/'
-test_image = 'C:/Users/peter.frost/Documents/python/data/birdiesdata/'
+test_image = 'C:/Users/peter.frost/Documents/python/data/birdiesdata/eval/'
 app_route = '/'
 
 

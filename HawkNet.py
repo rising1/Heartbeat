@@ -98,7 +98,7 @@ def load_latest_saved_model(chosen_model = None,is_eval = False):
         print("latest filename=", selected_model)
 
     if os.path.isfile(comp_root + selected_model) and loadfile == True:
-        checkpoint = torch.load(comp_root +  selected_model)
+        checkpoint = torch.load(comp_root +  selected_model,map_location='cpu')
         model.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         for state in optimizer.state.values():
