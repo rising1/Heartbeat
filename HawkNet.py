@@ -72,14 +72,16 @@ def get_latest_file(path, *paths):
     _, filename = os.path.split(latest_file)
     return filename
 
-def transfer_to_gpu():
+def transfer_to_gpu(evaluate = True):
     global device
-    device = torch.device("cuda: 0" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda: 0" if evaluate else "cpu")
     print("device=", device)
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
-        model.to(device)
-        print("model transferred to GPU")
+    if evaluate == True:
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            print("model transferred to GPU")
+    model.to(device)
+
 
 def load_latest_saved_model(chosen_model = None,is_eval = False):
     global dataPathRoot, loadfile, model, optimizer, \
