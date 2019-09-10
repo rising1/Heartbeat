@@ -341,7 +341,8 @@ def test_single(images,validate_path):
         guess_list.append(guess)
         #  imshow(img, guess)
         #  print("prediction=",guess)
-    show_images(image_list,2,guess_list)
+    # show_images(image_list,2,guess_list)
+    return guess
 
 
 

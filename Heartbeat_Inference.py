@@ -21,12 +21,12 @@ import HawkNet
 import Hawknet_Depld
 from flask import Flask, request, render_template
 
-validate_path = 'C:/Users/phfro/Documents/python/data/Class_validate.txt'
-#  validate_path = 'C:/Users/peter.frost/Downloads/Class_validate.txt'
-dataPathRoot = 'C:/Users/phfro/Documents/python/data'
-#  dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/birdiesdata'
-test_image = 'C:/Users/phfro/Documents/python/data/eval/'
-#  test_image = 'C:/Users/peter.frost/Documents/python/data/birdiesdata/eval/'
+# validate_path = 'C:/Users/phfro/Documents/python/data/Class_validate.txt'
+validate_path = 'C:/Users/peter.frost/Downloads/Class_validate.txt'
+# dataPathRoot = 'C:/Users/phfro/Documents/python/data'
+dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/birdiesdata'
+# test_image = 'C:/Users/phfro/Documents/python/data/eval/'
+test_image = 'C:/Users/peter.frost/Documents/python/data/birdiesdata/eval/'
 app_route = '/'
 
 HawkNet.build_model(dataPathRoot)
@@ -47,17 +47,16 @@ def hello():
         if request.method == 'GET':
                 return render_template('index.html', value='hello')
         if request.method == 'POST':
-                predicted_bird = 'Blackbird'
+                deploy_test = Hawknet_Depld.test_images(test_image)
+                predicted_bird = HawkNet.test_single(deploy_test.test_images, validate_path)
                 return render_template('result.html', bird=predicted_bird)
 
 
 
 #HawkNet.train(50)
-deploy_test = Hawknet_Depld.test_images(test_image )
-#  HawkNet.show_images(deploy_test.test_image)
-#  HawkNet.imshow(deploy_test.test_images) --> 28.08.19
-HawkNet.test_single(deploy_test.test_images, validate_path)
-#  /content/drive/My Drive/Colab Notebooks/saved_models/Birdies_model_0.model_best_acc_4.2667
+# deploy_test = Hawknet_Depld.test_images(test_image )
+# HawkNet.test_single(deploy_test.test_images, validate_path)
+
 
 if __name__ == '__main__':
         app.run(debug=True)
