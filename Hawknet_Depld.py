@@ -7,6 +7,12 @@ import numpy as np
 
 class test_images():
 
+    data_transform = transforms.Compose([
+        transforms.Resize(80),
+        transforms.CenterCrop(72),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+
     def __init__(self,dataPathRoot):
 
         self.dataPathRoot = dataPathRoot
@@ -14,14 +20,12 @@ class test_images():
                             self.dataPathRoot)
 
     def data_transformation(self,dataPathRoot):
+        global data_transform
+        print("type of dataPathRoot=",type(dataPathRoot))
         if not (os.path.exists(dataPathRoot)):
             print(' data path doesnt exist')  # used in DataLoaderHeartbeat
 
-        data_transform = transforms.Compose([
-                transforms.Resize(80),
-                transforms.CenterCrop(72),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+
 
         #image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot, 'photo.jpg'), data_transform)
         image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot), data_transform)
