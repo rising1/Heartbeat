@@ -21,7 +21,7 @@ import HawkNet
 import Hawknet_Depld
 from flask import Flask, request, render_template
 
-host = 'home'
+host = 'work'
 
 if host == 'home':
     validate_path = 'C:/Users/phfro/Documents/python/data/Class_validate.txt'
