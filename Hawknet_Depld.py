@@ -13,22 +13,18 @@ class test_images():
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 
-    def __init__(self,dataPathRoot):
+    #  def __init__(self,dataPathRoot):
 
-        self.dataPathRoot = dataPathRoot
-        self.test_images = self.data_transformation(
-                            self.dataPathRoot)
+    #    self.dataPathRoot = dataPathRoot
+    #    self.test_images = self.data_transformation(
+    #                        self.dataPathRoot)
 
-    def data_transformation(self,dataPathRoot):
+
+
+    def data_transformation(self,image):
         global data_transform
-        print("type of dataPathRoot=",type(dataPathRoot))
-        if not (os.path.exists(dataPathRoot)):
-            print(' data path doesnt exist')  # used in DataLoaderHeartbeat
-
-
-
         #image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot, 'photo.jpg'), data_transform)
-        image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot), data_transform)
+        image_dataset = datasets.ImageFolder(self.image, data_transform)
         #  self.imshow(torchvision.utils.make_grid(image_dataset[0][0]))
         #  self.imshow(torchvision.utils.make_grid(image_dataset))
         #  push the data to the GPU

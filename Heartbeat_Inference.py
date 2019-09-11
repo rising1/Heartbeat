@@ -21,7 +21,7 @@ import HawkNet
 import Hawknet_Depld
 from flask import Flask, request, render_template
 
-host = 'work'
+host = 'home'
 
 if host == 'home':
     validate_path = 'C:/Users/phfro/Documents/python/data/Class_validate.txt'
@@ -51,12 +51,11 @@ print("app.instance_path=",app.instance_path)
 @app.route(app_route,methods=['GET','POST'])
 def hello():
         if request.method == 'GET':
-                return render_template('index.html', value='hello')
+            return render_template('index.html', value='hello')
         if request.method == 'POST':
             print(request.files)
             if 'file' not in request.files:
-                print("file not uploaded")
-                return
+                return "file not uploaded"
             file = request.files['file']
             image = file.read()
             deploy_test = Hawknet_Depld.test_images(image)
