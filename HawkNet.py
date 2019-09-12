@@ -21,7 +21,7 @@ global faff, snapshot_points, batch_sizes, \
 def build_model(dataPathRoot_in):
     global  dataPathRoot, faff, snapshot_points, \
             batch_sizes, loadfile, model, optimizer, \
-            loss_fn
+            loss_fn, pic_size
 
     # Hyperparameters
     colour_channels = 3  # used in SimpleNet
