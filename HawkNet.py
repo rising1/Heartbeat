@@ -329,14 +329,14 @@ def test_single(images,validate_path):
     guess_list = []
     for image in images:
         #  Predict classes using images from the test set
-        image = image[0].to(device)
-        img = image.cpu()
-        inp = img.numpy().transpose((1, 2, 0))
-        mean = np.array([0.485, 0.456, 0.406])
-        std = np.array([0.229, 0.224, 0.225])
-        inp = std * inp + mean
-        inp = np.clip(inp, 0, 1)
-        image_list.append(inp)
+        #image = image[0].to(device)
+        #img = image.cpu()
+        #inp = img.numpy().transpose((1, 2, 0))
+        #mean = np.array([0.485, 0.456, 0.406])
+        #std = np.array([0.229, 0.224, 0.225])
+        #inp = std * inp + mean
+        #inp = np.clip(inp, 0, 1)
+        #image_list.append(inp)
         outputs = model(image.unsqueeze(0))
         _, prediction = torch.max(outputs.data, 1)
         guess = birds_listing(validate_path)[int(prediction.cpu().numpy())]
