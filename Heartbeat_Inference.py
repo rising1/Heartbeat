@@ -58,8 +58,8 @@ def hello():
                 return "file not uploaded"
             file = request.files['file']
             image = file.read()
-            deploy_test = Hawknet_Depld.test_images().data_transformation(image)
-            predicted_bird = HawkNet.test_single(deploy_test.test_images, validate_path)
+            deploy_test = Hawknet_Depld.test_images().get_tensor(image)
+            predicted_bird = HawkNet.test_single(deploy_test, validate_path)
             return render_template('result.html', bird=predicted_bird)
 
 
