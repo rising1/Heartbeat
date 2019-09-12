@@ -178,7 +178,7 @@ def save_models(epoch, loss, save_point):
 
 def train(num_epochs):
     #  global variables used in this function
-    global interim_fig_prev
+    global interim_fig_prev, learning_rate
 
     print("In train")
 
