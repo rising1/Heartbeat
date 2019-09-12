@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 class test_images():
-
+    global data_transform
     data_transform = transforms.Compose([
         transforms.Resize(80),
         transforms.CenterCrop(72),
@@ -23,8 +23,9 @@ class test_images():
 
     def data_transformation(self,image):
         global data_transform
+        print("type(image)=",type(image))
         #image_dataset = datasets.ImageFolder(os.path.join(dataPathRoot, 'photo.jpg'), data_transform)
-        image_dataset = datasets.ImageFolder(self.image, data_transform)
+        image_dataset = datasets.ImageFolder(image, data_transform)
         #  self.imshow(torchvision.utils.make_grid(image_dataset[0][0]))
         #  self.imshow(torchvision.utils.make_grid(image_dataset))
         #  push the data to the GPU
