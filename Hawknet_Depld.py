@@ -18,13 +18,6 @@ class test_images():
         image = Image.open(io.BytesIO(image_bytes))
         return data_transform(image).unsqueeze(0)
 
-    #  def __init__(self,dataPathRoot):
-
-    #    self.dataPathRoot = dataPathRoot
-    #    self.test_images = self.data_transformation(
-    #                        self.dataPathRoot)
-
-
 
     def data_transformation(self,image):
         global data_transform

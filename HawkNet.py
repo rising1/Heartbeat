@@ -137,7 +137,7 @@ def set_up_training(is_training):
 
     global model, train_loader_class, val_loader_class, \
             test_loader_class, single_loader_class, train_loader, \
-            val_loader, test_loader
+            val_loader, test_loader, pic_size
 
     if(is_training):
         model.train()
