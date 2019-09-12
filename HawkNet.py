@@ -243,8 +243,8 @@ def train(num_epochs):
                 time_elapsed = time.time() - since
                 interim_fig = running_loss / ((epoch + 1) * batch_counter)
                 interim_corrects = running_corrects / ((epoch + 1) * batch_counter)
-                #  if batch_counter == 1:
-                #    interim_fig_prev = interim_fig
+                if batch_counter == 1:
+                    interim_fig_prev = interim_fig
                 #    save_models(epoch, loss, "_loss_{:.4f} ".format(interim_fig))
                 #    print("first save ", "_loss_{:.4f} ".format(interim_fig))
                 print( phase, " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
