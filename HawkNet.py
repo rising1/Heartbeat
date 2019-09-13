@@ -32,7 +32,7 @@ def build_model(dataPathRoot_in):
     pooling_factor = 2  # used in SimpleNet
     pic_size = 72  # used in SimpleNet
     output_classes = 220  # used in SimpleNet
-    learning_rate = 0.001  # used in HeartbeatClean
+    learning_rate = 0.0001  # used in HeartbeatClean
     weight_decay = 0.0001  # used in HeartbeatClean
     dropout_factor = 0.1  # used in Unit
     faff = 'false'
