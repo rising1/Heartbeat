@@ -60,7 +60,7 @@ def hello():
             image = file.read()
             deploy_test = Hawknet_Depld.test_images().get_tensor(image)
             predicted_bird = HawkNet.test_single(deploy_test, validate_path)
-            return render_template('result.html', bird=predicted_bird)
+            return render_template('result.html', bird=predicted_bird, image=image)
 
 
 
