@@ -51,7 +51,7 @@ class SimpleNet(nn.Module):
                                 # self.unit3,
                                  self.pool1,
                                  self.unit4, self.unit5, self.unit6,
-                                 self.unit7,
+                                 # self.unit7,
                                  self.pool2,
                                  self.unit8, self.unit9,
                                  self.unit10,
