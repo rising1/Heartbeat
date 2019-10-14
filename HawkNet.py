@@ -32,7 +32,7 @@ def build_model(dataPathRoot_in):
     pooling_factor = 2  # used in SimpleNet
     pic_size = 72  # used in SimpleNet
     output_classes = 220  # used in SimpleNet
-    learning_rate = 0.0001  # used in HeartbeatClean
+    learning_rate = 0.001  # used in HeartbeatClean
     weight_decay = 0.0001  # used in HeartbeatClean
     dropout_factor = 0.1  # used in Unit
     faff = 'false'
@@ -190,7 +190,8 @@ def train(num_epochs):
 
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
-
+        if num_epochs == 8:
+            lr = lr/10
         # Each epoch has a training and validation phase
         for phase in ['train', 'val']:
             if phase == 'train':
