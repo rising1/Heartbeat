@@ -26,7 +26,7 @@ class SimpleNet(nn.Module):
         self.unit6 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 2,
                                   out_channels=self.pic_size * 2)
         #self.unit7 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 2,
-                                  out_channels=self.pic_size * 2)
+        #                         out_channels=self.pic_size * 2)
         self.pool2 = nn.MaxPool2d(kernel_size=self.pooling_factor)
 
         self.unit8 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 2,
