@@ -11,10 +11,11 @@ class SimpleNet(nn.Module):
         self.pic_size = SimpleNetArgs[6]
         self.pooling_factor = SimpleNetArgs[7]
 
-        self.unit1 = UnitNet.Unit(self.UnitArgs, in_channels=self.colour_channels,
+        self.unit1 = UnitNehi
+        t.Unit(self.UnitArgs, in_channels=self.colour_channels,
                                   out_channels=self.pic_size)
         self.unit2 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size,
-                                  out_channels=self.pic_size)
+          v                        out_channels=self.pic_size)
         #self.unit3 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size,
         #                          out_channels=self.pic_size)
         self.pool1 = nn.MaxPool2d(kernel_size=self.pooling_factor)
