@@ -53,7 +53,7 @@ def build_model(dataPathRoot_in):
     print("parameters loaded and data root path set")
 
     SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
-                 output_classes, colour_channels, pic_size, pooling_factor]
+                 output_classes, colour_channels, pic_size * 2, pooling_factor]
     model = ConvNet.SimpleNet(SimpleNetArgs)
     optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
