@@ -33,8 +33,8 @@ def build_model(dataPathRoot_in):
     pic_size = 48  # used in SimpleNet
     output_classes = 220  # used in SimpleNet
     learning_rate = 0.001  # used in HeartbeatClean
-    weight_decay = 0.0001  # used in HeartbeatClean
-    dropout_factor = 0.1  # used in Unit
+    weight_decay = 0.0000  # used in HeartbeatClean
+    dropout_factor = 0.4  # used in Unit
     faff = 'false'
     num_epochs = 300  # used in HeartbeatClean
     snapshot_points = num_epochs / 1
