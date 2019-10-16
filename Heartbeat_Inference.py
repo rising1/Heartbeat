@@ -21,7 +21,7 @@ import HawkNet
 import Hawknet_Depld
 from flask import Flask, request, render_template
 
-host = 'redroom'
+host = 'colab'
 
 if host == 'redroom':
     dataPathRoot = 'C:/Users/phfro/Documents/python/data'
@@ -36,6 +36,11 @@ if host ==  'work':
     validate_path = 'C:/Users/peter.frost/Downloads/Class_validate.txt'
     dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/birdiesdata'
     test_image = 'C:/Users/peter.frost/Documents/python/data/birdiesdata/eval/'
+
+if host ==  'colab':
+    validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
+    dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
+    test_image = '/content/drive/My Drive/Colab Notebooks'
 
 app_route = '/'
 
