@@ -38,7 +38,7 @@ def build_model(dataPathRoot_in):
     faff = 'false'
     num_epochs = 300  # used in HeartbeatClean
     snapshot_points = num_epochs / 1
-    batch_sizes = 128  # used in HeartbeatClean
+    batch_sizes = 256  # used in HeartbeatClean
     #  batch_sizes = 6 # used in HeartbeatClean
     loadfile = True
 
@@ -53,7 +53,7 @@ def build_model(dataPathRoot_in):
     print("parameters loaded and data root path set")
 
     SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
-                 output_classes, colour_channels, pic_size * 3, pooling_factor]
+                 output_classes, colour_channels, pic_size * 2, pooling_factor]
     model = ConvNet.SimpleNet(SimpleNetArgs)
     optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
