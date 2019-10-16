@@ -40,7 +40,7 @@ if host ==  'work':
 if host ==  'colab':
     validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
     dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
-    test_image = '/content/drive/My Drive/Colab Notebooks/eval/dummy'
+    test_image = '/content/drive/My Drive/Colab Notebooks/eval/'
 
 app_route = '/'
 
