@@ -9,13 +9,14 @@ import numpy as np
 class test_images():
 
     def __init__(self):
+        global data_transform
         data_transform = transforms.Compose([
                     transforms.Resize(80),
                     transforms.CenterCrop(72),
                     transforms.ToTensor(),
                     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 
-    global data_transform
+
     def get_tensor(self,image_bytes):
         image = Image.open(io.BytesIO(image_bytes))
         return data_transform(image).unsqueeze(0)
