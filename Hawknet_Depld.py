@@ -36,13 +36,12 @@ class test_images():
 
     def eval_test(self,path_to_images):
         self.dir_path = path_to_images
-        image_datasets = {x: datasets.ImageFolder(os.path.join(self.dir_path, x),
-                                                  data_transform[x])
-                          for x in ['dummy']}
-        self.dataloaders = {x: torch.utils.data.DataLoader(
-                            image_datasets[x],
+        image_dataset = datasets.ImageFolder(os.path.join(self.dir_path, 'dummy'),
+                                                  data_transform['dummy'])
+        self.dataloaders = torch.utils.data.DataLoader(
+                            image_datasets['dummy'],
                             batch_size=self.batch_sizes,
                             shuffle=True, num_workers=0)
-                       for x in ['dummy']}
+
         #print(type(self.dataloaders["train"][0]))
         self.dataset_sizes = {x: len(image_datasets[x]) for x in ['dummy']}
