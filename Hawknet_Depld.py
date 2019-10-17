@@ -8,7 +8,7 @@ import numpy as np
 
 class test_images():
 
-    def __init__(self)
+    def __init__(self):
         data_transform = transforms.Compose([
                     transforms.Resize(80),
                     transforms.CenterCrop(72),
