@@ -8,8 +8,9 @@ import numpy as np
 
 class test_images():
 
-    def __init__(self):
+    def __init__(self,batch_size):
         global data_transform
+        self.batch_sizes = batch_size
         data_transform = transforms.Compose([
                     transforms.Resize(80),
                     transforms.CenterCrop(72),
@@ -36,12 +37,11 @@ class test_images():
 
     def eval_test(self,path_to_images):
         self.dir_path = path_to_images
-        image_dataset = datasets.ImageFolder(os.path.join(self.dir_path, 'dummy'),
-                                                  data_transform['dummy'])
-        self.dataloaders = torch.utils.data.DataLoader(
-                            image_datasets['dummy'],
+        image_dataset = datasets.ImageFolder(self.dir_path+'/eval',data_transform)
+        self.dataloaders = torch.utils.data.DataLoader(image_dataset,
                             batch_size=self.batch_sizes,
                             shuffle=True, num_workers=0)
 
         #print(type(self.dataloaders["train"][0]))
-        self.dataset_sizes = {x: len(image_datasets[x]) for x in ['dummy']}
+        self.dataset_sizes = len(image_dataset)
+        return self.dataloaders

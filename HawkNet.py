@@ -4,12 +4,15 @@ from torch import nn
 from torch.autograd import Variable
 import numpy as np
 from matplotlib import pyplot as plt
-import ConvNet
-import HawkDataLoader
 from torch.optim import Adam
 import os, csv
 import glob
 import time
+
+# My classes
+import ConvNet
+import HawkDataLoader
+import Hawknet_Depld
 
 global faff, snapshot_points, batch_sizes, \
     loadfile, dataPathRoot, model, \
@@ -30,13 +33,13 @@ def build_model(dataPathRoot_in):
     stride_pixels = 1  # used in Unit
     padding_pixels = 1  # used in Unit
     pooling_factor = 2  # used in SimpleNet
-    pic_size = 48  # used in SimpleNet
+    pic_size = 72  # used in SimpleNet
     output_classes = 220  # used in SimpleNet
     learning_rate = 0.001  # used in HeartbeatClean
     weight_decay = 0.0000  # used in HeartbeatClean
     dropout_factor = 0.4  # used in Unit
     faff = 'false'
-    num_epochs = 300  # used in HeartbeatClean
+    num_epochs = 20  # used in HeartbeatClean
     snapshot_points = num_epochs / 1
     batch_sizes = 256  # used in HeartbeatClean
     #  batch_sizes = 6 # used in HeartbeatClean
@@ -53,7 +56,7 @@ def build_model(dataPathRoot_in):
     print("parameters loaded and data root path set")
 
     SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
-                 output_classes, colour_channels, pic_size * 2, pooling_factor]
+                 output_classes, colour_channels, pic_size, pooling_factor]
     model = ConvNet.SimpleNet(SimpleNetArgs)
     optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
@@ -310,20 +313,28 @@ def test_train():
     #  print("in test")
     return test_acct
 
-def test():
+def test(my_test_loader,validate_path):
+    my_test_loader = my_test_loader
     model.eval()
     test_acct = 0.0
     test_history = []
-    images, labels = next(iter(test_loader))
+    image_list = []
+    predictions_list = []
+    images, labels = next(iter(my_test_loader))
 
     if torch.cuda.is_available():
             images = Variable(images.cuda())
             labels = Variable(labels.cuda())
-
     #  Predict classes using images from the test set
     outputs = model(images)
     _, prediction = torch.max(outputs.data, 1)
-    print("prediction=",single_loader_class.classes[int(prediction.cpu().numpy())])
+    for image in images:
+        image = image.cpu()
+        image_list.append(imshow(image))
+    for predictions in prediction:
+        predictions_list.append(birds_listing(validate_path)[int(predictions.cpu().numpy())])
+    # print("prediction=",classes[int(prediction.cpu().numpy())])
+    show_images(image_list,2,predictions_list)
 
 def test_single(images,validate_path):
     image_list = []
@@ -363,15 +374,17 @@ def birds_listing(validate_path):
 
 def imshow(inp, title=None):
     """Imshow for Tensor."""
+    image_list = []
     inp = inp.numpy().transpose((1, 2, 0))
     mean = np.array([0.485, 0.456, 0.406])
     std = np.array([0.229, 0.224, 0.225])
     inp = std * inp + mean
     inp = np.clip(inp, 0, 1)
-    plt.imshow(inp)
-    if title is not None:
-        plt.title(title)
-    plt.pause(0.1)  # pause a bit so that plots are updated
+    return inp
+    #plt.imshow(inp)
+    #if title is not None:
+    #    plt.title(title)
+    #plt.pause(0.1)  # pause a bit so that plots are updated
 
 
 def show_images(images, cols=1, titles=None):
@@ -403,9 +416,21 @@ def show_images(images, cols=1, titles=None):
 
 # train(num_epochs)
 if __name__ == "__main__":
-      build_model()
-      transfer_to_gpu()
-      load_latest_saved_model()
-      set_up_training()
-      train(num_epochs)
-    #test()
+   build_model()
+   transfer_to_gpu()
+   load_latest_saved_model()
+   set_up_training()
+   train(20)
+   #   test()
+
+   # For testing -------------------------------------------------------
+   #bird_list = ['barn owl','bittern','blackbird','bluetit','chicken','parakeet','peregrine','pigeon','plover','puffin','robin','sparrow hawk']
+   #dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
+   #validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
+   #build_model(dataPathRoot)
+   #transfer_to_gpu()
+   # load_latest_saved_model('Birdies_model_0.model_loss_1180.3117 ')
+   #load_latest_saved_model('Birdies_model_0.model_best_acc_4.2667')
+   #set_up_training(False)
+   #deploy_test = Hawknet_Depld.test_images(6)
+   #test(deploy_test.eval_test(dataPathRoot),validate_path)

@@ -24,7 +24,7 @@ from flask import Flask, request, render_template
 host = 'colab'
 
 if host == 'redroom':
-    dataPathRoot = 'C:/Users/phfro/Documents/python/data'
+    dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
     validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 if host == 'home':
@@ -47,7 +47,8 @@ app_route = '/'
 HawkNet.build_model(dataPathRoot)
 HawkNet.transfer_to_gpu(False)
 is_eval = True
-HawkNet.load_latest_saved_model('Birdies_model_0.model_best_acc_4.2667_',is_eval)
+# HawkNet.load_latest_saved_model('Birdies_model_0.model_best_acc_4.2667_',is_eval)
+HawkNet.load_latest_saved_model('Birdies_model_0.model_loss_1180.3117 ',is_eval)
 #  HawkNet.load_latest_saved_model()
 #  HawkNet.load_latest_saved_model("New")
 
