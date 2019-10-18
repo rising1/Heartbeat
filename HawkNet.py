@@ -332,6 +332,9 @@ def test(my_test_loader,validate_path):
         image = image.cpu()
         image_list.append(imshow(image))
     for predictions in prediction:
+        img_label = "Prediction=" + birds_listing(
+                    validate_path)[int(predictions.cpu().numpy())] +
+                    " Actual=" + labels.index(predictions)
         predictions_list.append(birds_listing(validate_path)[int(predictions.cpu().numpy())])
     # print("prediction=",classes[int(prediction.cpu().numpy())])
     show_images(image_list,2,predictions_list)
