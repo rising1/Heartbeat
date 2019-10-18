@@ -295,6 +295,7 @@ def test_train():
     model.eval()
     test_acct = 0.0
     test_history = []
+    total = 0
     images, labels = next(iter(test_loader))
 
     if torch.cuda.is_available():
@@ -304,11 +305,11 @@ def test_train():
     #  Predict classes using images from the test set
     outputs = model(images)
     _, prediction = torch.max(outputs.data, 1)
-
+    total += labels.size(0)
     test_acct += torch.sum(prediction == labels.data)
     #  print("test_acct= ",  (test_acct).cpu().numpy())
     #  Compute the average acc and loss over all 10000 test images
-    test_acct = test_acct.cpu().numpy() / 30
+    test_acct = test_acct.cpu().numpy() / total
     test_history.append(test_acct)
     #  print("in test")
     return test_acct
