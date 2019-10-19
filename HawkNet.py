@@ -41,7 +41,7 @@ def build_model(dataPathRoot_in):
     faff = 'false'
     num_epochs = 20  # used in HeartbeatClean
     snapshot_points = num_epochs / 1
-    batch_sizes = 256  # used in HeartbeatClean
+    batch_sizes = 64  # used in HeartbeatClean
     #  batch_sizes = 6 # used in HeartbeatClean
     loadfile = True
 
@@ -193,8 +193,8 @@ def train(num_epochs):
 
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
-        if num_epochs == 8:
-            lr = lr/10
+
+            lr = learning_rate / (epoch + 1)
         # Each epoch has a training and validation phase
         for phase in ['train', 'val']:
             if phase == 'train':
@@ -257,11 +257,11 @@ def train(num_epochs):
                         time_elapsed // 60, time_elapsed % 60))
                 print("Average_loss: {:.4f},Prev_average_loss: {:.4f}, Learning_rate: {:.7f}".format(
                         interim_fig, interim_fig_prev, learning_rate))
-                if interim_fig < interim_fig_prev:
+                if ((batch_counter % (20 + epoch * 1) == 0) & (interim_fig < interim_fig_prev)):
                     interim_fig_prev = interim_fig
                     interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
                     print("saving at ",interim)
-                    save_models(epoch, loss, interim)
+                    save_models(epoch, loss, interim_corrects)
 
             train_loss = running_loss / train_loader_class.dataset_sizes[phase]
             train_acc = running_corrects.double() / \
@@ -272,7 +272,7 @@ def train(num_epochs):
             test_acc = test_train()
 
             # Save the model if the test acc is greater than our current best
-            if test_acc > best_acc:
+            if ((batch_counter % 20 == 0) & (test_acc > best_acc)):
                 main_acc = "_best_acc_{:.4f} ".format(test_acc)
                 save_models(epoch,loss,main_acc)
                 best_acc = test_acc
@@ -334,8 +334,8 @@ def test(my_test_loader,validate_path):
         image_list.append(imshow(image))
     for predictions in prediction:
         img_label = "Prediction=" + birds_listing(
-                    validate_path)[int(predictions.cpu().numpy())] +
-                    " Actual=" + labels.index(predictions)
+                    validate_path)[int(predictions.cpu(
+                    ).numpy())] + " Actual=" + labels.index(predictions)
         predictions_list.append(birds_listing(validate_path)[int(predictions.cpu().numpy())])
     # print("prediction=",classes[int(prediction.cpu().numpy())])
     show_images(image_list,2,predictions_list)
@@ -420,10 +420,10 @@ def show_images(images, cols=1, titles=None):
 
 # train(num_epochs)
 if __name__ == "__main__":
-   build_model()
+   build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
    transfer_to_gpu()
-   load_latest_saved_model()
-   set_up_training()
+   load_latest_saved_model("new")
+   set_up_training(True)
    train(20)
    #   test()
 
