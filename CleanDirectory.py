@@ -6,8 +6,11 @@ class CleanDirectories:
     global testFile
     def __init__(self, rootDir):
         self.rootDir = rootDir
+        self.dirFile = open('dirFile','rw+')
         for dirName, subdirList, fileList in os.walk(self.rootDir):
             print('Found directory: %s' % dirName)
+            for subdir in subdirList:
+                self.dirFile.write(subdir+',')
             for filename in fileList:
                 print('\t%s' % filename)
                 self.testFile = dirName + '/' + filename

@@ -66,7 +66,7 @@ class Categorize:
                                     if not exists:
                                         print("trying to open ",sourcepath_name)
                                         im = Image.open(sourcepath_name)
-                                        im.verify()  # I perform also verify, don't know if he sees other types o defects
+                                            im.verify()  # I perform also verify, don't know if he sees other types o defects
                                         im.close()  # reload is necessary in my case
                                         copyfile(sourcepath_name,filepath_name)
                                 except Exception as e:
