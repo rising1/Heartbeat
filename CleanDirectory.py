@@ -1,7 +1,7 @@
 import os
 from PIL import Image
 
-class list_directories:
+class List_Directories:
     def __init__(self, rootDir, sub_directory):
         self.rootDir = rootDir
         self.sub_directory = sub_directory
