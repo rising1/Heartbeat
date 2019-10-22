@@ -5,7 +5,7 @@ class List_Directories:
     def __init__(self, rootDir, sub_directory):
         self.rootDir = rootDir
         self.sub_directory = sub_directory
-        self.dirFile = open(rootDir + '/' + _subdirListing', 'w')
+        self.dirFile = open(rootDir + '/' + '_subdirListing', 'w')
         if os.path.exists(self.dirFile):
             for dirName, subdirList, fileList in os.walk(self.rootDir +'/' + 'train'):
                 print('Found directory: %s' % dirName)
