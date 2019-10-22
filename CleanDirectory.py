@@ -9,7 +9,7 @@ class List_Directories:
         for dirName, subdirList, fileList in os.walk(self.rootDir):
             print('Found directory: %s' % dirName)
             for subdir in subdirList:
-                self.dirFile.write(subdir + ',')
+                self.dirFile.write(str(subdir) + ',')
             self.dirFile.close()
 
 # clean directories
