@@ -8,9 +8,9 @@ class List_Directories:
         self.dirFile = open(rootDir + self.sub_directory, 'w')
         for dirName, subdirList, fileList in os.walk(self.rootDir):
             print('Found directory: %s' % dirName)
-            for subdir in subdirList:
+        for subdir in subdirList:
                 self.dirFile.write(str(subdir) + ',')
-            self.dirFile.close()
+        self.dirFile.close()
 
 # clean directories
 class CleanDirectories:
