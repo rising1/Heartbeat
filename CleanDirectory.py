@@ -11,7 +11,7 @@ class List_Directories:
             self.dirFile = open(dir, 'w')
             for dirName, subdirList, fileList in os.walk(self.rootDir +'/' + 'train'):
                 print('Found directory: %s' % dirName)
-                dir_list.append(dirName)
+                self.dir_list.append(dirName)
             #for dirs in dirName:
                 self.dirFile.write(str(dirName) + ',')
             self.dirFile.close()
