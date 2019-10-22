@@ -5,13 +5,15 @@ class List_Directories:
     def __init__(self, rootDir, sub_directory):
         self.rootDir = rootDir
         self.sub_directory = sub_directory
+        self.dir_list = []
         dir = str(rootDir + '/' + '_subdirListing')
         if os.path.exists(dir):
             self.dirFile = open(dir, 'w')
             for dirName, subdirList, fileList in os.walk(self.rootDir +'/' + 'train'):
                 print('Found directory: %s' % dirName)
-            for subdir in subdirList:
-                self.dirFile.write(str(subdir) + ',')
+                dir_list.append(dirName)
+            #for dirs in dirName:
+                self.dirFile.write(str(dirName) + ',')
             self.dirFile.close()
         else:
             print('file does not exist')
