@@ -24,7 +24,9 @@ class Categorize:
         with open(self.rootDir + '/' + dir_names ) as csvDataFile:
                 csvReader = csv.reader(csvDataFile)
                 for row in csvReader:
-                    os.mkdir(self.rootDir + '/' + 'train' + row )
+                    for item in row:
+                        # print(item)
+                        os.mkdir(self.rootDir + '/' + 'train' +'/' + item)
 
 
     def build_directories(self,parent):
@@ -210,4 +212,5 @@ if __name__ == "__main__":
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
     #  categorize.is_it_a_bird()
     #categorize.delete_irrelevant()
-    Categorize.build_dirs_from_file('_subdirListing.txt')
+    myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat',"dummy_target")
+    myCat.build_dirs_from_file('bird_dir_list.txt')
