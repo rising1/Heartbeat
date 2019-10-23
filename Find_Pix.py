@@ -3,17 +3,16 @@ import os
 
 
 class findPix:
-    global search_query
-    global response
-    global skipDirectories
-    loc_data = 'C:/Users/phfro/Documents/python/data/'
-    response = google_images_download.googleimagesdownload()
 
-    def __init__(self, keywords_file_path,skipDirectories):
+    loc_data = 'C:/Users/phfro/PycharmProjects/Heartbeat'
+
+
+    def __init__(self, keywords_file_path,subdir,skipDirectories):
         # creating object
         self.keywords_file_path = keywords_file_path
         self.skipDirectories = skipDirectories
-        response = google_images_download.googleimagesdownload()
+        self.subdir = subdir
+        self.response = google_images_download.googleimagesdownload()
         if  (os.path.exists(self.loc_data + self.keywords_file_path)):
             with open(self.loc_data + self.keywords_file_path, "r") as f:
                 self.search_query = f.read().splitlines()
@@ -42,8 +41,8 @@ class findPix:
                  "size": "medium",
                  "type": "photo",
                  "aspect_ratio": "square",
-                 "output_directory": self.loc_data + "BirdiesData/train/" }
-        dataPath = self.loc_data + "BirdiesData/train/" + query
+                 "output_directory": self.loc_data + self.subdir  }
+        dataPath = self.loc_data + self.subdir + query
         print(os.path.exists(dataPath))
         if not(os.path.exists(dataPath)and self.skipDirectories):
             try:

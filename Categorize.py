@@ -3,7 +3,8 @@ import shutil
 from string import ascii_lowercase
 from PIL import Image
 from shutil import copyfile
-import ImageType
+#import ImageType
+import csv
 
 class Categorize:
     def __init__(self, rootDir,targetDir):
@@ -17,6 +18,17 @@ class Categorize:
         self.sbirdType = ""
         #  self.catType = catType
         ''' This part creates all the necessary directory names  -----------------------------'''
+
+    def build_dirs_from_file(self,dir_names):
+        dir_list = []
+        with open(self.rootDir + '/' + dir_names ) as csvDataFile:
+                csvReader = csv.reader(csvDataFile)
+                for row in csvReader:
+                    for item in row:
+                        # print(item)
+                        os.mkdir(self.rootDir + '/' + 'train' +'/' + item)
+
+
     def build_directories(self,parent):
         for dirPath, dirNames, fileNames in os.walk(self.rootDir):
             #  print(dirNames)
@@ -25,6 +37,7 @@ class Categorize:
                 #  print("length dirNames= ", len(dirNames))
                 while self.counter < (len(dirNames)):
                     #  print(dirNames[counter])
+
                     dirName = dirNames[self.counter].split()
                     #  print(type(dirName),"  ",len(dirName),"  ",dirName)
                     self.birdType = dirName[len(dirName)-1]
@@ -192,10 +205,12 @@ if __name__ == "__main__":
     #  categorize = Categorize('f:/birdiesdata2/','f:/birdiesdata2')
     #  categorize = Categorize('/content/drive/My Drive/Colab Notebooks/BirdiesData/train',
     #           '/content/drive/My Drive/Colab Notebooks/')
-    categorize = Categorize('/content/drive/My Drive/Colab Notebooks/train',
-               '/content/drive/My Drive/Colab Notebooks/train')
+    #categorize = Categorize('/content/drive/My Drive/Colab Notebooks/train',
+    #           '/content/drive/My Drive/Colab Notebooks/train')
     #  categorize.build_directories('val')
     #  categorize.create_test("test",2)
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
     #  categorize.is_it_a_bird()
-    categorize.delete_irrelevant()
+    #categorize.delete_irrelevant()
+    myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat',"dummy_target")
+    myCat.build_dirs_from_file('bird_dir_list.txt')

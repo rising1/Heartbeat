@@ -1,5 +1,5 @@
 from google_images_download import google_images_download
-import ImageType
+#import ImageType
 import os
 from shutil import copyfile
 

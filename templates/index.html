@@ -6,9 +6,9 @@
 </head>
 <body>
     <h2>Upload the bird image</h2>
-    <form method="post">
-        <input class='picture-file-input' type="file" name="file" />
-        <input type="submit" value="upload" />
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" name="file" >
+        <input type="submit" value="upload">
     </form>
 </body>
 </html>

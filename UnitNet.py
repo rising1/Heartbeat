@@ -13,8 +13,8 @@ class Unit(nn.Module):
         super(Unit, self).__init__()
 
         self.conv = nn.Conv2d(in_channels=self.in_channels,
-                              kernel_size=self.kernel_sizes,
                               out_channels=self.out_channels,
+                              kernel_size=self.kernel_sizes,
                               stride=self.stride_pixels,
                               padding=self.padding_pixels)
         self.bn = nn.BatchNorm2d(num_features=self.out_channels)

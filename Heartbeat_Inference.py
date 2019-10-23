@@ -21,7 +21,11 @@ import HawkNet
 import Hawknet_Depld
 from flask import Flask, request, render_template
 
-host = 'work'
+host = 'colab'
+
+if host == 'redroom':
+    dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
+    validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 if host == 'home':
     validate_path = 'C:/Users/phfro/Documents/python/data/Class_validate.txt'
@@ -33,12 +37,18 @@ if host ==  'work':
     dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/birdiesdata'
     test_image = 'C:/Users/peter.frost/Documents/python/data/birdiesdata/eval/'
 
+if host ==  'colab':
+    validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
+    dataPathRoot = '/content/drive/My Drive/Colab Notebooks/saved_models'
+    test_image = '/content/drive/My Drive/Colab Notebooks/eval/'
+
 app_route = '/'
 
 HawkNet.build_model(dataPathRoot)
 HawkNet.transfer_to_gpu(False)
 is_eval = True
-HawkNet.load_latest_saved_model('Birdies_model_0.model_best_acc_4.2667_',is_eval)
+# HawkNet.load_latest_saved_model('Birdies_model_0.model_best_acc_4.2667_',is_eval)
+HawkNet.load_latest_saved_model('Birdies_model_0.model_loss_1180.3117 ',is_eval)
 #  HawkNet.load_latest_saved_model()
 #  HawkNet.load_latest_saved_model("New")
 

@@ -8,13 +8,17 @@ import numpy as np
 
 class test_images():
 
-    global data_transform
-    def get_tensor(self,image_bytes):
+    def __init__(self,batch_size):
+        global data_transform
+        self.batch_sizes = batch_size
         data_transform = transforms.Compose([
-                            transforms.Resize(80),
-                            transforms.CenterCrop(72),
-                            transforms.ToTensor(),
-                            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+                    transforms.Resize(80),
+                    transforms.CenterCrop(72),
+                    transforms.ToTensor(),
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+
+
+    def get_tensor(self,image_bytes):
         image = Image.open(io.BytesIO(image_bytes))
         return data_transform(image).unsqueeze(0)
 
@@ -31,6 +35,13 @@ class test_images():
         #  image_dataset = image_dataset[:][0]
         return image_dataset
 
+    def eval_test(self,path_to_images):
+        self.dir_path = path_to_images
+        image_dataset = datasets.ImageFolder(self.dir_path+'/eval',data_transform)
+        self.dataloaders = torch.utils.data.DataLoader(image_dataset,
+                            batch_size=self.batch_sizes,
+                            shuffle=True, num_workers=0)
 
-
-
+        #print(type(self.dataloaders["train"][0]))
+        self.dataset_sizes = len(image_dataset)
+        return self.dataloaders
