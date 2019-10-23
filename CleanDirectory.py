@@ -7,10 +7,10 @@ class List_Directories:
         self.rootDir = rootDir
         self.sub_directory = sub_directory
         self.dir_list = []
-        dir = str(rootDir + '/' + 'subdirListing.txt')
+        dir = str(rootDir )
         if os.path.exists(dir):
-            self.dirFile = open(dir, 'w')
-            for dirName, subdirList, fileList in os.walk(self.rootDir +'/' + 'train'):
+            self.dirFile = open(dir + '/' + 'subdirListing.txt', 'w')
+            for dirName, subdirList, fileList in os.walk(self.rootDir + '/' + 'train'):
                 print('Found directory: %s' % dirName)
                 self.dir_list.append(dirName)
             #for dirs in dirName:
