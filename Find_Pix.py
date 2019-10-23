@@ -67,7 +67,7 @@ class findPix:
 
 # train(num_epochs)
 if __name__ == "__main__":
-    findPix("british_birds.txt",True)
+    findPix("BirdList.txt",True)
 #  iimage = Image.open(BytesIO(response.content))
 #  #plt.imshow(iimage)
 #  i + i+1
