@@ -1,6 +1,7 @@
 from google_images_download import google_images_download
 import os
 
+'''Early attempt - not used in practice - not working anyway ----------------------------------------------------'''
 
 class findPix:
 

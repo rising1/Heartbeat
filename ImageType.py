@@ -8,6 +8,8 @@ from io import open
 import os
 from PIL import Image
 
+''' Thie AI classifier is capable of identifying birds in pictures-------------------------------------------------'''
+''' Useful for cleaning up unwanted and irrelevant images which would interfere with training ---------------------'''
 
 class ImageType:
 

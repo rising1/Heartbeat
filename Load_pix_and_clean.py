@@ -3,23 +3,14 @@ import ImageType
 import os
 from shutil import copyfile
 
+''' The purpose of this file is to create the directory structure and to load pictures into the directory tree -----'''
+''' It starts from a file containing keywords ----------------------------------------------------------------------'''
+
 # loc_data = '/content/drive/My Drive/Colab Notebooks/trial'
 loc_data = 'C:/Users/phfro/PycharmProjects/Heartbeat'
 
 # creating object
 response = google_images_download.googleimagesdownload()
-
-search_queries = \
-  [
-
-    'sparrowhawk in flight',
-    'kestrel in flight',
-    'common buzzard in flight',
-    'golden eagle in flight',
-    'red kite in flight',
-    'peregrine falcon'
-
-  ]
 
 class Load_pix():
     image_type = ImageType.ImageType()
@@ -91,7 +82,7 @@ class Load_pix():
         except:
             pass
 
-
+    ''' This bit doesn't work for some reason ------------------------------------------------------------------'''
     def remove_non_birds(self,query):
         file_path = loc_data + "/train/" + query
         for sfileNames in next(os.walk(file_path))[2]:
@@ -113,6 +104,9 @@ class Load_pix():
                 else:
                     print("breaking..")
                     break
+
+
+
 if __name__ == "__main__":
     loc_data = 'C:/Users/phfro/PycharmProjects/Heartbeat'
     search_queries = "bird_dir_list.txt"
