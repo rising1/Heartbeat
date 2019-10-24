@@ -108,6 +108,7 @@ class Load_pix():
 
 
 if __name__ == "__main__":
+    ''' run this after running first steps in Categorize to create directories ----------------'''
     loc_data = 'C:/Users/phfro/PycharmProjects/Heartbeat'
     search_queries = "bird_dir_list.txt"
     src_data = "unused"

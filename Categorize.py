@@ -17,8 +17,10 @@ class Categorize:
         self.birdType = ""
         self.sbirdType = ""
         #  self.catType = catType
+
     ''' This part creates all the necessary directory names  -----------------------------'''
     ''' A choice of two ways below -------------------------------------------------------'''
+
     def build_dirs_from_file(self,dir_names):
         dir_list = []
         with open(self.rootDir + '/' + dir_names ) as csvDataFile:
@@ -54,7 +56,7 @@ class Categorize:
     ''' End of part creates all the necessary directory names  --------------------'''
 
     ''' Routine to cut down the number of different bird types and consolidate them under common headings '''
-
+    ''' Unlikely that it will be needed ------------------------------------------------------------------'''
     def copy_and_clean(self):
                 #  Now walk the target directory
                 # exclude = set(["train","val","test"])
@@ -91,7 +93,7 @@ class Categorize:
 
     ''' End routine to cut down the number of different bird types and consolidate them under common headings '''
 
-    ''' Routine to create a test directory with the right folders --------------------------------------------'''
+    ''' Routine to create a 'validation' directory with the right folders --------------------------------------------'''
 
     def create_test(self,parent,number):
         #  walk the target directory and create a list of the directory names and save into a file
@@ -235,5 +237,11 @@ if __name__ == "__main__":
     #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
     #  categorize.is_it_a_bird()
     #categorize.delete_irrelevant()
-    myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat',"dummy_target")
-    myCat.build_dirs_from_file('bird_dir_list.txt')
+    '''---1. First step to create structure here ---------------------------------------------------------------'''
+    # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat',"dummy_target")
+    # myCat.build_dirs_from_file('bird_dir_list.txt')
+    '''---2. Jump over to Load-Pix-and-Clean to fill the directory with google images --------------------------'''
+
+    '''---3. Now run the bird check AI -------------------------------------------------------------------------'''
+    myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
+    myCat.is_it_a_bird()

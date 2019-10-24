@@ -1,6 +1,8 @@
 import os
 from PIL import Image
 
+''' Not used yet -------------------------------------------------------------------------------------------'''
+
 # class to list out sub-directories of a directory
 class List_Directories:
     def __init__(self, rootDir, sub_directory):
