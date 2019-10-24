@@ -3,7 +3,7 @@ import shutil
 from string import ascii_lowercase
 from PIL import Image
 from shutil import copyfile
-#import ImageType
+import ImageType
 import csv
 
 class Categorize:
@@ -17,8 +17,8 @@ class Categorize:
         self.birdType = ""
         self.sbirdType = ""
         #  self.catType = catType
-        ''' This part creates all the necessary directory names  -----------------------------'''
-
+    ''' This part creates all the necessary directory names  -----------------------------'''
+    ''' A choice of two ways below -------------------------------------------------------'''
     def build_dirs_from_file(self,dir_names):
         dir_list = []
         with open(self.rootDir + '/' + dir_names ) as csvDataFile:
@@ -50,7 +50,10 @@ class Categorize:
                     #      os.mkdir(self.targetDir + '/' + self.birdType + '/train')
                     self.counter = self.counter + 1
                 print("directory creation complete")
-                ''' End of part creates all the necessary directory names  --------------------'''
+
+    ''' End of part creates all the necessary directory names  --------------------'''
+
+    ''' Routine to cut down the number of different bird types and consolidate them under common headings '''
 
     def copy_and_clean(self):
                 #  Now walk the target directory
@@ -85,6 +88,11 @@ class Categorize:
                                 except Exception as e:
                                     print(e," --sfileNames=", sfileNames, " -failed")
                                 #    os.remove(self.testFile)
+
+    ''' End routine to cut down the number of different bird types and consolidate them under common headings '''
+
+    ''' Routine to create a test directory with the right folders --------------------------------------------'''
+
     def create_test(self,parent,number):
         #  walk the target directory and create a list of the directory names and save into a file
         class_file = open(self.targetDir + "/" + "Class_validate.txt", "w")
@@ -110,6 +118,7 @@ class Categorize:
                 counter = counter + 1
             class_file.write(tdirNames + ",")
         class_file.close()
+
         with open(self.targetDir + "/" + "Class_validate.txt", 'rb+')\
                 as filehandle:
             filehandle.seek(-1, os.SEEK_END)
@@ -117,6 +126,9 @@ class Categorize:
             filehandle.close()
         #  Copy the first item from each directory into the val directory
 
+    '''  End routine to create a test directory with the right folders --------------------------------------------'''
+
+    ''' Count the number of pictures in each of the directories ---------------------------------------------------'''
 
     def summarise(self):
         record_file = "image_count.txt"
@@ -135,7 +147,9 @@ class Categorize:
                 f.flush()
             f.close()
 
+    ''' End count the number of pictures in each of the directories ------------------------------------------------'''
 
+    ''' Split down image count file --------------------------------------------------------------------------------'''
     def get_more_images(self):
         file_list = []
         f = open(os.path.join(self.rootDir, "image_count.txt"))
@@ -148,6 +162,10 @@ class Categorize:
         #    if image_no < 100:
         #        req_no = 100 - image_no
         return file_list
+    ''' End split down image count file ----------------------------------------------------------------------------'''
+
+    ''' AI routine to walk directories and pick pictures containing birds from everything downloaded ---------------'''
+    ''' and write the results to a file ----------------------------------------------------------------------------'''
 
     def is_it_a_bird(self):
         index_file = "scan_results.txt"
@@ -172,10 +190,13 @@ class Categorize:
                             print("written ",record_string)
                             f.flush()
                         f.close()
+    '''End of AI routing -------------------------------------------------------------------------------------------'''
+
+    ''' Iterate through AI results file and delete everything that is not a bird -----------------------------------'''
 
     def delete_irrelevant(self):
         file_list = []
-        f = open(os.path.join(self.rootDir, "Birds_file_index - scan_results.csv"))
+        f = open(os.path.join(self.rootDir, "scan_results.txt"))
         for line in f:
             file_path = line.rstrip("\n").split(",")
             file_list.append(file_path)
@@ -185,8 +206,9 @@ class Categorize:
                 if os.path.isfile(bad_file[2]):
                     print("removing ",bad_file[2])
                     os.remove(bad_file[2])
+    ''' End of iterate through AI results file and delete everything that is not a bird ----------------------------'''
 
-
+    ''' Routine to copy top-up images to the training directories --------------------------------------------------'''
     def copy_top_up_images(self):
         for tdirNames in next(os.walk(self.targetDir + "/trial"))[1]:
             bird_dir = tdirNames.split(" ")[0]
@@ -200,6 +222,7 @@ class Categorize:
                 shutil.move(source + f, dest1)
                 print("copied ",source + f," to ",dest1)
 
+    ''' End of routine to copy top-up images to the training directories --------------------------------------------'''
 if __name__ == "__main__":
     #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
     #  categorize = Categorize('f:/birdiesdata2/','f:/birdiesdata2')

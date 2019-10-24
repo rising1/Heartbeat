@@ -13,9 +13,10 @@ class findPix:
         self.skipDirectories = skipDirectories
         self.subdir = subdir
         self.response = google_images_download.googleimagesdownload()
-        if  (os.path.exists(self.loc_data + self.keywords_file_path)):
-            with open(self.loc_data + self.keywords_file_path, "r") as f:
+        if  (os.path.exists(self.loc_data + "/" + self.keywords_file_path)):
+            with open(self.loc_data + "/" + self.keywords_file_path, "r") as f:
                 self.search_query = f.read().splitlines()
+                self.search_query.sort()
             for query in self.search_query:
                 #  print("query=",query)
                 self.downloadimages(query)
@@ -36,23 +37,25 @@ class findPix:
         # of images to download. ("tall, square, wide, panoramic")
         arguments = {"keywords": query,
                  "format": "jpg",
-                 "limit": 99,
+                 "limit": 2,
                  "print_urls": True,
                  "size": "medium",
                  "type": "photo",
                  "aspect_ratio": "square",
+                 "delay": 0.1,
                  "output_directory": self.loc_data + self.subdir  }
         dataPath = self.loc_data + self.subdir + query
+        print("dataPath=",dataPath)
         print(os.path.exists(dataPath))
         if not(os.path.exists(dataPath)and self.skipDirectories):
             try:
-                response.download(arguments)
+                self.response.download(arguments)
 
             # Handling File NotFound Error
             except FileNotFoundError:
                 arguments = {"keywords": query,
                      "format": "jpg",
-                     "limit": 4,
+                     "limit": 1,
                      "print_urls": True,
                      "size": "medium",
                      "output_directory": self.loc_data + self.downloadimages(query)}
@@ -67,7 +70,7 @@ class findPix:
 
 # train(num_epochs)
 if __name__ == "__main__":
-    findPix("BirdList.txt",True)
+    findPix("bird_dir_list.txt","train",True)
 #  iimage = Image.open(BytesIO(response.content))
 #  #plt.imshow(iimage)
 #  i + i+1
