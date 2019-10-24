@@ -183,9 +183,19 @@ class Categorize:
                     print(file_path)
                     if os.path.isfile(file_path):
                         try:
-                            result = imageType.predict_image(file_path)
-                        except RuntimeError:
-                            result = "PREDICT_FAILURE"
+                           im = Image.open(file_path)
+                           im.verify()  # I perform also verify, don't know if he sees other types o defects
+                           im.close()  # reload is necessary in my case
+                           print("passed ", file_path)
+                                # im = Image.load(filename)
+                                # im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+                                # im.close()
+                           result = imageType.predict_image(file_path)
+                        except:
+                           os.remove(file_path)
+                           print("removed ", file_path)
+                           result = "PREDICT_FAILURE"
+
                         with open(indexpath, "a") as f:
                             record_string = result.rstrip() + "\t" + file_path + "\n"
                             f.write(record_string )
