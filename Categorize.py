@@ -3,7 +3,6 @@ import shutil
 from string import ascii_lowercase
 from PIL import Image
 from shutil import copyfile
-import ImageType
 import csv
 
 class Categorize:
@@ -170,6 +169,7 @@ class Categorize:
     ''' and write the results to a file ----------------------------------------------------------------------------'''
 
     def is_it_a_bird(self):
+        import ImageType
         index_file = "scan_results.txt"
         indexpath = os.path.join(self.rootDir, index_file)
         print("index_path= ",indexpath)
@@ -206,18 +206,13 @@ class Categorize:
 
     ''' Iterate through AI results file and delete everything that is not a bird -----------------------------------'''
 
-    def delete_irrelevant(self):
-        file_list = []
-        f = open(os.path.join(self.rootDir, "scan_results.txt"))
-        for line in f:
-            file_path = line.rstrip("\n").split(",")
-            file_list.append(file_path)
-        #  print(file_list)
-        for bad_file in file_list:
-            if bad_file[3] != "bird":
-                if os.path.isfile(bad_file[2]):
-                    print("removing ",bad_file[2])
-                    os.remove(bad_file[2])
+    def delete_irrelevant(self,file_with_delete_list):
+        with open(file_with_delete_list,'r') as delete_file:
+            delete_list = csv.reader(delete_file)
+            for bad_file in delete_list:
+                if os.path.isfile(bad_file[0]):
+                    print("removing ",bad_file[0])
+                    os.remove(bad_file[0])
     ''' End of iterate through AI results file and delete everything that is not a bird ----------------------------'''
 
     ''' Routine to copy top-up images to the training directories --------------------------------------------------'''
@@ -236,22 +231,18 @@ class Categorize:
 
     ''' End of routine to copy top-up images to the training directories --------------------------------------------'''
 if __name__ == "__main__":
-    #  Categorize('d:/birdiesTest/train','d:/birdiesTest')
-    #  categorize = Categorize('f:/birdiesdata2/','f:/birdiesdata2')
-    #  categorize = Categorize('/content/drive/My Drive/Colab Notebooks/BirdiesData/train',
-    #           '/content/drive/My Drive/Colab Notebooks/')
-    #categorize = Categorize('/content/drive/My Drive/Colab Notebooks/train',
-    #           '/content/drive/My Drive/Colab Notebooks/train')
-    #  categorize.build_directories('val')
-    #  categorize.create_test("test",2)
-    #  Categorize('h:/birdiesdata/train', 'h:/birdiesdata')
-    #  categorize.is_it_a_bird()
-    #categorize.delete_irrelevant()
     '''---1. First step to create structure here ---------------------------------------------------------------'''
     # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat',"dummy_target")
     # myCat.build_dirs_from_file('bird_dir_list.txt')
     '''---2. Jump over to Load-Pix-and-Clean to fill the directory with google images --------------------------'''
 
     '''---3. Now run the bird check AI -------------------------------------------------------------------------'''
-    myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
-    myCat.is_it_a_bird()
+    # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
+    # myCat.is_it_a_bird()
+
+    '''---4. Use Excel on scan_results using the AI bird class list to identify non-relevant files to be deleted'''
+    '''---    produce a list of filepaths for deletion and save in Excel as CSV --------------------------------'''
+    # myCat = Categorize('F:/train', "dummy_target")
+    # myCat.delete_irrelevant('F:/train/delete_list.csv')
+
+    '''---5. List the image shortages following the clean-up ---------------------------------------------------'''
