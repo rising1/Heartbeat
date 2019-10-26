@@ -1,33 +1,24 @@
 from google_images_download import google_images_download
 import os
 
-'''Early attempt - not used in practice - not working anyway ----------------------------------------------------'''
+class findExtraPix:
 
-class findPix:
+    def __init__(self, rootDir, image_shortages_list):
 
-    loc_data = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-
-
-    def __init__(self, keywords_file_path,subdir,skipDirectories):
-        # creating object
-        self.keywords_file_path = keywords_file_path
-        self.skipDirectories = skipDirectories
-        self.subdir = subdir
+        self.rootDir = rootDir
         self.response = google_images_download.googleimagesdownload()
-        if  (os.path.exists(self.loc_data + "/" + self.keywords_file_path)):
-            with open(self.loc_data + "/" + self.keywords_file_path, "r") as f:
-                self.search_query = f.read().splitlines()
-                self.search_query.sort()
-            for query in self.search_query:
-                #  print("query=",query)
-                self.downloadimages(query)
 
-        else:
-            print("keyword file not present")
+        file_list = []
+        f = open(os.path.join(self.rootDir, image_shortages_list))
+        for line in f:
+                file_path = line.rstrip("\n").split("\t")
+                file_list.append(file_path)
+        #print(file_list)
+        for short_item in file_list:
+            print(short_item)
+            self.downloadimages(short_item[0],short_item[1])
 
-
-
-    def downloadimages(self, query):
+    def downloadimages(self, query, no_of_images):
         # keywords is the search query
         # format is the image file format
         # limit is the number of images to be downloaded
@@ -36,44 +27,39 @@ class findPix:
         # be specified manually ("large, medium, icon")
         # aspect ratio denotes the height width ratio
         # of images to download. ("tall, square, wide, panoramic")
-        arguments = {"keywords": query,
+        arguments = {"keywords": query + " in flight",
                  "format": "jpg",
-                 "limit": 2,
+                 "limit": (100 - int(no_of_images)),
                  "print_urls": True,
                  "size": "medium",
                  "type": "photo",
                  "aspect_ratio": "square",
                  "delay": 0.1,
-                 "output_directory": self.loc_data + self.subdir  }
-        dataPath = self.loc_data + self.subdir + query
-        print("dataPath=",dataPath)
-        print(os.path.exists(dataPath))
-        if not(os.path.exists(dataPath)and self.skipDirectories):
-            try:
+                 "output_directory": os.path.join("F:/top-up-images" )  }
+
+
+        try:
                 self.response.download(arguments)
 
             # Handling File NotFound Error
-            except FileNotFoundError:
-                arguments = {"keywords": query,
+        except FileNotFoundError:
+                arguments = {"keywords": query + " in flight",
                      "format": "jpg",
-                     "limit": 1,
+                     "limit": (100 - int(no_of_images)),
                      "print_urls": True,
                      "size": "medium",
-                     "output_directory": self.loc_data + self.downloadimages(query)}
+                     "output_directory": os.path.join("F:/top-up-images" )}
 
             # Providing arguments for the searched query
-            try:
+        try:
                 # Downloading the photos based
                 # on the given arguments
                 self.response.download(arguments)
-            except:
+        except:
                 pass
 
-# train(num_epochs)
+
 if __name__ == "__main__":
-    findPix("bird_dir_list.txt","train",True)
-#  iimage = Image.open(BytesIO(response.content))
-#  #plt.imshow(iimage)
-#  i + i+1
-#  iimage.save(loc_data + query + str(i) + '.jpg')
+    findExtraPix("F:/train","image_count.txt")
+
 

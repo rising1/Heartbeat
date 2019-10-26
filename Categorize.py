@@ -134,12 +134,14 @@ class Categorize:
     def summarise(self):
         record_file = "image_count.txt"
         record_path = os.path.join(self.rootDir, record_file)
-        for tdirNames in next(os.walk(self.targetDir))[1]:
+        if os.path.exists(record_path):
+            os.remove(record_path)
+        for tdirNames in next(os.walk(self.rootDir))[1]:
             counter = 0
-            #  print("tdirNames=",tdirNames)
-            for tfileNames in next(os.walk(self.targetDir  + "/" \
+            print("tdirNames=",tdirNames)
+            for tfileNames in next(os.walk(self.rootDir  + "/" \
                                            + tdirNames))[2]:
-                counter = counter +1
+                counter = counter + 1
             #  print(tdirNames + "\t" + str(counter))
             with open(record_path, "a") as f:
                 record_string = tdirNames + "\t" + str(counter) + "\n"
@@ -151,7 +153,7 @@ class Categorize:
     ''' End count the number of pictures in each of the directories ------------------------------------------------'''
 
     ''' Split down image count file --------------------------------------------------------------------------------'''
-    def get_more_images(self):
+    def split_down_images(self):
         file_list = []
         f = open(os.path.join(self.rootDir, "image_count.txt"))
         for line in f:
@@ -229,10 +231,11 @@ class Categorize:
                 shutil.move(source + f, dest1)
                 print("copied ",source + f," to ",dest1)
 
-    ''' End of routine to copy top-up images to the training directories --------------------------------------------'''
+    ''' End of routine to copy top-up images to the training directories -------------------------------------------'''
+
 if __name__ == "__main__":
+    myCat = Categorize('F:/train', "dummy_target")
     '''---1. First step to create structure here ---------------------------------------------------------------'''
-    # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat',"dummy_target")
     # myCat.build_dirs_from_file('bird_dir_list.txt')
     '''---2. Jump over to Load-Pix-and-Clean to fill the directory with google images --------------------------'''
 
@@ -245,4 +248,10 @@ if __name__ == "__main__":
     # myCat = Categorize('F:/train', "dummy_target")
     # myCat.delete_irrelevant('F:/train/delete_list.csv')
 
-    '''---5. List the image shortages following the clean-up ---------------------------------------------------'''
+    '''---5. Count the image shortages following the clean-up ---------------------------------------------------'''
+    # myCat = Categorize('F:/train', "dummy_target")
+    # myCat.summarise()
+
+    '''---6. Go to Find_Pix to download extra pix in flight -----------------------------------------------------'''
+    '''---   loads the extra images to a trial directory for cleaning through the AI routine --------------------'''
+
