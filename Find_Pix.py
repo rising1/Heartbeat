@@ -27,7 +27,7 @@ class findExtraPix:
         # be specified manually ("large, medium, icon")
         # aspect ratio denotes the height width ratio
         # of images to download. ("tall, square, wide, panoramic")
-        arguments = {"keywords": query + " in flight",
+        arguments = {"keywords": query + " nesting",
                  "format": "jpg",
                  "limit": (100 - int(no_of_images)),
                  "print_urls": True,
@@ -37,13 +37,14 @@ class findExtraPix:
                  "delay": 0.1,
                  "output_directory": os.path.join("F:/top-up-images" )  }
 
+        if (int(no_of_images)) < 100:
+            try:
 
-        try:
                 self.response.download(arguments)
 
-            # Handling File NotFound Error
-        except FileNotFoundError:
-                arguments = {"keywords": query + " in flight",
+                # Handling File NotFound Error
+            except FileNotFoundError:
+                arguments = {"keywords": query + " nesting",
                      "format": "jpg",
                      "limit": (100 - int(no_of_images)),
                      "print_urls": True,
@@ -51,11 +52,11 @@ class findExtraPix:
                      "output_directory": os.path.join("F:/top-up-images" )}
 
             # Providing arguments for the searched query
-        try:
+            try:
                 # Downloading the photos based
                 # on the given arguments
                 self.response.download(arguments)
-        except:
+            except:
                 pass
 
 

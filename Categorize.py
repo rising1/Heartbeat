@@ -194,9 +194,12 @@ class Categorize:
                                 # im.close()
                            result = imageType.predict_image(file_path)
                         except:
-                           os.remove(file_path)
                            print("removed ", file_path)
                            result = "PREDICT_FAILURE"
+                           try:
+                                os.remove(file_path)
+                           except:
+                               pass
 
                         with open(indexpath, "a") as f:
                             record_string = result.rstrip() + "\t" + file_path + "\n"
@@ -218,18 +221,21 @@ class Categorize:
     ''' End of iterate through AI results file and delete everything that is not a bird ----------------------------'''
 
     ''' Routine to copy top-up images to the training directories --------------------------------------------------'''
-    def copy_top_up_images(self):
-        for tdirNames in next(os.walk(self.targetDir + "/trial"))[1]:
+    def copy_top_up_images(self, targetDir):
+        for tdirNames in next(os.walk(self.rootDir))[1]:
             bird_dir = tdirNames.split(" ")[0]
-            source = self.targetDir + "trial/" + tdirNames + "/"
+            source = self.rootDir + "/" + tdirNames + "/"
             print("source=",source)
-            dest1 = self.rootDir + "train/" + bird_dir
+            dest1 = targetDir + "/" + bird_dir
             print("dest=",dest1)
 
             files = os.listdir(source)
             for f in files:
-                shutil.move(source + f, dest1)
-                print("copied ",source + f," to ",dest1)
+                try:
+                    shutil.move(source + f, dest1)
+                    print("copied ",source + f," to ",dest1)
+                except:
+                    pass
 
     ''' End of routine to copy top-up images to the training directories -------------------------------------------'''
 
@@ -255,3 +261,14 @@ if __name__ == "__main__":
     '''---6. Go to Find_Pix to download extra pix in flight -----------------------------------------------------'''
     '''---   loads the extra images to a trial directory for cleaning through the AI routine --------------------'''
 
+    '''---7. test the newly downloaded images -------------------------------------------------------------------'''
+    # myCat = Categorize('F:/top-up-images',"dummy_target")
+    # myCat.is_it_a_bird()
+
+    '''---8. delete the downloaded top-up-images ----------------------------------------------------------------'''
+    # myCat = Categorize('F:/top-up-images',"dummy_target")
+    # myCat.delete_irrelevant('F:/top-up-images/deletions.csv')
+
+    '''---9. Copy across downloaded top-up-images ----------------------------------------------------------------'''
+    # myCat = Categorize('F:/top-up-images',"dummy_target")
+    # myCat.copy_top_up_images("F:/train")
