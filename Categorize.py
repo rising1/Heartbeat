@@ -192,6 +192,18 @@ class Categorize:
                                 # im = Image.load(filename)
                                 # im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
                                 # im.close()
+
+                           try:
+                               result = imageType.predict_image(file_path)
+                           except:
+                               print("failed predict test")
+                               with open(indexpath, "a") as f:
+                                   record_string = result.rstrip() + "\t" + file_path + "\n"
+                                   f.write(record_string)
+                                   print("written ", record_string)
+                                   f.flush()
+                               f.close()
+
                         except:
                             print("failed image test")
                             with open(indexpath, "a") as f:
@@ -200,16 +212,7 @@ class Categorize:
                                 print("written ", record_string)
                                 f.flush()
                             f.close()
-                        try:
-                           result = imageType.predict_image(file_path)
-                        except:
-                            print("failed predict test")
-                            with open(indexpath, "a") as f:
-                                record_string = result.rstrip() + "\t" + file_path + "\n"
-                                f.write(record_string)
-                                print("written ", record_string)
-                                f.flush()
-                            f.close()
+
 
     '''End of AI routing -------------------------------------------------------------------------------------------'''
 
