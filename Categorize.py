@@ -192,21 +192,25 @@ class Categorize:
                                 # im = Image.load(filename)
                                 # im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
                                 # im.close()
+                        except:
+                            print("failed image test")
+                            with open(indexpath, "a") as f:
+                                record_string = result.rstrip() + "\t" + file_path + "\n"
+                                f.write(record_string)
+                                print("written ", record_string)
+                                f.flush()
+                            f.close()
+                        try:
                            result = imageType.predict_image(file_path)
                         except:
-                           print("removed ", file_path)
-                           result = "PREDICT_FAILURE"
-                           try:
-                                os.remove(file_path)
-                           except:
-                               pass
+                            print("failed predict test")
+                            with open(indexpath, "a") as f:
+                                record_string = result.rstrip() + "\t" + file_path + "\n"
+                                f.write(record_string)
+                                print("written ", record_string)
+                                f.flush()
+                            f.close()
 
-                        with open(indexpath, "a") as f:
-                            record_string = result.rstrip() + "\t" + file_path + "\n"
-                            f.write(record_string )
-                            print("written ",record_string)
-                            f.flush()
-                        f.close()
     '''End of AI routing -------------------------------------------------------------------------------------------'''
 
     ''' Iterate through AI results file and delete everything that is not a bird -----------------------------------'''
@@ -240,7 +244,8 @@ class Categorize:
     ''' End of routine to copy top-up images to the training directories -------------------------------------------'''
 
 if __name__ == "__main__":
-    myCat = Categorize('F:/train', "dummy_target")
+    # myCat = Categorize('F:/train', "dummy_target")
+    myCat = Categorize('E:/train', "dummy_target")
     '''---1. First step to create structure here ---------------------------------------------------------------'''
     # myCat.build_dirs_from_file('bird_dir_list.txt')
     '''---2. Jump over to Load-Pix-and-Clean to fill the directory with google images --------------------------'''
@@ -248,7 +253,7 @@ if __name__ == "__main__":
     '''---3. Now run the bird check AI -------------------------------------------------------------------------'''
     # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
     # myCat.is_it_a_bird()
-
+    myCat.is_it_a_bird()
     '''---4. Use Excel on scan_results using the AI bird class list to identify non-relevant files to be deleted'''
     '''---    produce a list of filepaths for deletion and save in Excel as CSV --------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")

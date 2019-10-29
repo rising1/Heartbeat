@@ -194,7 +194,7 @@ def train(num_epochs):
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
 
-            lr = learning_rate / (epoch + 1)
+        lr = learning_rate / (epoch + 1)
         # Each epoch has a training and validation phase
         for phase in ['train', 'val']:
             if phase == 'train':
