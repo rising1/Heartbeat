@@ -200,16 +200,21 @@ class Categorize:
                                 print("written ", record_string)
                                 f.flush()
                             f.close()
-                        try:
-                           result = imageType.predict_image(file_path)
-                        except:
-                            print("failed predict test")
-                            with open(indexpath, "a") as f:
-                                record_string = result.rstrip() + "\t" + file_path + "\n"
-                                f.write(record_string)
-                                print("written ", record_string)
-                                f.flush()
-                            f.close()
+                            try:
+                                os.remove(file_path)
+                                print("successfully removed bad image ",file_path)
+                            except:
+                                print("failed to remove bad image ",file_path)
+                        if os.path.isfile(file_path):
+                            try:
+                                result = imageType.predict_image(file_path)
+                            except:
+                                print("failed predict test")
+                                try:
+                                    os.remove(file_path)
+                                    print("successfully removed non-bird ", file_path)
+                                except:
+                                    print("failed to remove non-bird ", file_path)
 
     '''End of AI routing -------------------------------------------------------------------------------------------'''
 
