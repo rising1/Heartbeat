@@ -178,7 +178,7 @@ class Categorize:
         if os.path.exists(indexpath):
             os.remove(indexpath)
         imageType = ImageType.ImageType()
-        #  with open(indexpath, "w") as f:
+
         for sdirNames in next(os.walk(self.rootDir))[1]:
                 for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
                     file_path = self.rootDir  + '/' + sdirNames + '/' + sfileNames
@@ -194,12 +194,6 @@ class Categorize:
                                 # im.close()
                         except:
                             print("failed image test")
-                            with open(indexpath, "a") as f:
-                                record_string = result.rstrip() + "\t" + file_path + "\n"
-                                f.write(record_string)
-                                print("written ", record_string)
-                                f.flush()
-                            f.close()
                             try:
                                 os.remove(file_path)
                                 print("successfully removed bad image ",file_path)
@@ -208,13 +202,16 @@ class Categorize:
                         if os.path.isfile(file_path):
                             try:
                                 result = imageType.predict_image(file_path)
+                                '''record the result in a file '''
+                                with open(indexpath, "a") as f:
+                                    record_string = result.rstrip() + "\t" + file_path + "\n"
+                                    f.write(record_string)
+                                    print("written ", record_string)
+                                    f.flush()
+                                f.close()
                             except:
                                 print("failed predict test")
-                                try:
-                                    os.remove(file_path)
-                                    print("successfully removed non-bird ", file_path)
-                                except:
-                                    print("failed to remove non-bird ", file_path)
+
 
     '''End of AI routing -------------------------------------------------------------------------------------------'''
 
@@ -258,12 +255,12 @@ if __name__ == "__main__":
     '''---3. Now run the bird check AI -------------------------------------------------------------------------'''
     # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
     # myCat.is_it_a_bird()
-    myCat.is_it_a_bird()
+    # myCat.is_it_a_bird()
     '''---4. Use Excel on scan_results using the AI bird class list to identify non-relevant files to be deleted'''
     '''---    produce a list of filepaths for deletion and save in Excel as CSV --------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
     # myCat.delete_irrelevant('F:/train/delete_list.csv')
-
+    myCat.delete_irrelevant('E:/train/delete_list.csv')
     '''---5. Count the image shortages following the clean-up ---------------------------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
     # myCat.summarise()
