@@ -1,5 +1,6 @@
 from google_images_download import google_images_download
 import os
+import BingPix
 
 class findExtraPix:
 
@@ -7,6 +8,7 @@ class findExtraPix:
 
         self.rootDir = rootDir
         self.response = google_images_download.googleimagesdownload()
+
 
         file_list = []
         f = open(os.path.join(self.rootDir, image_shortages_list))
@@ -17,6 +19,7 @@ class findExtraPix:
         for short_item in file_list:
             print(short_item)
             self.downloadimages(short_item[0],short_item[1])
+            BingPix.pre_prep(self.rootDir, True, short_item[0], short_item[1])
 
     def downloadimages(self, query, no_of_images):
         # keywords is the search query

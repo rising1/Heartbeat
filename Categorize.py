@@ -260,7 +260,7 @@ if __name__ == "__main__":
     '''---    produce a list of filepaths for deletion and save in Excel as CSV --------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
     # myCat.delete_irrelevant('F:/train/delete_list.csv')
-    myCat.delete_irrelevant('E:/train/delete_list.csv')
+    # myCat.delete_irrelevant('E:/train/delete_list.csv')
     '''---5. Count the image shortages following the clean-up ---------------------------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
     # myCat.summarise()
