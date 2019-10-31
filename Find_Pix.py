@@ -18,11 +18,11 @@ class findExtraPix:
         #print(file_list)
         for short_item in file_list:
             print(short_item)
-            print(short_item[0] + " nesting")
+            print(short_item[0] + keyword_mod)
             # self.downloadimages(short_item[0],short_item[1])
             BingPix.pre_prep(self.rootDir + "/" + short_item[0], True, (short_item[0] + keyword_mod), short_item[1],20)
 
-    def downloadimages(self, query, no_of_images):
+    def downloadimages(self, query, no_of_images,keyword_mod):
         # keywords is the search query
         # format is the image file format
         # limit is the number of images to be downloaded
@@ -31,7 +31,7 @@ class findExtraPix:
         # be specified manually ("large, medium, icon")
         # aspect ratio denotes the height width ratio
         # of images to download. ("tall, square, wide, panoramic")
-        arguments = {"keywords": query + " nesting",
+        arguments = {"keywords": query + keyword_mod,
                  "format": "jpg",
                  "limit": (100 - int(no_of_images)),
                  "print_urls": True,
@@ -67,4 +67,4 @@ class findExtraPix:
 if __name__ == "__main__":
     # findExtraPix("F:/train","image_count.txt")
     # findExtraPix("E:/top-up-images","image_count.txt")
-    findExtraPix("D:/top-up-images","image_count.txt"," in flight")
+    findExtraPix("D:/top-up-images","image_count.txt"," bird")
