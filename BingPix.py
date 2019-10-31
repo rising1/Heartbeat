@@ -16,6 +16,8 @@ tried_urls = []
 image_md5s = {}
 urlopenheader={ 'User-Agent' : 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0'}
 
+
+
 def download(pool_sema: threading.Semaphore, url: str, output_dir: str):
     if url in tried_urls:
         return
@@ -92,7 +94,8 @@ def backup_history(*args):
     if args:
         exit(0)
 
-def pre_prep(output_dir,adult_filter,keyword_list,no_of_images):
+def pre_prep(output_dir,adult_filter,keyword_list,no_of_images,threads):
+    global adlt
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     output_dir_origin = output_dir
@@ -108,9 +111,9 @@ def pre_prep(output_dir,adult_filter,keyword_list,no_of_images):
         adlt = ''
     else:
         adlt = 'off'
-    pool_sema = threading.BoundedSemaphore(args.threads)
+    pool_sema = threading.BoundedSemaphore(threads)
     for search_string in keyword_list:
-        fetch_images_from_keyword(pool_sema, search_string,output_dir, adult_filter, (100 - int(no_of_images)))
+        fetch_images_from_keyword(pool_sema, search_string,output_dir, adlt, (100 - int(no_of_images)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = 'Bing image bulk downloader')
