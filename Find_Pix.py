@@ -4,7 +4,7 @@ import BingPix
 
 class findExtraPix:
 
-    def __init__(self, rootDir, image_shortages_list):
+    def __init__(self, rootDir, image_shortages_list, keyword_mod):
 
         self.rootDir = rootDir
         # self.response = google_images_download.googleimagesdownload()
@@ -18,8 +18,9 @@ class findExtraPix:
         #print(file_list)
         for short_item in file_list:
             print(short_item)
+            print(short_item[0] + " nesting")
             # self.downloadimages(short_item[0],short_item[1])
-            BingPix.pre_prep(self.rootDir + "/" + short_item[0], True, (short_item[0] + " nesting"), short_item[1],20)
+            BingPix.pre_prep(self.rootDir + "/" + short_item[0], True, (short_item[0] + keyword_mod), short_item[1],20)
 
     def downloadimages(self, query, no_of_images):
         # keywords is the search query
@@ -65,5 +66,5 @@ class findExtraPix:
 
 if __name__ == "__main__":
     # findExtraPix("F:/train","image_count.txt")
-    findExtraPix("E:/top-up-images","image_count.txt")
-
+    # findExtraPix("E:/top-up-images","image_count.txt")
+    findExtraPix("D:/top-up-images","image_count.txt"," in flight")
