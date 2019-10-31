@@ -31,7 +31,7 @@ class findExtraPix:
         # be specified manually ("large, medium, icon")
         # aspect ratio denotes the height width ratio
         # of images to download. ("tall, square, wide, panoramic")
-        arguments = {"keywords": query + keyword_mod,
+        arguments = {"keywords": (query + keyword_mod),
                  "format": "jpg",
                  "limit": (100 - int(no_of_images)),
                  "print_urls": True,
@@ -65,6 +65,6 @@ class findExtraPix:
 
 
 if __name__ == "__main__":
-    # findExtraPix("F:/train","image_count.txt")
-    # findExtraPix("E:/top-up-images","image_count.txt")
-    findExtraPix("D:/top-up-images","image_count.txt"," bird")
+    findExtraPix("F:/top-up-images","image_count.txt"," bird")
+    # findExtraPix("E:/top-up-images","image_count.txt", " bird")
+    # findExtraPix("D:/top-up-images","image_count.txt"," bird")

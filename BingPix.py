@@ -94,7 +94,7 @@ def backup_history(*args):
     if args:
         exit(0)
 
-def pre_prep(output_dir,adult_filter,keyword_list,no_of_images,threads):
+def pre_prep(output_dir,adult_filter,keyword,no_of_images,threads):
     global adlt
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -112,8 +112,8 @@ def pre_prep(output_dir,adult_filter,keyword_list,no_of_images,threads):
     else:
         adlt = 'off'
     pool_sema = threading.BoundedSemaphore(threads)
-    for search_string in keyword_list:
-        fetch_images_from_keyword(pool_sema, search_string,output_dir, adlt, (100 - int(no_of_images)))
+    print("search string {}".format(keyword))
+    fetch_images_from_keyword(pool_sema, keyword,output_dir, adlt, (100 - int(no_of_images)))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = 'Bing image bulk downloader')
