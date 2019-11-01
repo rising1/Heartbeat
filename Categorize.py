@@ -247,7 +247,7 @@ class Categorize:
 
 if __name__ == "__main__":
     # myCat = Categorize('F:/train', "dummy_target")
-    myCat = Categorize('E:/train', "dummy_target")
+    # myCat = Categorize('E:/train', "dummy_target")
     '''---1. First step to create structure here ---------------------------------------------------------------'''
     # myCat.build_dirs_from_file('bird_dir_list.txt')
     '''---2. Jump over to Load-Pix-and-Clean to fill the directory with google images --------------------------'''
@@ -259,12 +259,14 @@ if __name__ == "__main__":
     '''---4. Use Excel on scan_results using the AI bird class list to identify non-relevant files to be deleted'''
     '''---    produce a list of filepaths for deletion and save in Excel as CSV --------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
+    # myCat = Categorize('D:/train', "dummy_target")
     # myCat.delete_irrelevant('F:/train/delete_list.csv')
-    # myCat.delete_irrelevant('E:/train/delete_list.csv')
+    # myCat.delete_irrelevant('D:/train/delete_list.csv')
     '''---5. Count the image shortages following the clean-up ---------------------------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
     # myCat.summarise()
-
+    myCat = Categorize('D:/train', "dummy_target")
+    myCat.summarise()
     '''---6. Go to Find_Pix to download extra pix in flight -----------------------------------------------------'''
     '''---   loads the extra images to a trial directory for cleaning through the AI routine --------------------'''
 
@@ -279,3 +281,5 @@ if __name__ == "__main__":
     '''---9. Copy across downloaded top-up-images ----------------------------------------------------------------'''
     # myCat = Categorize('F:/top-up-images',"dummy_target")
     # myCat.copy_top_up_images("F:/train")
+    # myCat = Categorize('D:/top-up-images',"dummy_target")
+    # myCat.copy_top_up_images("D:/train")
