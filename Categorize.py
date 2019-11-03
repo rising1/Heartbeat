@@ -187,17 +187,20 @@ class Categorize:
                         try:
                            im = Image.open(file_path)
                            im.verify()  # I perform also verify, don't know if he sees other types o defects
-                           im.close()  # reload is necessary in my case
+                           im.close()
+                           im = Image.open(file_path)
+                           print("image successfully opened")
+                           im.transpose(Image.FLIP_LEFT_RIGHT)
+                           print("image successfully transposed")
+                           im.save(file_path)
                            print("passed ", file_path)
-                                # im = Image.load(filename)
-                                # im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
-                                # im.close()
-                        except:
-                            print("failed image test")
+                        except Exception as e:
+                            print(str(e))
                             try:
                                 os.remove(file_path)
                                 print("successfully removed bad image ",file_path)
-                            except:
+                            except Exception as e2:
+                                print(str(e2))
                                 print("failed to remove bad image ",file_path)
                         if os.path.isfile(file_path):
                             try:
@@ -253,9 +256,9 @@ if __name__ == "__main__":
     '''---2. Jump over to Load-Pix-and-Clean to fill the directory with google images --------------------------'''
 
     '''---3. Now run the bird check AI -------------------------------------------------------------------------'''
-    # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
-    # myCat.is_it_a_bird()
-    # myCat.is_it_a_bird()
+    myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
+    myCat.is_it_a_bird()
+
     '''---4. Use Excel on scan_results using the AI bird class list to identify non-relevant files to be deleted'''
     '''---    produce a list of filepaths for deletion and save in Excel as CSV --------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
@@ -265,8 +268,8 @@ if __name__ == "__main__":
     '''---5. Count the image shortages following the clean-up ---------------------------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
     # myCat.summarise()
-    myCat = Categorize('D:/train', "dummy_target")
-    myCat.summarise()
+    # myCat = Categorize('D:/train', "dummy_target")
+    # myCat.summarise()
     '''---6. Go to Find_Pix to download extra pix in flight -----------------------------------------------------'''
     '''---   loads the extra images to a trial directory for cleaning through the AI routine --------------------'''
 
