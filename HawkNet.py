@@ -166,8 +166,8 @@ def set_up_training(is_training):
         print("model in evaluation mode")
 
 def save_models(epoch, loss, save_point):
-    print("save path types = ",type(dataPathRoot)+"\t",type(epoch)+"\t",type(save_point))
-    save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}.model".format(epoch) + save_point
+    print("save path types = ",str(type(dataPathRoot))+"\t",str(type(epoch))+"\t",str(type(save_point)))
+    save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}.model".format(epoch) + str(save_point)
     checkpoint = {
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
@@ -262,7 +262,7 @@ def train(num_epochs):
                     interim_fig_prev = interim_fig
                     interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
                     print("saving at ",interim)
-                    save_models(epoch, loss, interim_corrects)
+                    save_models(epoch, loss, interim_corrects.cpu().numpy())
 
             train_loss = running_loss / train_loader_class.dataset_sizes[phase]
             train_acc = running_corrects.double() / \
