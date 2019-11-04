@@ -166,6 +166,7 @@ def set_up_training(is_training):
         print("model in evaluation mode")
 
 def save_models(epoch, loss, save_point):
+    print("save path types = ",type(dataPathRoot)+"\t",type(epoch)+"\t",type(save_point))
     save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}.model".format(epoch) + save_point
     checkpoint = {
             'epoch': epoch,
