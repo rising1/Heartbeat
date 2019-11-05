@@ -243,8 +243,8 @@ class Categorize:
         with open(file_with_delete_list,'r') as delete_file:
             delete_list = delete_file.readlines()
             for bad_file in delete_list:
-                bad_file = bad_file.lstrip(" ")
-                print("bad file=", bad_file)
+                bad_file = bad_file.rstrip("\n")
+                print("bad file=", bad_file,"=")
                 if os.path.isfile(bad_file):
                     print("removing ",bad_file)
                     os.remove(bad_file)
