@@ -172,7 +172,7 @@ class Categorize:
         corrupt_path = os.path.join(self.rootDir,"corrupt_files.txt")
         if os.path.isfile(corrupt_path):
             os.remove(corrupt_path)
-            for sdirNames in next(os.walk(self.rootDir))[1]:
+        for sdirNames in next(os.walk(self.rootDir))[1]:
                 for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
                     file_path = self.rootDir  + '/' + sdirNames + '/' + sfileNames
                     print(file_path)
@@ -191,7 +191,7 @@ class Categorize:
                             print(str(e))
                             try:
                                 with open(corrupt_path, "a") as f:
-                                    record_string = corrupt_path + "\n"
+                                    record_string = file_path + "\n"
                                     f.write(record_string)
                                     print("written ", record_string)
                                     f.flush()
