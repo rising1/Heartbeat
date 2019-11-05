@@ -241,11 +241,15 @@ class Categorize:
 
     def delete_irrelevant(self,file_with_delete_list):
         with open(file_with_delete_list,'r') as delete_file:
-            delete_list = csv.reader(delete_file)
+            delete_list = delete_file.readlines()
             for bad_file in delete_list:
-                if os.path.isfile(bad_file[0]):
-                    print("removing ",bad_file[0])
-                    os.remove(bad_file[0])
+                bad_file = bad_file.lstrip(" ")
+                print("bad file=", bad_file)
+                if os.path.isfile(bad_file):
+                    print("removing ",bad_file)
+                    os.remove(bad_file)
+                else:
+                    print("not a file")
     ''' End of iterate through AI results file and delete everything that is not a bird ----------------------------'''
 
     ''' Routine to copy top-up images to the training directories --------------------------------------------------'''
@@ -275,17 +279,18 @@ if __name__ == "__main__":
     '''---2. Jump over to Load-Pix-and-Clean to fill the directory with google images --------------------------'''
     '''---3. Now run the delete corrupt images routine -------------------------------------------------------------------------'''
     # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
-    myCat = Categorize('D:/train',"dummy_target")
-    myCat.delete_corrupt()
+    # myCat = Categorize('D:/train',"dummy_target")
+    # myCat = Categorize('F:/train',"dummy_target")
+    # myCat.delete_corrupt()
     '''---3. Now run the bird check AI -------------------------------------------------------------------------'''
     # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
     # myCat.is_it_a_bird()
 
     '''---4. Use Excel on scan_results using the AI bird class list to identify non-relevant files to be deleted'''
     '''---    produce a list of filepaths for deletion and save in Excel as CSV --------------------------------'''
-    # myCat = Categorize('F:/train', "dummy_target")
+    myCat = Categorize('F:/train', "dummy_target")
     # myCat = Categorize('D:/train', "dummy_target")
-    # myCat.delete_irrelevant('F:/train/delete_list.csv')
+    myCat.delete_irrelevant('F:/train/corrupt_files.txt')
     # myCat.delete_irrelevant('D:/train/delete_list.csv')
     '''---5. Count the image shortages following the clean-up ---------------------------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
@@ -296,8 +301,8 @@ if __name__ == "__main__":
     '''---   loads the extra images to a trial directory for cleaning through the AI routine --------------------'''
 
     '''---7. test the newly downloaded images -------------------------------------------------------------------'''
-    myCat = Categorize('F:/top-up-images',"dummy_target")
-    myCat.is_it_a_bird()
+    # myCat = Categorize('F:/top-up-images',"dummy_target")
+    # myCat.is_it_a_bird()
 
     '''---8. delete the downloaded top-up-images ----------------------------------------------------------------'''
     # myCat = Categorize('F:/top-up-images',"dummy_target")

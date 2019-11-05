@@ -65,6 +65,6 @@ class findExtraPix:
 
 
 if __name__ == "__main__":
-    findExtraPix("F:/top-up-images","image_count.txt"," bird")
+    findExtraPix("F:/train_2","image_count.txt"," bird")
     # findExtraPix("E:/top-up-images","image_count.txt", " bird")
     # findExtraPix("D:/top-up-images","image_count.txt"," bird")

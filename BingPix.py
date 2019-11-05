@@ -82,7 +82,7 @@ def fetch_images_from_keyword(pool_sema: threading.Semaphore, keyword: str, outp
         except IndexError:
             print('No search results for "{0}"'.format(keyword))
             return
-        time.sleep(0.1)
+        time.sleep(0.5)
 
 def backup_history(*args):
     download_history = open(os.path.join(output_dir, 'download_history.pickle'), 'wb')
@@ -113,7 +113,7 @@ def pre_prep(output_dir,adult_filter,keyword,no_of_images,threads):
         adlt = 'off'
     pool_sema = threading.BoundedSemaphore(threads)
     print("search string {}".format(keyword))
-    fetch_images_from_keyword(pool_sema, keyword,output_dir, adlt, (100 - int(no_of_images)))
+    fetch_images_from_keyword(pool_sema, keyword,output_dir, adlt, int(no_of_images))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = 'Bing image bulk downloader')
