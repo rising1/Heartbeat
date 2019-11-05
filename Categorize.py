@@ -167,9 +167,12 @@ class Categorize:
         return file_list
     ''' End split down image count file ----------------------------------------------------------------------------'''
 
- ''' Get rid of corrupted images'''
+    ''' Get rid of corrupted images'''
     def delete_corrupt(self):
-        for sdirNames in next(os.walk(self.rootDir))[1]:
+        corrupt_path = os.path.join(self.rootDir,"corrupt_files.txt")
+        if os.path.isfile(corrupt_path):
+            os.remove(corrupt_path)
+            for sdirNames in next(os.walk(self.rootDir))[1]:
                 for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
                     file_path = self.rootDir  + '/' + sdirNames + '/' + sfileNames
                     print(file_path)
@@ -187,13 +190,21 @@ class Categorize:
                         except Exception as e:
                             print(str(e))
                             try:
-                                os.remove(file_path)
-                                print("successfully removed bad image ",file_path)
+                                with open(corrupt_path, "a") as f:
+                                    record_string = corrupt_path + "\n"
+                                    f.write(record_string)
+                                    print("written ", record_string)
+                                    f.flush()
+                                    f.close()
+                                    # os.remove(file_path)
+                                    # print("successfully removed bad image ",file_path)
                             except Exception as e2:
                                 print(str(e2))
                                 print("failed to remove bad image ",file_path)
 
-   ''' AI routine to walk directories and pick pictures containing birds from everything downloaded ---------------'''
+
+
+    ''' AI routine to walk directories and pick pictures containing birds from everything downloaded ---------------'''
     ''' and write the results to a file ----------------------------------------------------------------------------'''
     def is_it_a_bird(self):
         import ImageType
