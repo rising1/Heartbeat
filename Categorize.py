@@ -167,18 +167,11 @@ class Categorize:
         return file_list
     ''' End split down image count file ----------------------------------------------------------------------------'''
 
-    ''' AI routine to walk directories and pick pictures containing birds from everything downloaded ---------------'''
-    ''' and write the results to a file ----------------------------------------------------------------------------'''
-
-    def is_it_a_bird(self):
-        import ImageType
-        index_file = "scan_results.txt"
-        indexpath = os.path.join(self.rootDir, index_file)
-        print("index_path= ",indexpath)
-        if os.path.exists(indexpath):
-            os.remove(indexpath)
-        imageType = ImageType.ImageType()
-
+    ''' Get rid of corrupted images'''
+    def delete_corrupt(self):
+        corrupt_path = os.path.join(self.rootDir,"corrupt_files.txt")
+        if os.path.isfile(corrupt_path):
+            os.remove(corrupt_path)
         for sdirNames in next(os.walk(self.rootDir))[1]:
                 for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
                     file_path = self.rootDir  + '/' + sdirNames + '/' + sfileNames
@@ -197,11 +190,37 @@ class Categorize:
                         except Exception as e:
                             print(str(e))
                             try:
-                                os.remove(file_path)
-                                print("successfully removed bad image ",file_path)
+                                with open(corrupt_path, "a") as f:
+                                    record_string = file_path + "\n"
+                                    f.write(record_string)
+                                    print("written ", record_string)
+                                    f.flush()
+                                    f.close()
+                                    # os.remove(file_path)
+                                    # print("successfully removed bad image ",file_path)
                             except Exception as e2:
                                 print(str(e2))
                                 print("failed to remove bad image ",file_path)
+
+
+
+    ''' AI routine to walk directories and pick pictures containing birds from everything downloaded ---------------'''
+    ''' and write the results to a file ----------------------------------------------------------------------------'''
+    def is_it_a_bird(self):
+        import ImageType
+        index_file = "scan_results.txt"
+        indexpath = os.path.join(self.rootDir, index_file)
+        print("index_path= ",indexpath)
+        if os.path.exists(indexpath):
+            os.remove(indexpath)
+        imageType = ImageType.ImageType()
+
+        for sdirNames in next(os.walk(self.rootDir))[1]:
+                for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
+                    file_path = self.rootDir  + '/' + sdirNames + '/' + sfileNames
+                    print(file_path)
+                    if os.path.isfile(file_path):
+                        self.delete_corrupt()
                         if os.path.isfile(file_path):
                             try:
                                 result = imageType.predict_image(file_path)
@@ -254,10 +273,13 @@ if __name__ == "__main__":
     '''---1. First step to create structure here ---------------------------------------------------------------'''
     # myCat.build_dirs_from_file('bird_dir_list.txt')
     '''---2. Jump over to Load-Pix-and-Clean to fill the directory with google images --------------------------'''
-
+    '''---3. Now run the delete corrupt images routine -------------------------------------------------------------------------'''
+    # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
+    myCat = Categorize('D:/train',"dummy_target")
+    myCat.delete_corrupt()
     '''---3. Now run the bird check AI -------------------------------------------------------------------------'''
-    myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
-    myCat.is_it_a_bird()
+    # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
+    # myCat.is_it_a_bird()
 
     '''---4. Use Excel on scan_results using the AI bird class list to identify non-relevant files to be deleted'''
     '''---    produce a list of filepaths for deletion and save in Excel as CSV --------------------------------'''
