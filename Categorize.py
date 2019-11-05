@@ -274,8 +274,8 @@ if __name__ == "__main__":
     '''---   loads the extra images to a trial directory for cleaning through the AI routine --------------------'''
 
     '''---7. test the newly downloaded images -------------------------------------------------------------------'''
-    # myCat = Categorize('F:/top-up-images',"dummy_target")
-    # myCat.is_it_a_bird()
+    myCat = Categorize('F:/top-up-images',"dummy_target")
+    myCat.is_it_a_bird()
 
     '''---8. delete the downloaded top-up-images ----------------------------------------------------------------'''
     # myCat = Categorize('F:/top-up-images',"dummy_target")
