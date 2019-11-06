@@ -35,7 +35,7 @@ def build_model(dataPathRoot_in):
     pooling_factor = 2  # used in SimpleNet
     pic_size = 72  # used in SimpleNet
     output_classes = 220  # used in SimpleNet
-    learning_rate = 0.001  # used in HeartbeatClean
+    learning_rate = 0.0001  # used in HeartbeatClean
     weight_decay = 0.0000  # used in HeartbeatClean
     dropout_factor = 0.4  # used in Unit
     faff = 'false'
@@ -423,7 +423,7 @@ def show_images(images, cols=1, titles=None):
 if __name__ == "__main__":
    build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
    transfer_to_gpu()
-   load_latest_saved_model("new")
+   load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
    set_up_training(True)
    train(20)
    #   test()

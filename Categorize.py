@@ -278,7 +278,7 @@ if __name__ == "__main__":
     # myCat.build_dirs_from_file('bird_dir_list.txt')
     '''---2. Jump over to Load-Pix-and-Clean to fill the directory with google images --------------------------'''
     '''---3. Now run the delete corrupt images routine -------------------------------------------------------------------------'''
-    # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
+    myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
     # myCat = Categorize('D:/train',"dummy_target")
     # myCat = Categorize('F:/train',"dummy_target")
     # myCat.delete_corrupt()
@@ -288,9 +288,9 @@ if __name__ == "__main__":
 
     '''---4. Use Excel on scan_results using the AI bird class list to identify non-relevant files to be deleted'''
     '''---    produce a list of filepaths for deletion and save in Excel as CSV --------------------------------'''
-    myCat = Categorize('F:/train', "dummy_target")
+    # myCat = Categorize('F:/train', "dummy_target")
     # myCat = Categorize('D:/train', "dummy_target")
-    myCat.delete_irrelevant('F:/train/corrupt_files.txt')
+    myCat.delete_irrelevant('C:/Users/phfro/PycharmProjects/Heartbeat/train/corrupt_files.txt')
     # myCat.delete_irrelevant('D:/train/delete_list.csv')
     '''---5. Count the image shortages following the clean-up ---------------------------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
