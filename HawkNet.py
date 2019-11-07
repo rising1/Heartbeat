@@ -41,7 +41,7 @@ def build_model(dataPathRoot_in):
     faff = 'false'
     num_epochs = 20  # used in HeartbeatClean
     snapshot_points = num_epochs / 1
-    batch_sizes = 64  # used in HeartbeatClean
+    batch_sizes = 88  # used in HeartbeatClean
     #  batch_sizes = 6 # used in HeartbeatClean
     loadfile = True
 
@@ -167,7 +167,8 @@ def set_up_training(is_training):
 
 def save_models(epoch, loss, save_point):
     print("save path types = ",str(type(dataPathRoot))+"\t",str(type(epoch))+"\t",str(type(save_point)))
-    save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}.model".format(epoch) + str(save_point)
+    save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}_".format(epoch) + "_best_" \
+                                + str(save_point) + "_loss_" + str(loss.detach().cpu().numpy()) + ".model"
     checkpoint = {
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
@@ -423,9 +424,10 @@ def show_images(images, cols=1, titles=None):
 if __name__ == "__main__":
    build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
    transfer_to_gpu()
-   load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
+   # load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
+   load_latest_saved_model("new")
    set_up_training(True)
-   train(20)
+   train(10)
    #   test()
 
    # For testing -------------------------------------------------------
