@@ -1,10 +1,11 @@
 from google_images_download import google_images_download
 import os
+from PIL import Image
 import BingPix
 
 class findExtraPix:
 
-    def __init__(self, rootDir, image_shortages_list, keyword_mod):
+    def __init__(self, rootDir, image_shortages_list, keyword_mod, load_new_pix):
 
         self.rootDir = rootDir
         # self.response = google_images_download.googleimagesdownload()
@@ -20,7 +21,32 @@ class findExtraPix:
             print(short_item)
             print(short_item[0] + keyword_mod)
             # self.downloadimages(short_item[0],short_item[1])
-            BingPix.pre_prep(self.rootDir + "/" + short_item[0], True, (short_item[0] + keyword_mod), short_item[1],20)
+            if (load_new_pix):
+                BingPix.pre_prep(self.rootDir + "/" + short_item[0], True, (short_item[0] + keyword_mod), short_item[1],20)
+            else:
+                for sfileNames in next(os.walk(self.rootDir + '/' + short_item[0]))[2]:
+                    for i in range(1, int(short_item[1])):
+                            'code to copy the existing pictures and rotate them'
+                            file_path = self.rootDir + '/' + short_item[0] + '/' + sfileNames
+                            print(file_path)
+                            if os.path.isfile(file_path):
+                                try:
+                                    im = Image.open(file_path)
+                                    im.verify()  # I perform also verify, don't know if he sees other types o defects
+                                    im.close()
+                                    im = Image.open(file_path)
+                                    print("image successfully opened")
+                                    im.transpose(Image.FLIP_LEFT_RIGHT)
+                                    print("image successfully transposed")
+                                    im.save( file_path + "flipped.jpg")
+                                    print("passed flipped_", file_path)
+                                except Exception as e:
+                                    print(str(e))
+
+
+
+
+
 
     def downloadimages(self, query, no_of_images,keyword_mod):
         # keywords is the search query
@@ -65,6 +91,7 @@ class findExtraPix:
 
 
 if __name__ == "__main__":
-    findExtraPix("F:/train_2","image_count.txt"," bird")
+    # findExtraPix("F:/train_2","image_count.txt"," bird", False)
+    findExtraPix("F:/train","image_count.txt"," bird", False)
     # findExtraPix("E:/top-up-images","image_count.txt", " bird")
     # findExtraPix("D:/top-up-images","image_count.txt"," bird")
