@@ -17,8 +17,8 @@ class findExtraPix:
                 file_path = line.rstrip("\n").split("\t")
                 file_list.append(file_path)
         #print(file_list)
-        i = 0
         for short_item in file_list:
+            i=0
             print(short_item)
             print(short_item[0] + keyword_mod)
             # self.downloadimages(short_item[0],short_item[1])
@@ -26,8 +26,8 @@ class findExtraPix:
                 BingPix.pre_prep(self.rootDir + "/" + short_item[0], True, (short_item[0] + keyword_mod), short_item[1],20)
             else:
                 for sfileNames in next(os.walk(self.rootDir + '/' + short_item[0]))[2]:
-                    print("working with ", self.rootDir + '/' + short_item[0])
-                    while i < (100 - int(short_item[1])):
+                        if i < (100 - int(short_item[1])):
+                            print("working with ", self.rootDir + '/' + short_item[0])
                             'code to copy the existing pictures and rotate them'
                             file_path = self.rootDir + '/' + short_item[0] + '/' + sfileNames
                             print(file_path, "i= ",i)
@@ -36,12 +36,13 @@ class findExtraPix:
                                     im = Image.open(file_path)
                                     print("image successfully opened")
                                     im = im.transpose(Image.FLIP_LEFT_RIGHT)
-                                    print("image successfully transposed")
-                                    # im.save( file_path + "flipped.jpg")
+                                    # print("image successfully transposed")
+                                    im.save( file_path + "flipped.jpg")
                                     print("passed flipped_", file_path)
                                     i = i + 1
                                 except Exception as e:
                                     print(str(e))
+
 
 
 
@@ -92,7 +93,8 @@ class findExtraPix:
 
 if __name__ == "__main__":
     # findExtraPix("F:/train_2","image_count.txt"," bird", False)
-    findExtraPix("C:/Users/phfro/PycharmProjects/Heartbeat/train","image_count.txt"," bird", False)
+    # findExtraPix("C:/Users/phfro/PycharmProjects/Heartbeat/train","image_count.txt"," bird", False)
     # findExtraPix("F:/train","image_count.txt"," bird", False)
+    findExtraPix("D:/train","image_count.txt"," bird", False)
     # findExtraPix("E:/top-up-images","image_count.txt", " bird")
     # findExtraPix("D:/top-up-images","image_count.txt"," bird")

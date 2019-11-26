@@ -278,7 +278,7 @@ if __name__ == "__main__":
     # myCat.build_dirs_from_file('bird_dir_list.txt')
     '''---2. Jump over to Load-Pix-and-Clean to fill the directory with google images --------------------------'''
     '''---3. Now run the delete corrupt images routine -------------------------------------------------------------------------'''
-    myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
+    # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
     # myCat = Categorize('D:/train',"dummy_target")
     # myCat = Categorize('F:/train',"dummy_target")
     # myCat.delete_corrupt()
@@ -295,7 +295,7 @@ if __name__ == "__main__":
     '''---5. Count the image shortages following the clean-up ---------------------------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
     # myCat.summarise()
-    # myCat = Categorize('D:/train', "dummy_target")
+    myCat = Categorize('D:/train', "dummy_target")
     myCat.summarise()
     '''---6. Go to Find_Pix to download extra pix in flight -----------------------------------------------------'''
     '''---   loads the extra images to a trial directory for cleaning through the AI routine --------------------'''
