@@ -296,7 +296,7 @@ if __name__ == "__main__":
     # myCat = Categorize('F:/train', "dummy_target")
     # myCat.summarise()
     # myCat = Categorize('D:/train', "dummy_target")
-    # myCat.summarise()
+    myCat.summarise()
     '''---6. Go to Find_Pix to download extra pix in flight -----------------------------------------------------'''
     '''---   loads the extra images to a trial directory for cleaning through the AI routine --------------------'''
 

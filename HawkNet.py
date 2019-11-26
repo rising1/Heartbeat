@@ -427,7 +427,7 @@ if __name__ == "__main__":
    # load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
    load_latest_saved_model("new")
    set_up_training(True)
-   train(100)
+   train(50)
    #   test()
 
    # For testing -------------------------------------------------------
