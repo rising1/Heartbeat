@@ -170,8 +170,11 @@ class Categorize:
     ''' Get rid of corrupted images'''
     def delete_corrupt(self):
         corrupt_path = os.path.join(self.rootDir,"corrupt_files.txt")
+        corrupt_path_not_deleted = os.path.join(self.rootDir, "corrupt_files_not_deleted.txt")
         if os.path.isfile(corrupt_path):
             os.remove(corrupt_path)
+        if os.path.isfile(corrupt_path_not_deleted):
+            os.remove(corrupt_path_not_deleted)
         for sdirNames in next(os.walk(self.rootDir))[1]:
                 for sfileNames in next(os.walk(self.rootDir + '/' + sdirNames))[2]:
                     file_path = self.rootDir  + '/' + sdirNames + '/' + sfileNames
@@ -196,9 +199,15 @@ class Categorize:
                                     print("written ", record_string)
                                     f.flush()
                                     f.close()
-                                    # os.remove(file_path)
-                                    # print("successfully removed bad image ",file_path)
+                                    os.remove(file_path)
+                                    print("successfully removed bad image ",file_path)
                             except Exception as e2:
+                                with open(corrupt_path, "a") as f:
+                                    record_string = str(e2) + "\n"
+                                    f.write(record_string)
+                                    print("written ", record_string)
+                                    f.flush()
+                                    f.close()
                                 print(str(e2))
                                 print("failed to remove bad image ",file_path)
 
@@ -278,10 +287,10 @@ if __name__ == "__main__":
     # myCat.build_dirs_from_file('bird_dir_list.txt')
     '''---2. Jump over to Load-Pix-and-Clean to fill the directory with google images --------------------------'''
     '''---3. Now run the delete corrupt images routine -------------------------------------------------------------------------'''
-    # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
+    myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
     # myCat = Categorize('D:/train',"dummy_target")
     # myCat = Categorize('F:/train',"dummy_target")
-    # myCat.delete_corrupt()
+    myCat.delete_corrupt()
     '''---3. Now run the bird check AI -------------------------------------------------------------------------'''
     # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
     # myCat.is_it_a_bird()
@@ -295,8 +304,8 @@ if __name__ == "__main__":
     '''---5. Count the image shortages following the clean-up ---------------------------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
     # myCat.summarise()
-    myCat = Categorize('D:/train', "dummy_target")
-    myCat.summarise()
+    # myCat = Categorize('D:/train', "dummy_target")
+    # myCat.summarise()
     '''---6. Go to Find_Pix to download extra pix in flight -----------------------------------------------------'''
     '''---   loads the extra images to a trial directory for cleaning through the AI routine --------------------'''
 

@@ -93,8 +93,8 @@ class findExtraPix:
 
 if __name__ == "__main__":
     # findExtraPix("F:/train_2","image_count.txt"," bird", False)
-    # findExtraPix("C:/Users/phfro/PycharmProjects/Heartbeat/train","image_count.txt"," bird", False)
+    findExtraPix("C:/Users/phfro/PycharmProjects/Heartbeat/train","image_count.txt"," bird", False)
     # findExtraPix("F:/train","image_count.txt"," bird", False)
-    findExtraPix("D:/train","image_count.txt"," bird", False)
+    # findExtraPix("D:/train","image_count.txt"," bird", False)
     # findExtraPix("E:/top-up-images","image_count.txt", " bird")
     # findExtraPix("D:/top-up-images","image_count.txt"," bird")
