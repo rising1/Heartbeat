@@ -35,7 +35,7 @@ def build_model(dataPathRoot_in):
     pooling_factor = 2  # used in SimpleNet
     pic_size = 72  # used in SimpleNet
     output_classes = 220  # used in SimpleNet
-    learning_rate = 0.0001  # used in HeartbeatClean
+    learning_rate = 0.0002  # used in HeartbeatClean
     weight_decay = 0.0000  # used in HeartbeatClean
     dropout_factor = 0.4  # used in Unit
     faff = 'false'
@@ -115,7 +115,7 @@ def load_latest_saved_model(chosen_model = None,is_eval = False):
         #  model.train()
         if not is_eval:
             model_file_path = comp_root + selected_model
-            interim_fig_prev_text = model_file_path[(model_file_path.rfind('_') + 1):(len(model_file_path) - 1)]
+            interim_fig_prev_text = model_file_path[(model_file_path.rfind('_') + 1):(len(model_file_path) - 6)]
             interim_fig_prev = float(interim_fig_prev_text)
             print("using saved model ", model_file_path, " Loss: {:.4f}".format(interim_fig_prev))
     else:
@@ -264,6 +264,9 @@ def train(num_epochs):
                     interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
                     print("saving at ",interim)
                     save_models(epoch, loss, interim_corrects.cpu().numpy())
+                if (batch_counter % (20 ) == 0):
+                    deploy_test = Hawknet_Depld.test_images(12, False)
+                    test(deploy_test, validate_path)
 
             train_loss = running_loss / train_loader_class.dataset_sizes[phase]
             train_acc = running_corrects.double() / \
@@ -293,6 +296,7 @@ def train(num_epochs):
             train_history.append(train_acc)
 
 
+
 def test_train():
     model.eval()
     test_acct = 0.0
@@ -317,14 +321,16 @@ def test_train():
     return test_acct
 
 def test(my_test_loader,validate_path):
-    my_test_loader = my_test_loader
+    bird_list = ['Owl', 'Bittern', 'Blackbird', 'Tit', 'Chicken', 'Parakeet', 'Peregrine', 'Dove', 'Plover',
+                 'Puffin', 'Robin', 'sparrowhawk']
+    my_test_loader_eval = my_test_loader.eval_test(dataPathRoot)
     model.eval()
     test_acct = 0.0
     test_history = []
     image_list = []
+    label_list = []
     predictions_list = []
-    images, labels = next(iter(my_test_loader))
-
+    images, labels = next(iter(my_test_loader_eval))
     if torch.cuda.is_available():
             images = Variable(images.cuda())
             labels = Variable(labels.cuda())
@@ -334,12 +340,15 @@ def test(my_test_loader,validate_path):
     for image in images:
         image = image.cpu()
         image_list.append(imshow(image))
-    for predictions in prediction:
-        img_label = "Prediction=" + birds_listing(
-                    validate_path)[int(predictions.cpu(
-                    ).numpy())] + " Actual=" + labels.index(predictions)
-        predictions_list.append(birds_listing(validate_path)[int(predictions.cpu().numpy())])
-    # print("prediction=",classes[int(prediction.cpu().numpy())])
+    for i in range(len(prediction)):
+        if (birds_listing(validate_path)[int(prediction[i].cpu().numpy())]) == (
+                bird_list[labels.data[i].cpu().numpy()]):
+                tick = "Yes"    # str(u'\2714'.encode('utf-8')) # approval tick mark
+        else:
+                tick = "No"     # str(u'\2717'.encode('utf-8')) # cross mark
+        predictions_list.append(birds_listing(validate_path)[int(prediction[i].cpu().numpy())]  +
+                                "\n" + "\n" + "       " + tick)
+                                # "\n" + bird_list[labels.data[i].cpu().numpy()] + " " + tick)
     show_images(image_list,2,predictions_list)
 
 def test_single(images,validate_path):
@@ -415,29 +424,38 @@ def show_images(images, cols=1, titles=None):
         if image.ndim == 2:
             plt.gray()
         plt.imshow(image)
-        a.set_title(title)
+        a.set_title(title,fontsize=8)
     #  fig.set_size_inches(np.array(fig.get_size_inches()) * n_images)
     #  fig = plt.figure(figsize=(6, 3))
-    plt.show()
+    plt.show(block=False)
+    plt.pause(8)
+    plt.close()
 
 # train(num_epochs)
 if __name__ == "__main__":
-   build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
-   transfer_to_gpu()
-   # load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
-   load_latest_saved_model("new")
-   set_up_training(True)
-   train(200)
+    bird_list = ['barn owl', 'bittern', 'blackbird', 'bluetit', 'chicken', 'parakeet', 'peregrine', 'pigeon', 'plover',
+                 'puffin', 'robin', 'sparrow hawk']
+    dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
+    validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
+    # model_training = False    # Change depending on purpose of run
+    model_training = True    # Change depending on purpose of run
+
+    if model_training:
+        build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
+        transfer_to_gpu()
+        # load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
+        # load_latest_saved_model("new")
+        load_latest_saved_model()
+        set_up_training(True)
+        train(500)
+    else:
    #   test()
 
-   # For testing -------------------------------------------------------
-   #bird_list = ['barn owl','bittern','blackbird','bluetit','chicken','parakeet','peregrine','pigeon','plover','puffin','robin','sparrow hawk']
-   #dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-   #validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
-   #build_model(dataPathRoot)
-   #transfer_to_gpu()
-   # load_latest_saved_model('Birdies_model_0.model_loss_1180.3117 ')
-   #load_latest_saved_model('Birdies_model_0.model_best_acc_4.2667')
-   #set_up_training(False)
-   #deploy_test = Hawknet_Depld.test_images(6)
-   #test(deploy_test.eval_test(dataPathRoot),validate_path)
+        # For testing -------------------------------------------------------
+        build_model(dataPathRoot)
+        transfer_to_gpu()
+        # load_latest_saved_model('Birdies_model_199__best_0_loss_1.1715012')
+        load_latest_saved_model('Birdies_model_0.model_best_acc_4.2667')
+        set_up_training(False)
+        deploy_test = Hawknet_Depld.test_images(12,False)
+        test(deploy_test,validate_path)

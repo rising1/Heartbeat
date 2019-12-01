@@ -133,8 +133,12 @@ class Categorize:
 
     def summarise(self):
         record_file = "image_count.txt"
+        record_file2 = "directory_list.txt"
         record_path = os.path.join(self.rootDir, record_file)
+        record_path2 = os.path.join(self.rootDir, record_file2)
         if os.path.exists(record_path):
+            os.remove(record_path)
+        if os.path.exists(record_path2):
             os.remove(record_path)
         for tdirNames in next(os.walk(self.rootDir))[1]:
             counter = 0
@@ -149,7 +153,12 @@ class Categorize:
                 print("written ", record_string)
                 f.flush()
             f.close()
-
+            with open(record_path2, "a") as f2:
+                record_string = tdirNames + ","
+                f2.write(record_string)
+                print("written ", record_string)
+                f2.flush()
+            f2.close()
     ''' End count the number of pictures in each of the directories ------------------------------------------------'''
 
     ''' Split down image count file --------------------------------------------------------------------------------'''
@@ -290,7 +299,7 @@ if __name__ == "__main__":
     myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
     # myCat = Categorize('D:/train',"dummy_target")
     # myCat = Categorize('F:/train',"dummy_target")
-    myCat.delete_corrupt()
+    # myCat.delete_corrupt()
     '''---3. Now run the bird check AI -------------------------------------------------------------------------'''
     # myCat = Categorize('C:/Users/phfro/PycharmProjects/Heartbeat/train',"dummy_target")
     # myCat.is_it_a_bird()
@@ -303,7 +312,7 @@ if __name__ == "__main__":
     # myCat.delete_irrelevant('D:/train/delete_list.csv')
     '''---5. Count the image shortages following the clean-up ---------------------------------------------------'''
     # myCat = Categorize('F:/train', "dummy_target")
-    # myCat.summarise()
+    myCat.summarise()
     # myCat = Categorize('D:/train', "dummy_target")
     # myCat.summarise()
     '''---6. Go to Find_Pix to download extra pix in flight -----------------------------------------------------'''
