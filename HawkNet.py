@@ -35,7 +35,7 @@ def build_model(dataPathRoot_in):
     pooling_factor = 2  # used in SimpleNet
     pic_size = 72  # used in SimpleNet
     output_classes = 220  # used in SimpleNet
-    learning_rate = 0.0002  # used in HeartbeatClean
+    learning_rate = 0.0001  # used in HeartbeatClean
     weight_decay = 0.0000  # used in HeartbeatClean
     dropout_factor = 0.4  # used in Unit
     faff = 'false'
@@ -63,6 +63,19 @@ def build_model(dataPathRoot_in):
     loss_fn = nn.CrossEntropyLoss()
     print("model now built")
 
+def get_lr(optimizer):
+    for param_group in optimizer.param_groups:
+        return param_group['lr']
+
+def first_learning_rate(optimizer, lr):
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
+
+def adjust_learning_rate(optimizer, epoch):
+    """Sets the learning rate to the initial LR decayed by 10 every 10 epochs"""
+    learning_rate = get_lr(optimizer) * (0.1 ** (epoch // 10))
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = learning_rate
 
 def get_latest_file(path, *paths):
     """Returns the name of the latest (most recent) file
@@ -134,6 +147,7 @@ def load_latest_saved_model(chosen_model = None,is_eval = False):
     for var_name in optimizer.state_dict():
         if var_name == "param_groups":
             print(var_name, "\t", optimizer.state_dict()[var_name])
+    first_learning_rate(optimizer,learning_rate)
     print("model loaded")
 
 def set_up_training(is_training):
@@ -195,8 +209,9 @@ def train(num_epochs):
 
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        # adjust the learning rate
+        adjust_learning_rate(optimizer,epoch)
 
-        lr = learning_rate / (epoch + 1)
         # Each epoch has a training and validation phase
         for phase in ['train', 'val']:
             if phase == 'train':
@@ -258,7 +273,7 @@ def train(num_epochs):
                               interim_corrects), 'time {:.0f}m {:.0f}s'.format(
                         time_elapsed // 60, time_elapsed % 60))
                 print("Average_loss: {:.4f},Prev_average_loss: {:.4f}, Learning_rate: {:.7f}".format(
-                        interim_fig, interim_fig_prev, learning_rate))
+                        interim_fig, interim_fig_prev, get_lr(optimizer)))
                 if ((batch_counter % (20 + epoch * 1) == 0) & (interim_fig < interim_fig_prev)):
                     interim_fig_prev = interim_fig
                     interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
@@ -444,10 +459,10 @@ if __name__ == "__main__":
         build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
         transfer_to_gpu()
         # load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
-        # load_latest_saved_model("new")
-        load_latest_saved_model()
+        load_latest_saved_model("new")
+        # load_latest_saved_model()
         set_up_training(True)
-        train(500)
+        train(20)
     else:
    #   test()
 
