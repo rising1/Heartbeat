@@ -19,7 +19,7 @@ global faff, snapshot_points, batch_sizes, \
     optimizer, loss_fn, pic_size, epoch, \
     loss, device, train_loader_class, \
     learning_rate, test_loader, \
-    single_loader_class, num_epochs
+    single_loader_class, num_epochs, decay_cycles
 
 def build_model(dataPathRoot_in):
     global  dataPathRoot, faff, snapshot_points, \
@@ -35,8 +35,9 @@ def build_model(dataPathRoot_in):
     pooling_factor = 2  # used in SimpleNet
     pic_size = 72  # used in SimpleNet
     output_classes = 220  # used in SimpleNet
-    learning_rate = 0.0001  # used in HeartbeatClean
-    weight_decay = 0.0000  # used in HeartbeatClean
+    learning_rate = 0.001  # used in HeartbeatClean
+    decay_cycles = 30 # default to start
+    weight_decay = 0.0001  # used in HeartbeatClean
     dropout_factor = 0.4  # used in Unit
     faff = 'false'
     num_epochs = 20  # used in HeartbeatClean
@@ -71,9 +72,15 @@ def first_learning_rate(optimizer, lr):
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
+def lr_decay_cycles(cycles):
+    global decay_cycles
+    decay_cycles = cycles
+    return decay_cycles
+
 def adjust_learning_rate(optimizer, epoch):
-    """Sets the learning rate to the initial LR decayed by 10 every 10 epochs"""
-    learning_rate = get_lr(optimizer) * (0.1 ** (epoch // 10))
+    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
+    global decay_cycles
+    learning_rate = get_lr(optimizer) * (0.1 ** (epoch // decay_cycles))
     for param_group in optimizer.param_groups:
         param_group['lr'] = learning_rate
 
@@ -208,6 +215,7 @@ def train(num_epochs):
     loopcount = 0
 
     for epoch in range(num_epochs):
+        model.train()
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
         # adjust the learning rate
         adjust_learning_rate(optimizer,epoch)
@@ -242,19 +250,18 @@ def train(num_epochs):
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
-                # zero the parameter gradients
-                optimizer.zero_grad()
-
                 # track history if only in train
                 with torch.set_grad_enabled(phase == 'train'):
-                    outputs = model(inputs)
-                    _, preds = torch.max(outputs, 1)
-                    loss = loss_fn(outputs, labels)
+                    # zero the parameter gradients
+                    optimizer.zero_grad()
+                outputs = model(inputs)
+                _, preds = torch.max(outputs, 1)
+                loss = loss_fn(outputs, labels)
 
-                    # backward + optimize only if in training phase
-                    if phase == 'train':
-                        loss.backward()
-                        optimizer.step()
+                # backward + optimize only if in training phase
+                if phase == 'train':
+                   loss.backward()
+                   optimizer.step()
 
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
@@ -460,9 +467,11 @@ if __name__ == "__main__":
         transfer_to_gpu()
         # load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
         load_latest_saved_model("new")
+        first_learning_rate(optimizer, .001)
+        lr_decay_cycles(50)
         # load_latest_saved_model()
         set_up_training(True)
-        train(20)
+        train(200)
     else:
    #   test()
 
