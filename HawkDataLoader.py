@@ -1,6 +1,7 @@
 # transforms to apply to the datan
 from torchvision import transforms, datasets
 from torch.utils.data import DataLoader
+from torchvision.datasets import CIFAR10
 import torch
 import csv
 import os
@@ -60,3 +61,33 @@ class HawkLoader:
            #  print("len self.classes=",len(self.classes))
         return self.classes
 
+    def cifar10_train_loader(self):
+        # Define transformations for the training set, flip the images randomly, crop out and apply mean and std normalization
+        train_transformations = transforms.Compose([
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomCrop(32, padding=4),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        ])
+
+        # Load the training set
+        train_set = CIFAR10(root="./data", train=True, transform=train_transformations, download=True)
+
+        # Create a loder for the training set
+        train_loader = DataLoader(train_set, batch_size=32, shuffle=True, num_workers=4)
+        return train_loader
+
+    def cifar10_test_loader(self):
+        # Define transformations for the test set
+        test_transformations = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+
+        ])
+
+        # Load the test set, note that train is set to False
+        test_set = CIFAR10(root="./data", train=False, transform=test_transformations, download=True)
+
+        # Create a loder for the test set, note that both shuffle is set to false for the test loader
+        test_loader = DataLoader(test_set, batch_size=32, shuffle=False, num_workers=4)
+        return test_loader

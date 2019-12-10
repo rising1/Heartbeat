@@ -42,7 +42,7 @@ def build_model(dataPathRoot_in):
     faff = 'false'
     num_epochs = 20  # used in HeartbeatClean
     snapshot_points = num_epochs / 1
-    batch_sizes = 88  # used in HeartbeatClean
+    batch_sizes = 24  # used in HeartbeatClean
     #  batch_sizes = 6 # used in HeartbeatClean
     loadfile = True
 
@@ -157,34 +157,38 @@ def load_latest_saved_model(chosen_model = None,is_eval = False):
     first_learning_rate(optimizer,learning_rate)
     print("model loaded")
 
-def set_up_training(is_training):
+def set_up_training(is_training,use_cifar10):
 
-    global model, train_loader_class, val_loader_class, \
+    if use_cifar10:
+        print("put some code here")
+
+    else:
+        global model, train_loader_class, val_loader_class, \
             test_loader_class, single_loader_class, train_loader, \
             val_loader, test_loader, pic_size
 
-    if(is_training):
-        model.train()
-        train_loader_class = \
-            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
-        val_loader_class = \
-            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
-        test_loader_class = \
-            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
-        single_loader_class = \
-            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
-        train_loader = train_loader_class.dataloaders["train"]
-        val_loader = val_loader_class.dataloaders["val"]
-        test_loader = test_loader_class.dataloaders["test"]
-        # Get a batch of training data
-        inputs, classes = next(iter(train_loader))
-        print('len inputs=', len(inputs))
-        # Make a grid from batch
-        out = torchvision.utils.make_grid(inputs)
-        print("model in training mode")
-    else:
-        model.eval()
-        print("model in evaluation mode")
+        if(is_training):
+            model.train()
+            train_loader_class = \
+                HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+            val_loader_class = \
+                HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+            test_loader_class = \
+                HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+            single_loader_class = \
+                HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+            train_loader = train_loader_class.dataloaders["train"]
+            val_loader = val_loader_class.dataloaders["val"]
+            test_loader = test_loader_class.dataloaders["test"]
+            # Get a batch of training data
+            inputs, classes = next(iter(train_loader))
+            print('len inputs=', len(inputs))
+            # Make a grid from batch
+            out = torchvision.utils.make_grid(inputs)
+            print("model in training mode")
+        else:
+            model.eval()
+            print("model in evaluation mode")
 
 def save_models(epoch, loss, save_point):
     print("save path types = ",str(type(dataPathRoot))+"\t",str(type(epoch))+"\t",str(type(save_point)))
@@ -470,7 +474,7 @@ if __name__ == "__main__":
         first_learning_rate(optimizer, .001)
         lr_decay_cycles(50)
         # load_latest_saved_model()
-        set_up_training(True)
+        set_up_training(is_training=True,cifar10=False)
         train(200)
     else:
    #   test()
@@ -480,6 +484,6 @@ if __name__ == "__main__":
         transfer_to_gpu()
         # load_latest_saved_model('Birdies_model_199__best_0_loss_1.1715012')
         load_latest_saved_model('Birdies_model_0.model_best_acc_4.2667')
-        set_up_training(False)
+        set_up_training(False,False)
         deploy_test = Hawknet_Depld.test_images(12,False)
         test(deploy_test,validate_path)
