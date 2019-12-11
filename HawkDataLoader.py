@@ -39,6 +39,9 @@ class HawkLoader:
         image_datasets = {x: datasets.ImageFolder(os.path.join(self.dir_path, x),
                                                   data_transforms[x])
                           for x in ['train', 'val', 'test']}
+        #image_datasets = {x: datasets.ImageFolder(os.path.join('D/:', x),
+        #                                          data_transforms[x])
+        #                  for x in ['train', 'val', 'test']}
         self.dataloaders = {x: torch.utils.data.DataLoader(
                             image_datasets[x],
                             batch_size=self.batch_sizes,

@@ -95,7 +95,7 @@ def get_latest_file(path, *paths):
     _, filename = os.path.split(latest_file)
     return filename
 
-def transfer_to_gpu(evaluate = True):
+def transfer_to_gpu(evaluate = torch.cuda.is_available()):
     global device
     device = torch.device("cuda: 0" if evaluate else "cpu")
     print("device=", device)
@@ -467,14 +467,15 @@ if __name__ == "__main__":
     model_training = True    # Change depending on purpose of run
 
     if model_training:
-        build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
+        # build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
+        build_model('C:/Users/peter.frost/PycharmProjects/heartbeat')
         transfer_to_gpu()
         # load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
         load_latest_saved_model("new")
         first_learning_rate(optimizer, .001)
         lr_decay_cycles(50)
         # load_latest_saved_model()
-        set_up_training(is_training=True,cifar10=False)
+        set_up_training(is_training=True,use_cifar10=False)
         train(200)
     else:
    #   test()
