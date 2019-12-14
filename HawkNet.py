@@ -24,7 +24,7 @@ global faff, snapshot_points, batch_sizes, \
 def build_model(dataPathRoot_in):
     global  dataPathRoot, faff, snapshot_points, \
             batch_sizes, loadfile, model, optimizer, \
-            loss_fn, pic_size, learning_rate
+            loss_fn, pic_size, learning_rate, decay_cycles
 
     # Hyperparameters
     colour_channels = 3  # used in SimpleNet
@@ -33,16 +33,16 @@ def build_model(dataPathRoot_in):
     stride_pixels = 1  # used in Unit
     padding_pixels = 1  # used in Unit
     pooling_factor = 2  # used in SimpleNet
-    pic_size = 72  # used in SimpleNet
-    output_classes = 220  # used in SimpleNet
+    pic_size = 32  # used in SimpleNet
+    output_classes = 10  # used in SimpleNet
     learning_rate = 0.001  # used in HeartbeatClean
-    decay_cycles = 30 # default to start
+    decay_cycles = 1 # default to start
     weight_decay = 0.0001  # used in HeartbeatClean
     dropout_factor = 0.4  # used in Unit
     faff = 'false'
     num_epochs = 20  # used in HeartbeatClean
     snapshot_points = num_epochs / 1
-    batch_sizes = 24  # used in HeartbeatClean
+    batch_sizes = 512  # used in HeartbeatClean
     #  batch_sizes = 6 # used in HeartbeatClean
     loadfile = True
 
@@ -78,7 +78,7 @@ def lr_decay_cycles(cycles):
     return decay_cycles
 
 def adjust_learning_rate(optimizer, epoch):
-    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
+    """Sets the learning rate to the initial LR decayed by 10 every decay epochs"""
     global decay_cycles
     learning_rate = get_lr(optimizer) * (0.1 ** (epoch // decay_cycles))
     for param_group in optimizer.param_groups:
@@ -159,6 +159,10 @@ def load_latest_saved_model(chosen_model = None,is_eval = False):
 
 def set_up_training(is_training,use_cifar10):
 
+    global model, train_loader_class, val_loader_class, \
+        test_loader_class, single_loader_class, train_loader, \
+        val_loader, test_loader, pic_size
+
     if use_cifar10:
         print("put some code here")
         train_loader_class = \
@@ -168,9 +172,7 @@ def set_up_training(is_training,use_cifar10):
             HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
         test_loader = test_loader_class.cifar10_test_loader()
     else:
-        global model, train_loader_class, val_loader_class, \
-            test_loader_class, single_loader_class, train_loader, \
-            val_loader, test_loader, pic_size
+
 
         if(is_training):
             model.train()
@@ -213,7 +215,7 @@ def save_models(epoch, loss, save_point):
 
 def train(num_epochs):
     #  global variables used in this function
-    global interim_fig_prev, learning_rate
+    global interim_fig_prev, learning_rate, decay_cycles
 
     print("In train")
 
@@ -249,7 +251,7 @@ def train(num_epochs):
                 #  set up reporting variables
                 no_of_batches = int(train_loader_class.dataset_sizes[phase] / batch_sizes) + 1
                 batch_counter = batch_counter + 1
-
+                #  adjust_learning_rate(optimizer, batch_counter)
                 if batch_counter == 1:
                     print("inputs size=",inputs.shape)
                     print("labels size=",labels.shape)
@@ -282,6 +284,13 @@ def train(num_epochs):
                 interim_corrects = running_corrects / ((epoch + 1) * batch_counter)
                 if batch_counter == 1:
                     interim_fig_prev = interim_fig
+                if batch_counter == 3:
+                    interim_corrects_prev = interim_corrects
+                if batch_counter > 3:
+                    print("now", interim_corrects.cpu().numpy(), " Previously ", interim_corrects_prev.cpu().numpy())
+                    if interim_corrects > interim_corrects_prev:
+                        save_models(epoch, loss, interim_corrects.cpu().numpy())
+                        interim_corrects_prev = interim_corrects
                 #    save_models(epoch, loss, "_loss_{:.4f} ".format(interim_fig))
                 #    print("first save ", "_loss_{:.4f} ".format(interim_fig))
                 print( phase, " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
@@ -290,11 +299,11 @@ def train(num_epochs):
                         time_elapsed // 60, time_elapsed % 60))
                 print("Average_loss: {:.4f},Prev_average_loss: {:.4f}, Learning_rate: {:.7f}".format(
                         interim_fig, interim_fig_prev, get_lr(optimizer)))
-                if ((batch_counter % (20 + epoch * 1) == 0) & (interim_fig < interim_fig_prev)):
-                    interim_fig_prev = interim_fig
-                    interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
-                    print("saving at ",interim)
-                    save_models(epoch, loss, interim_corrects.cpu().numpy())
+                #if ((batch_counter % (20 + epoch * 1) == 0) & (interim_fig < interim_fig_prev)):
+                #    interim_fig_prev = interim_fig
+                #    interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
+                #    print("saving at ",interim)
+                #    save_models(epoch, loss, interim_corrects.cpu().numpy())
                 if (batch_counter % (20 ) == 0):
                     deploy_test = Hawknet_Depld.test_images(12, False)
                     test(deploy_test, validate_path)
@@ -308,7 +317,8 @@ def train(num_epochs):
             test_acc = test_train()
 
             # Save the model if the test acc is greater than our current best
-            if ((batch_counter % 20 == 0) & (test_acc > best_acc)):
+            # if ((batch_counter % 20 == 0) & (test_acc > best_acc)):
+            if  (test_acc > best_acc):
                 main_acc = "_best_acc_{:.4f} ".format(test_acc)
                 save_models(epoch,loss,main_acc)
                 best_acc = test_acc
@@ -464,6 +474,12 @@ def show_images(images, cols=1, titles=None):
 
 # train(num_epochs)
 if __name__ == "__main__":
+
+    # *****************************************************************************
+    # no of classes set to 10 and starting lr to .00001 and decay_rate to 2
+    #******************************************************************************
+
+
     bird_list = ['barn owl', 'bittern', 'blackbird', 'bluetit', 'chicken', 'parakeet', 'peregrine', 'pigeon', 'plover',
                  'puffin', 'robin', 'sparrow hawk']
     dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
@@ -472,16 +488,17 @@ if __name__ == "__main__":
     model_training = True    # Change depending on purpose of run
 
     if model_training:
-        # build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
-        build_model('C:/Users/peter.frost/PycharmProjects/heartbeat')
+        build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
+        # build_model('C:/Users/peter.frost/PycharmProjects/heartbeat')
         transfer_to_gpu()
         # load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
         load_latest_saved_model("new")
-        first_learning_rate(optimizer, .001)
-        lr_decay_cycles(50)
+        # load_latest_saved_model()
+        first_learning_rate(optimizer, .00001)
+        lr_decay_cycles(5)
         # load_latest_saved_model()
         set_up_training(is_training=True, use_cifar10=True)
-        train(200)
+        train(5)
     else:
    #   test()
 

@@ -79,6 +79,7 @@ class HawkLoader:
 
         # Create a loder for the training set
         train_loader = DataLoader(train_set, batch_size=32, shuffle=True, num_workers=0)
+        print ("returning train loader object")
         return train_loader
 
     def cifar10_test_loader(self):

@@ -5,7 +5,7 @@ class Unit(nn.Module):
     def __init__(self, argslist, in_channels, out_channels):
         self.in_channels = in_channels
         self.out_channels = out_channels
-        self.kernel_sizes = argslist[0] # problem ?
+        self.kernel_sizes = argslist[0]  # problem ?
         self.stride_pixels = argslist[1]
         self.padding_pixels = argslist[2]
         self.dropout_factor = argslist[3]
