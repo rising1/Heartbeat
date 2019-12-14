@@ -161,9 +161,12 @@ def set_up_training(is_training,use_cifar10):
 
     if use_cifar10:
         print("put some code here")
-        train_loader = DataLoader(train_set, batch_size=32,
-                                  shuffle=True, num_workers=0)
-
+        train_loader_class = \
+            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+        train_loader = train_loader_class.cifar10_test_loader()
+        test_loader_class = \
+            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+        test_loader = test_loader_class.cifar10_test_loader()
     else:
         global model, train_loader_class, val_loader_class, \
             test_loader_class, single_loader_class, train_loader, \
@@ -477,7 +480,7 @@ if __name__ == "__main__":
         first_learning_rate(optimizer, .001)
         lr_decay_cycles(50)
         # load_latest_saved_model()
-        set_up_training(is_training=True,use_cifar10=False)
+        set_up_training(is_training=True, use_cifar10=True)
         train(200)
     else:
    #   test()
