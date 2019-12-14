@@ -77,7 +77,7 @@ class HawkLoader:
         train_set = CIFAR10(root="./data", train=True, transform=train_transformations, download=True)
 
         # Create a loder for the training set
-        train_loader = DataLoader(train_set, batch_size=32, shuffle=True, num_workers=4)
+        train_loader = DataLoader(train_set, batch_size=32, shuffle=True, num_workers=0)
         return train_loader
 
     def cifar10_test_loader(self):
@@ -92,5 +92,5 @@ class HawkLoader:
         test_set = CIFAR10(root="./data", train=False, transform=test_transformations, download=True)
 
         # Create a loder for the test set, note that both shuffle is set to false for the test loader
-        test_loader = DataLoader(test_set, batch_size=32, shuffle=False, num_workers=4)
+        test_loader = DataLoader(test_set, batch_size=32, shuffle=False, num_workers=0)
         return test_loader

@@ -161,6 +161,8 @@ def set_up_training(is_training,use_cifar10):
 
     if use_cifar10:
         print("put some code here")
+        train_loader = DataLoader(train_set, batch_size=32,
+                                  shuffle=True, num_workers=0)
 
     else:
         global model, train_loader_class, val_loader_class, \
