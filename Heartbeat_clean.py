@@ -78,7 +78,7 @@ train_transformations = transforms.Compose([
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
 
-batch_size = 32
+batch_size = (128)
 
 # Load the training set
 train_set = CIFAR10(root="./data", train=True, transform=train_transformations, download=True)
@@ -213,6 +213,6 @@ def train(num_epochs):
 if __name__ == "__main__":
 
     # ------------------------------------------------------------------
-    # Changed num_workers to 0, fixed prediction == labels.data
+    # Changed num_workers to 0, fixed prediction == labels.data,
     #-------------------------------------------------------------------
     train(200)

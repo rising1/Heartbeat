@@ -42,7 +42,7 @@ def build_model(dataPathRoot_in):
     faff = 'false'
     num_epochs = 20  # used in HeartbeatClean
     snapshot_points = num_epochs / 1
-    batch_sizes = 512  # used in HeartbeatClean
+    batch_sizes = 128  # used in HeartbeatClean
     #  batch_sizes = 6 # used in HeartbeatClean
     loadfile = True
 
@@ -236,7 +236,6 @@ def train(num_epochs):
 
         # Iterate over data.
         for inputs, labels in train_loader_class.dataloaders["train"]:
-
                 #  set up reporting variables
                 no_of_batches = int(train_loader_class.dataset_sizes["train"] / batch_sizes) + 1
                 batch_counter = batch_counter + 1
@@ -281,7 +280,7 @@ def train(num_epochs):
                         interim_corrects_prev = interim_corrects
                 #    save_models(epoch, loss, "_loss_{:.4f} ".format(interim_fig))
                 #    print("first save ", "_loss_{:.4f} ".format(interim_fig))
-                print( phase, " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
+                print( 'train', " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
                       .format(running_loss, interim_fig,
                               interim_corrects), 'time {:.0f}m {:.0f}s'.format(
                         time_elapsed // 60, time_elapsed % 60))
@@ -296,17 +295,16 @@ def train(num_epochs):
                     deploy_test = Hawknet_Depld.test_images(12, False)
                     test(deploy_test, validate_path)
 
-            train_loss = running_loss / train_loader_class.dataset_sizes[phase]
-            train_acc = running_corrects.double() / \
-                        train_loader_class.dataset_sizes[phase]
+                train_loss = running_loss / train_loader_class.dataset_sizes['train']
+                train_acc = running_corrects.double() / \
+                        train_loader_class.dataset_sizes['train']
 
+        # Evaluate on the test set
+        test_acc = test_train()
 
-            # Evaluate on the test set
-            test_acc = test_train()
-
-            # Save the model if the test acc is greater than our current best
-            # if ((batch_counter % 20 == 0) & (test_acc > best_acc)):
-            if  (test_acc > best_acc):
+        # Save the model if the test acc is greater than our current best
+        # if ((batch_counter % 20 == 0) & (test_acc > best_acc)):
+        if  (test_acc > best_acc):
                 main_acc = "_best_acc_{:.4f} ".format(test_acc)
                 save_models(epoch,loss,main_acc)
                 best_acc = test_acc
@@ -314,15 +312,15 @@ def train(num_epochs):
 
         if ((epoch) % (num_epochs / snapshot_points) == 0) or (epoch == num_epochs):
             loopcount = loopcount + 1
-            time_elapsed = time.time() - since
-            print("Epoch {:4}, ".format(epoch),
-                 phase, " Accuracy: {:.4f},TrainLoss: {:.4f},"
+        time_elapsed = time.time() - since
+        print("Epoch {:4}, ".format(epoch),
+                  " Train accuracy: {:.4f},TrainLoss: {:.4f},"
                   .format( train_acc,
                           train_loss), 'time {:.0f}m {:.0f}s'.format(
                           time_elapsed // 60, time_elapsed % 60))
-            print('Best val Acc: {:4f}'.format(best_acc))
-            # Accuracy Curves
-            train_history.append(train_acc)
+        print('Best val Acc: {:4f}'.format(best_acc))
+        # Accuracy Curves
+        train_history.append(train_acc)
 
 
 
@@ -483,10 +481,10 @@ if __name__ == "__main__":
         load_latest_saved_model("new")
         # load_latest_saved_model()
         first_learning_rate(optimizer, .00001)
-        lr_decay_cycles(5)
+        lr_decay_cycles(30)
         # load_latest_saved_model()
         set_up_training(is_training=True, use_cifar10=True)
-        train(10)
+        train(200)
     else:
    #   test()
 
