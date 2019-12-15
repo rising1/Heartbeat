@@ -26,7 +26,7 @@ def build_model(dataPathRoot_in):
             batch_sizes, loadfile, model, optimizer, \
             loss_fn, pic_size, learning_rate, decay_cycles
 
-    # Hyperparameters
+    # Hyper-parameters
     colour_channels = 3  # used in SimpleNet
     no_feature_detectors = 12  # used in ??????
     kernel_sizes = 3  # used in Unit
@@ -498,7 +498,7 @@ if __name__ == "__main__":
         lr_decay_cycles(5)
         # load_latest_saved_model()
         set_up_training(is_training=True, use_cifar10=True)
-        train(5)
+        train(10)
     else:
    #   test()
 
