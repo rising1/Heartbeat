@@ -6,7 +6,6 @@ from torchvision.transforms import transforms
 from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torch.autograd import Variable
-import numpy as np
 import HawkDataLoader
 
 
@@ -181,7 +180,7 @@ def test():
         # Predict classes using images from the test set
         outputs = model(images)
         _, prediction = torch.max(outputs.data, 1)
-        prediction = prediction.cpu().numpy()
+        # prediction = prediction.cpu().numpy()
         test_acc += torch.sum(prediction == labels.data)
 
     # Compute the average acc and loss over all 10000 test images
@@ -215,7 +214,7 @@ def train(num_epochs):
             # Adjust parameters according to the computed gradients
             optimizer.step()
 
-            train_loss += loss.cpu().data[0] * images.size(0)
+            train_loss += loss.cpu().item() * images.size(0)
             _, prediction = torch.max(outputs.data, 1)
 
             train_acc += torch.sum(prediction == labels.data)
@@ -241,4 +240,7 @@ def train(num_epochs):
 
 
 if __name__ == "__main__":
+    #***********************************************************
+    # Includes drop-out
+    #***********************************************************
     train(200)

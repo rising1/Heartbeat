@@ -28,7 +28,7 @@ def build_model(dataPathRoot_in):
 
     # Hyper-parameters
     colour_channels = 3  # used in SimpleNet
-    no_feature_detectors = 12  # used in ??????
+    no_feature_detectors = 32  # used in ??????
     kernel_sizes = 3  # used in Unit
     stride_pixels = 1  # used in Unit
     padding_pixels = 1  # used in Unit
@@ -57,7 +57,7 @@ def build_model(dataPathRoot_in):
     print("parameters loaded and data root path set")
 
     SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
-                 output_classes, colour_channels, pic_size, pooling_factor]
+                 output_classes, colour_channels, no_feature_detectors, pooling_factor]
     model = ConvNet.SimpleNet(SimpleNetArgs)
     optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
@@ -217,8 +217,7 @@ def train(num_epochs):
     #  global variables used in this function
     global interim_fig_prev, learning_rate, decay_cycles
 
-    print("In train")
-
+    # print("In train")
     #  set some measurement variables
     best_acc = 0.0
     since = time.time()
@@ -227,52 +226,41 @@ def train(num_epochs):
 
     for epoch in range(num_epochs):
         model.train()
-        print('Epoch {}/{}'.format(epoch, num_epochs - 1))
+        # print('Epoch {}/{}'.format(epoch, num_epochs - 1))
         # adjust the learning rate
         adjust_learning_rate(optimizer,epoch)
 
-        # Each epoch has a training and validation phase
-        for phase in ['train', 'val']:
-            if phase == 'train':
-                # scheduler.step()
-                model.train()  # Set model to training mode
-                print('model set to train mode')
-            else:
-                model.eval()   # Set model to evaluate mode
-                print('model set to eval mode')
+        running_loss = 0.0
+        running_corrects = 0
+        batch_counter = 0
 
-            running_loss = 0.0
-            running_corrects = 0
-            batch_counter = 0
-
-            # Iterate over data.
-            for inputs, labels in train_loader_class.dataloaders[phase]:
+        # Iterate over data.
+        for inputs, labels in train_loader_class.dataloaders["train"]:
 
                 #  set up reporting variables
-                no_of_batches = int(train_loader_class.dataset_sizes[phase] / batch_sizes) + 1
+                no_of_batches = int(train_loader_class.dataset_sizes["train"] / batch_sizes) + 1
                 batch_counter = batch_counter + 1
                 #  adjust_learning_rate(optimizer, batch_counter)
-                if batch_counter == 1:
-                    print("inputs size=",inputs.shape)
-                    print("labels size=",labels.shape)
-                print('Epoch=',epoch,' batch=',batch_counter," of ",no_of_batches)
+                #if batch_counter == 1:
+                #    print("inputs size=",inputs.shape)
+                #    print("labels size=",labels.shape)
+                #print('Epoch=',epoch,' batch=',batch_counter," of ",no_of_batches)
 
                 #  push the data to the GPU
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
                 # track history if only in train
-                with torch.set_grad_enabled(phase == 'train'):
+                with torch.set_grad_enabled('train'):
                     # zero the parameter gradients
                     optimizer.zero_grad()
                 outputs = model(inputs)
                 _, preds = torch.max(outputs, 1)
                 loss = loss_fn(outputs, labels)
 
-                # backward + optimize only if in training phase
-                if phase == 'train':
-                   loss.backward()
-                   optimizer.step()
+                # backward + optimize
+                loss.backward()
+                optimizer.step()
 
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
@@ -343,7 +331,7 @@ def test_train():
     test_acct = 0.0
     test_history = []
     total = 0
-    images, labels = next(iter(test_loader))
+    images, labels = next(iter(test_loader)) #    for i, (images, labels) in enumerate(test_loader):
 
     if torch.cuda.is_available():
             images = Variable(images.cuda())

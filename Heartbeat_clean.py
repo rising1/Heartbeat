@@ -84,7 +84,7 @@ batch_size = 32
 train_set = CIFAR10(root="./data", train=True, transform=train_transformations, download=True)
 
 # Create a loder for the training set
-train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=4)
+train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=0)
 
 # Define transformations for the test set
 test_transformations = transforms.Compose([
@@ -97,7 +97,7 @@ test_transformations = transforms.Compose([
 test_set = CIFAR10(root="./data", train=False, transform=test_transformations, download=True)
 
 # Create a loder for the test set, note that both shuffle is set to false for the test loader
-test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=4)
+test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=0)
 
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
@@ -150,7 +150,7 @@ def test():
         # Predict classes using images from the test set
         outputs = model(images)
         _, prediction = torch.max(outputs.data, 1)
-        prediction = prediction.cpu().numpy()
+        # prediction = prediction.cpu()
         test_acc += torch.sum(prediction == labels.data)
 
     # Compute the average acc and loss over all 10000 test images
@@ -184,7 +184,8 @@ def train(num_epochs):
             # Adjust parameters according to the computed gradients
             optimizer.step()
 
-            train_loss += loss.cpu().data[0] * images.size(0)
+            # train_loss += loss.cpu().data[0] * images.size(0)
+            train_loss += loss.cpu().item() * images.size(0)
             _, prediction = torch.max(outputs.data, 1)
 
             train_acc += torch.sum(prediction == labels.data)
@@ -210,4 +211,8 @@ def train(num_epochs):
 
 
 if __name__ == "__main__":
+
+    # ------------------------------------------------------------------
+    # Changed num_workers to 0, fixed prediction == labels.data
+    #-------------------------------------------------------------------
     train(200)
