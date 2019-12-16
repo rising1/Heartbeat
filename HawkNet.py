@@ -157,7 +157,7 @@ def load_latest_saved_model(chosen_model = None,is_eval = False):
     first_learning_rate(optimizer,learning_rate)
     print("model loaded")
 
-def set_up_training(is_training,use_cifar10):
+def set_up_training(computer, is_training,use_cifar10):
 
     global model, train_loader_class, val_loader_class, \
         test_loader_class, single_loader_class, train_loader, \
@@ -166,10 +166,10 @@ def set_up_training(is_training,use_cifar10):
     if use_cifar10:
         print("put some code here")
         train_loader_class = \
-            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size,computer)
         train_loader = train_loader_class.cifar10_test_loader()
         test_loader_class = \
-            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+            HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size,computer)
         test_loader = test_loader_class.cifar10_test_loader()
     else:
 
@@ -177,13 +177,13 @@ def set_up_training(is_training,use_cifar10):
         if(is_training):
             model.train()
             train_loader_class = \
-                HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+                HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size,computer)
             val_loader_class = \
-                HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+                HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size),computer
             test_loader_class = \
-                HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+                HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size,computer)
             single_loader_class = \
-                HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+                HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size,computer)
             train_loader = train_loader_class.dataloaders["train"]
             val_loader = val_loader_class.dataloaders["val"]
             test_loader = test_loader_class.dataloaders["test"]
@@ -473,8 +473,13 @@ if __name__ == "__main__":
     model_training = True    # Change depending on purpose of run
 
     if model_training:
-        build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
-        # build_model('C:/Users/peter.frost/PycharmProjects/heartbeat')
+        computer = "work"
+        # computer = "home_laptop"
+        # computer = "home_red_room"
+        if (computer == "home_laptop" or computer == "home_red_room" ):
+            build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
+        elif computer == "work":
+            build_model('C:/Users/peter.frost/PycharmProjects/heartbeat')
         transfer_to_gpu()
         # load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
         load_latest_saved_model("new")
@@ -482,10 +487,10 @@ if __name__ == "__main__":
         first_learning_rate(optimizer, .00001)
         lr_decay_cycles(30)
         # load_latest_saved_model()
-        set_up_training(is_training=True, use_cifar10=True)
+        set_up_training(computer, is_training=True, use_cifar10=True,  )
         train(200)
     else:
-   #   test()
+   #   test(),
 
         # For testing -------------------------------------------------------
         build_model(dataPathRoot)
