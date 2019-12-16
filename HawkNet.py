@@ -164,10 +164,10 @@ def set_up_training(computer, is_training,use_cifar10):
         val_loader, test_loader, pic_size
 
     if use_cifar10:
-        print("put some code here")
+        print("using cifar10")
         train_loader_class = \
             HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size,computer)
-        train_loader = train_loader_class.cifar10_test_loader()
+        train_loader = train_loader_class.cifar10_train_loader()
         test_loader_class = \
             HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size,computer)
         test_loader = test_loader_class.cifar10_test_loader()
@@ -473,8 +473,8 @@ if __name__ == "__main__":
     model_training = True    # Change depending on purpose of run
 
     if model_training:
-        computer = "work"
-        # computer = "home_laptop"
+        # computer = "work"
+        computer = "home_laptop"
         # computer = "home_red_room"
         if (computer == "home_laptop" or computer == "home_red_room" ):
             build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
