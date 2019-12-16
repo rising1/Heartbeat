@@ -294,9 +294,9 @@ def train(num_epochs):
                 #    deploy_test = Hawknet_Depld.test_images(12, False)
                 #    test(deploy_test, validate_path)
 
-                #train_loss = running_loss / train_loader_class.dataset_sizes['train']
-                #train_acc = running_corrects.double() / \
-                #        train_loader_class.dataset_sizes['train']
+                train_loss = running_loss / train_loader_class.dataset_sizes['train']
+                train_acc = running_corrects.double() / \
+                        train_loader_class.dataset_sizes['train']
 
         # Evaluate on the test set
         test_acc = test_train()
