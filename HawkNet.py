@@ -250,11 +250,10 @@ def train(num_epochs):
                 labels = labels.to(device)
 
                 # track history if only in train
-                with torch.set_grad_enabled('train'):
-                    # zero the parameter gradients
-                    optimizer.zero_grad()
+                # zero the parameter gradients
+                optimizer.zero_grad()
                 outputs = model(inputs)
-                _, preds = torch.max(outputs, 1)
+
                 loss = loss_fn(outputs, labels)
 
                 # backward + optimize
@@ -263,8 +262,8 @@ def train(num_epochs):
 
                 # statistics
                 running_loss += loss.item() * inputs.size(0)
-
-                print(' prev loss.item()=', loss.item(), ' x inputs.size(0)=', inputs.size(0))
+                _, preds = torch.max(outputs, 1)
+                # print(' prev loss.item()=', loss.item(), ' x inputs.size(0)=', inputs.size(0))
                 running_corrects += torch.sum(preds == labels.data)
                 time_elapsed = time.time() - since
                 interim_fig = running_loss / ((epoch + 1) * batch_counter)
@@ -280,24 +279,24 @@ def train(num_epochs):
                         interim_corrects_prev = interim_corrects
                 #    save_models(epoch, loss, "_loss_{:.4f} ".format(interim_fig))
                 #    print("first save ", "_loss_{:.4f} ".format(interim_fig))
-                print( 'train', " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
-                      .format(running_loss, interim_fig,
-                              interim_corrects), 'time {:.0f}m {:.0f}s'.format(
-                        time_elapsed // 60, time_elapsed % 60))
-                print("Average_loss: {:.4f},Prev_average_loss: {:.4f}, Learning_rate: {:.7f}".format(
-                        interim_fig, interim_fig_prev, get_lr(optimizer)))
+                #print( 'train', " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
+                #      .format(running_loss, interim_fig,
+                #              interim_corrects), 'time {:.0f}m {:.0f}s'.format(
+                #        time_elapsed // 60, time_elapsed % 60))
+                #print("Average_loss: {:.4f},Prev_average_loss: {:.4f}, Learning_rate: {:.7f}".format(
+                #        interim_fig, interim_fig_prev, get_lr(optimizer)))
                 #if ((batch_counter % (20 + epoch * 1) == 0) & (interim_fig < interim_fig_prev)):
                 #    interim_fig_prev = interim_fig
                 #    interim = "_loss_{:.4f} ".format(running_loss / ((epoch + 1) * batch_counter))
                 #    print("saving at ",interim)
                 #    save_models(epoch, loss, interim_corrects.cpu().numpy())
-                if (batch_counter % (20 ) == 0):
-                    deploy_test = Hawknet_Depld.test_images(12, False)
-                    test(deploy_test, validate_path)
+                #if (batch_counter % (20 ) == 0):
+                #    deploy_test = Hawknet_Depld.test_images(12, False)
+                #    test(deploy_test, validate_path)
 
-                train_loss = running_loss / train_loader_class.dataset_sizes['train']
-                train_acc = running_corrects.double() / \
-                        train_loader_class.dataset_sizes['train']
+                #train_loss = running_loss / train_loader_class.dataset_sizes['train']
+                #train_acc = running_corrects.double() / \
+                #        train_loader_class.dataset_sizes['train']
 
         # Evaluate on the test set
         test_acc = test_train()
