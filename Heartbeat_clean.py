@@ -205,7 +205,7 @@ def train(num_epochs):
 
             # Save the model if the test acc is greater than our current best
         if test_acc_abs > best_acc and epoch%5 == 0 and epoch > 1:
-                save_models(epoch,str(test_acc_abs))
+                save_models(epoch,str(test_acc_abs.cpu().numpy()))
                 best_acc = test_acc_abs
 
             # Print the metrics
