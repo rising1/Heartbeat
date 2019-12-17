@@ -133,13 +133,15 @@ def adjust_learning_rate(epoch):
         param_group["lr"] = lr
 
 
-def save_models(epoch):
-    torch.save(model.state_dict(), "cifar10model_{}.model".format(epoch))
+def save_models(epoch,test_corrects):
+    torch.save(model.state_dict(), "cifar10model" + test_corrects +"_{}.model".format(epoch))
     print("Checkpoint saved")
 
 
 def test():
+    global test_acc
     model.eval()
+    test_acc_abs = 0
     test_acc = 0.0
     for i, (images, labels) in enumerate(test_loader):
 
@@ -151,16 +153,16 @@ def test():
         outputs = model(images)
         _, prediction = torch.max(outputs.data, 1)
         # prediction = prediction.cpu()
-        test_acc += torch.sum(prediction == labels.data)
+        test_acc_abs += torch.sum(prediction == labels.data)
 
     # Compute the average acc and loss over all 10000 test images
-    test_acc = test_acc / 10000
+    test_acc = test_acc_abs / 10000
 
-    return test_acc
+    return (test_acc, test_acc_abs)
 
 
 def train(num_epochs):
-    best_acc = 0.0
+    best_acc = 0
 
     for epoch in range(num_epochs):
         model.train()
@@ -198,16 +200,17 @@ def train(num_epochs):
         train_loss = train_loss / 50000
 
         # Evaluate on the test set
-        test_acc = test()
+        test_acc = test()[0]
+        test_acc_abs = test()[1]
 
-        # Save the model if the test acc is greater than our current best
-        if test_acc > best_acc:
-            save_models(epoch)
-            best_acc = test_acc
+            # Save the model if the test acc is greater than our current best
+        if test_acc_abs > best_acc and epoch%5 == 0 and epoch > 1:
+                save_models(epoch,str(test_acc_abs))
+                best_acc = test_acc_abs
 
-        # Print the metrics
-        print("Epoch {}, Train Accuracy: {} , TrainLoss: {} , Test Accuracy: {}".format(epoch, train_acc, train_loss,
-                                                                                        test_acc))
+            # Print the metrics
+        print("Epoch {}, Train Accuracy: {:.4f} , TrainLoss: {} , Test Accuracy: {:.4f}, Test Accuracy Absolute: {}".format(epoch, train_acc, train_loss,
+                                                                                        test_acc, test_acc_abs))
 
 
 if __name__ == "__main__":
