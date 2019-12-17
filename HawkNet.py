@@ -21,7 +21,7 @@ global faff, snapshot_points, batch_sizes, \
     learning_rate, test_loader, \
     single_loader_class, num_epochs, decay_cycles
 
-def build_model(dataPathRoot_in):
+def build_model(dataPathRoot_in,computer):
     global  dataPathRoot, faff, snapshot_points, \
             batch_sizes, loadfile, model, optimizer, \
             loss_fn, pic_size, learning_rate, decay_cycles
@@ -53,7 +53,10 @@ def build_model(dataPathRoot_in):
     #  dataPathRoot = '/content/drive/My Drive/Colab Notebooks/BirdiesData'
     #  dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
     #  dataPathRoot = 'C:/Users/phfro/Documents/python/data'
-    dataPathRoot = dataPathRoot_in
+    if computer == "work":
+        dataPathRoot = "d:/"
+    else:
+        dataPathRoot = dataPathRoot_in
     print("parameters loaded and data root path set")
 
     SimpleNetArgs = [kernel_sizes, stride_pixels, padding_pixels, dropout_factor,
@@ -473,13 +476,13 @@ if __name__ == "__main__":
     model_training = True    # Change depending on purpose of run
 
     if model_training:
-        # computer = "work"
-        computer = "home_laptop"
+        computer = "work"
+        # computer = "home_laptop"
         # computer = "home_red_room"
         if (computer == "home_laptop" or computer == "home_red_room" ):
-            build_model('C:/Users/phfro/PycharmProjects/Heartbeat')
+            build_model('C:/Users/phfro/PycharmProjects/Heartbeat',computer)
         elif computer == "work":
-            build_model('C:/Users/peter.frost/PycharmProjects/heartbeat')
+            build_model('C:/Users/peter.frost/PycharmProjects/heartbeat',computer)
         transfer_to_gpu()
         # load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
         load_latest_saved_model("new")
