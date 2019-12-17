@@ -270,13 +270,13 @@ def train(num_epochs):
                 interim_corrects = running_corrects / ((epoch + 1) * batch_counter)
                 if batch_counter == 1:
                     interim_fig_prev = interim_fig
-                if batch_counter == 3:
-                    interim_corrects_prev = interim_corrects
-                if batch_counter > 3:
-                    print("now", interim_corrects.cpu().numpy(), " Previously ", interim_corrects_prev.cpu().numpy())
-                    if interim_corrects > interim_corrects_prev:
-                        save_models(epoch, loss, interim_corrects.cpu().numpy())
-                        interim_corrects_prev = interim_corrects
+                #if batch_counter == 3:
+                #    interim_corrects_prev = interim_corrects
+                #if batch_counter > 3:
+                    # print("now", interim_corrects.cpu().numpy(), " Previously ", interim_corrects_prev.cpu().numpy())
+                #    if interim_corrects > interim_corrects_prev:
+                #        save_models(epoch, loss, interim_corrects.cpu().numpy())
+                #        interim_corrects_prev = interim_corrects
                 #    save_models(epoch, loss, "_loss_{:.4f} ".format(interim_fig))
                 #    print("first save ", "_loss_{:.4f} ".format(interim_fig))
                 #print( 'train', " Running_loss: {:.4f}, Average_loss: {:.4f}, Running_corrects: {:.4f},"
