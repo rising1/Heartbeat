@@ -19,12 +19,12 @@ class Unit(nn.Module):
                               padding=self.padding_pixels)
         self.bn = nn.BatchNorm2d(num_features=self.out_channels)
         self.relu = nn.ReLU()
-        self.do = nn.Dropout(p=self.dropout_factor)
+        # self.do = nn.Dropout(p=self.dropout_factor)
 
     def forward(self, input):
         output = self.conv(input)
         output = self.bn(output)
         output = self.relu(output)
-        output = self.do(output)
+        # output = self.do(output)
 
         return output
