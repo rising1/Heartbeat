@@ -46,7 +46,7 @@ class SimpleNet(nn.Module):
         self.unit14 = UnitNet.Unit(self.UnitArgs, in_channels=self.no_features * 4,
                                    out_channels=self.no_features * 4)
         # self.avgpool = nn.AvgPool2d(kernel_size=(self.pooling_factor * 2) + 1)
-        self.avgpool = nn.AvgPool2d(kernel_size=(self.pooling_factor * 2) + 1)
+        self.avgpool = nn.AvgPool2d(kernel_size=(self.pooling_factor * 4) + 1)
 
         self.net = nn.Sequential(self.unit1, self.unit2,
                                  self.unit3,

@@ -29,7 +29,7 @@ def build_model(dataPathRoot_in,computer):
     # Hyper-parameters
     colour_channels = 3  # used in SimpleNet
     no_feature_detectors = 32  # used in ??????
-    kernel_sizes = 3  # used in Unit
+    kernel_sizes = 2  # used in Unit
     stride_pixels = 1  # used in Unit
     padding_pixels = 1  # used in Unit
     pooling_factor = 2  # used in SimpleNet
@@ -97,17 +97,6 @@ def get_latest_file(path, *paths):
     latest_file = max(list_of_files, key=os.path.getctime)
     _, filename = os.path.split(latest_file)
     return filename
-
-def transfer_to_gpu(evaluate = torch.cuda.is_available()):
-    global device
-    device = torch.device("cuda: 0" if evaluate else "cpu")
-    print("device=", device)
-    if evaluate == True:
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-            print("model transferred to GPU")
-    model.to(device)
-
 
 def load_latest_saved_model(chosen_model = None,is_eval = False):
     global dataPathRoot, loadfile, model, optimizer, \
@@ -465,6 +454,7 @@ if __name__ == "__main__":
 
     # *****************************************************************************
     # no of classes set to 10 and starting lr to .00001 and decay_rate to 2
+    # kernel size set to 2
     #******************************************************************************
 
 
@@ -476,8 +466,8 @@ if __name__ == "__main__":
     model_training = True    # Change depending on purpose of run
 
     if model_training:
-        computer = "work"
-        # computer = "home_laptop"
+        # computer = "work"
+        computer = "home_laptop"
         # computer = "home_red_room"
         if (computer == "home_laptop" or computer == "home_red_room" ):
             build_model('C:/Users/phfro/PycharmProjects/Heartbeat',computer)
@@ -491,7 +481,7 @@ if __name__ == "__main__":
         lr_decay_cycles(30)
         # load_latest_saved_model()
         set_up_training(computer, is_training=True, use_cifar10=True,  )
-        train(200)
+        train(20)
     else:
    #   test(),
 
