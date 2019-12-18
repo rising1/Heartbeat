@@ -139,7 +139,7 @@ def save_models(epoch,test_corrects):
 
 
 def test():
-    global test_acc
+    global test_acc, test_acc_abs
     model.eval()
     test_acc_abs = 0
     test_acc = 0.0
@@ -157,11 +157,11 @@ def test():
 
     # Compute the average acc and loss over all 10000 test images
     test_acc = test_acc_abs / 10000
-
     return (test_acc, test_acc_abs)
 
 
 def train(num_epochs):
+    global best_acc, train_acc, train_loss
     best_acc = 0
 
     for epoch in range(num_epochs):
@@ -209,7 +209,7 @@ def train(num_epochs):
                 best_acc = test_acc_abs
 
             # Print the metrics
-        print("Epoch {}, Train Accuracy: {:.4f} , TrainLoss: {} , Test Accuracy: {:.4f}, Test Accuracy Absolute: {}".format(epoch, train_acc, train_loss,
+        print("Epoch {}, Train Accuracy: {:.1%} , TrainLoss: {:.4f} , Test Accuracy: {:.1%}, Test Accuracy Absolute: {}".format(epoch, train_acc, train_loss,
                                                                                         test_acc, test_acc_abs))
 
 
