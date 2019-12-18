@@ -200,8 +200,9 @@ def train(num_epochs):
         train_loss = train_loss / 50000
 
         # Evaluate on the test set
-        test_acc = test()[0]
-        test_acc_abs = test()[1]
+        results = test()
+        test_acc = results[0]
+        test_acc_abs = results[1]
 
             # Save the model if the test acc is greater than our current best
         if test_acc_abs > best_acc and epoch%5 == 0 and epoch > 1:
@@ -218,4 +219,4 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     # Changed num_workers to 0, fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    train(200)
+    train(50)
