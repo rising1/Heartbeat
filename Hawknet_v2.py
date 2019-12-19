@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torch.autograd import Variable
 import numpy as np
+import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
@@ -16,7 +17,7 @@ stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
 pic_size = 32  # used in SimpleNet
-output_classes = 10  # used in SimpleNet
+output_classes = 220  # used in SimpleNet
 learning_rate = 0.001  # used in HeartbeatClean
 decay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
@@ -27,6 +28,11 @@ snapshot_points = num_epochs / 1
 batch_sizes = 128  # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
+
+dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
+validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
+computer = "home_laptop"
+
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 
@@ -118,24 +124,35 @@ train_transformations = transforms.Compose([
 
 batch_size = (128)
 
+train_loader_class = \
+    HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size, computer)
+val_loader_class = \
+    HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size, computer)
+test_loader_class = \
+    HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size, computer)
+train_loader = train_loader_class.dataloaders["train"]
+test_loader = val_loader_class.dataloaders["val"]
+# test_loader = test_loader_class.dataloaders["test"]
+
+
 # Load the training set
-train_set = CIFAR10(root="./data", train=True, transform=train_transformations, download=True)
+# train_set = CIFAR10(root="./data", train=True, transform=train_transformations, download=True)
 
 # Create a loder for the training set
-train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=0)
+# train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=0)
 
 # Define transformations for the test set
-test_transformations = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+# test_transformations = transforms.Compose([
+#    transforms.ToTensor(),
+#    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 
-])
+# ])
 
 # Load the test set, note that train is set to False
-test_set = CIFAR10(root="./data", train=False, transform=test_transformations, download=True)
+# test_set = CIFAR10(root="./data", train=False, transform=test_transformations, download=True)
 
 # Create a loder for the test set, note that both shuffle is set to false for the test loader
-test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=0)
+# test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=0)
 
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
@@ -257,4 +274,5 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     # Changed num_workers to 0, fixed prediction == labels.data,
     #-------------------------------------------------------------------
+
     train(50)
