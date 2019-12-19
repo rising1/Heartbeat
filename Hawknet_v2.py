@@ -38,24 +38,19 @@ SimpleNetArgs = [UnitArgs, dropout_factor,output_classes,
 
 
 class Unit(nn.Module):
-    def __init__(self, UnitArgs, in_channels, out_channels):
+    def __init__(self, UnitArgs, in_channel, out_channel):
         
         super(Unit, self).__init__()
-        
-        kernel_size = UnitArgs[0]
-        stride = UnitArgs[1]
-        padding = UnitArgs[2]
-
-        self.conv = nn.Conv2d( kernel_size, stride, padding,
-                               in_channels=in_channels, out_channels=out_channels)
-        self.bn = nn.BatchNorm2d(num_features=out_channels)
+        self.conv = nn.Conv2d( kernel_size = UnitArgs[0], stride = UnitArgs[1],
+                               padding = UnitArgs[2],
+                               in_channels = in_channel, out_channels = out_channel)
+        self.bn = nn.BatchNorm2d(num_features=out_channel)
         self.relu = nn.ReLU()
 
     def forward(self, input):
         output = self.conv(input)
         output = self.bn(output)
         output = self.relu(output)
-
         return output
 
 
@@ -108,7 +103,7 @@ class SimpleNet(nn.Module):
 
     def forward(self, input):
         output = self.net(input)
-        output = output.view(-1, 128)
+        output = output.view(-1, no_feature_detectors * 4)
         output = self.fc(output)
         return output
 
@@ -253,8 +248,8 @@ def train(num_epochs):
                 best_acc = test_acc_abs
 
             # Print the metrics
-        print("Epoch {}, Train Accuracy: {:.1%} , TrainLoss: {:.4f} , Test Accuracy: {:.1%}, Test Accuracy Absolute: {}".format(epoch, train_acc, train_loss,
-                                                                                        test_acc, test_acc_abs))
+        print("Epoch {}, Train Accuracy: {:.1%} , TrainLoss: {:.4f} , Test Accuracy: {:.1%}," \
+              "Test Accuracy Absolute: {}".format(epoch, train_acc, train_loss, test_acc, test_acc_abs))
 
 
 if __name__ == "__main__":
