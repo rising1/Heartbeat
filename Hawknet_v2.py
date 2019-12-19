@@ -104,7 +104,7 @@ class SimpleNet(nn.Module):
                                  , self.unit7, self.pool2, self.unit8, self.unit9, self.unit10, self.unit11, self.pool3,
                                  self.unit12, self.unit13, self.unit14, self.avgpool)
 
-        self.fc = nn.Linear(in_features=128, out_features=num_classes)
+        self.fc = nn.Linear(no_feature_detectors * 4, output_classes)
 
     def forward(self, input):
         output = self.net(input)
