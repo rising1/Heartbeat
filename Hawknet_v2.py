@@ -11,7 +11,7 @@ import numpy as np
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
 no_feature_detectors = 32  # used in ??????
-kernel_sizes = 2  # used in Unit
+kernel_sizes = 3  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
@@ -30,13 +30,24 @@ loadfile = True
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 
+# Args lists to pass through to models
+UnitArgs = [kernel_sizes, stride_pixels, padding_pixels]
+SimpleNetArgs = [UnitArgs, dropout_factor,output_classes, 
+                 colour_channels, no_feature_detectors, 
+                 pooling_factor]
 
 
 class Unit(nn.Module):
-    def __init__(self, in_channels, out_channels):
+    def __init__(self, UnitArgs, in_channels, out_channels):
+        
         super(Unit, self).__init__()
+        
+        kernel_size = UnitArgs[0]
+        stride = UnitArgs[1]
+        padding = UnitArgs[2]
 
-        self.conv = nn.Conv2d(in_channels=in_channels, kernel_size=3, out_channels=out_channels, stride=1, padding=1)
+        self.conv = nn.Conv2d( kernel_size, stride, padding,
+                               in_channels=in_channels, out_channels=out_channels)
         self.bn = nn.BatchNorm2d(num_features=out_channels)
         self.relu = nn.ReLU()
 
@@ -49,33 +60,42 @@ class Unit(nn.Module):
 
 
 class SimpleNet(nn.Module):
-    def __init__(self, num_classes=10):
+    def __init__(self, SimpleNetArgs):
         super(SimpleNet, self).__init__()
 
+        # Break out the parameters for the model
+        UnitArgs = SimpleNetArgs[0]
+        dropout_factor = SimpleNetArgs[1]
+        output_classes = SimpleNetArgs[2]
+        colour_channels = SimpleNetArgs[3]
+        no_feature_detectors = SimpleNetArgs[4]
+        pooling_factor = SimpleNetArgs[5]
+
+
         # Create 14 layers of the unit with max pooling in between
-        self.unit1 = Unit(in_channels=3, out_channels=32)
-        self.unit2 = Unit(in_channels=32, out_channels=32)
-        self.unit3 = Unit(in_channels=32, out_channels=32)
+        self.unit1 = Unit(UnitArgs,colour_channels, no_feature_detectors)
+        self.unit2 = Unit(UnitArgs,no_feature_detectors, no_feature_detectors)
+        self.unit3 = Unit(UnitArgs,no_feature_detectors, no_feature_detectors)
 
         self.pool1 = nn.MaxPool2d(kernel_size=2)
 
-        self.unit4 = Unit(in_channels=32, out_channels=64)
-        self.unit5 = Unit(in_channels=64, out_channels=64)
-        self.unit6 = Unit(in_channels=64, out_channels=64)
-        self.unit7 = Unit(in_channels=64, out_channels=64)
+        self.unit4 = Unit(UnitArgs,no_feature_detectors, no_feature_detectors * 2)
+        self.unit5 = Unit(UnitArgs,no_feature_detectors * 2, no_feature_detectors * 2)
+        self.unit6 = Unit(UnitArgs,no_feature_detectors * 2, no_feature_detectors * 2)
+        self.unit7 = Unit(UnitArgs,no_feature_detectors * 2, no_feature_detectors * 2)
 
         self.pool2 = nn.MaxPool2d(kernel_size=2)
 
-        self.unit8 = Unit(in_channels=64, out_channels=128)
-        self.unit9 = Unit(in_channels=128, out_channels=128)
-        self.unit10 = Unit(in_channels=128, out_channels=128)
-        self.unit11 = Unit(in_channels=128, out_channels=128)
+        self.unit8 = Unit(UnitArgs,no_feature_detectors * 2, no_feature_detectors * 4)
+        self.unit9 = Unit(UnitArgs,no_feature_detectors * 4, no_feature_detectors * 4)
+        self.unit10 = Unit(UnitArgs,no_feature_detectors * 4, no_feature_detectors * 4)
+        self.unit11 = Unit(UnitArgs,no_feature_detectors * 4, no_feature_detectors * 4)
 
         self.pool3 = nn.MaxPool2d(kernel_size=2)
 
-        self.unit12 = Unit(in_channels=128, out_channels=128)
-        self.unit13 = Unit(in_channels=128, out_channels=128)
-        self.unit14 = Unit(in_channels=128, out_channels=128)
+        self.unit12 = Unit(UnitArgs,no_feature_detectors * 4, no_feature_detectors * 4)
+        self.unit13 = Unit(UnitArgs,no_feature_detectors * 4, no_feature_detectors * 4)
+        self.unit14 = Unit(UnitArgs,no_feature_detectors * 4, no_feature_detectors * 4)
 
         self.avgpool = nn.AvgPool2d(kernel_size=4)
 
@@ -126,7 +146,7 @@ test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_wor
 cuda_avail = torch.cuda.is_available()
 
 # Create model, optimizer and loss function
-model = SimpleNet(num_classes=10)
+model = SimpleNet(SimpleNetArgs)
 
 if cuda_avail:
     model.cuda()
