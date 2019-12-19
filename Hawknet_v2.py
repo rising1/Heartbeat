@@ -8,6 +8,29 @@ from torch.optim import Adam
 from torch.autograd import Variable
 import numpy as np
 
+# Hyper-parameters
+colour_channels = 3  # used in SimpleNet
+no_feature_detectors = 32  # used in ??????
+kernel_sizes = 2  # used in Unit
+stride_pixels = 1  # used in Unit
+padding_pixels = 1  # used in Unit
+pooling_factor = 2  # used in SimpleNet
+pic_size = 32  # used in SimpleNet
+output_classes = 10  # used in SimpleNet
+learning_rate = 0.001  # used in HeartbeatClean
+decay_cycles = 1  # default to start
+weight_decay = 0.0001  # used in HeartbeatClean
+dropout_factor = 0.4  # used in Unit
+faff = 'false'
+num_epochs = 20  # used in HeartbeatClean
+snapshot_points = num_epochs / 1
+batch_sizes = 128  # used in HeartbeatClean
+#  batch_sizes = 6 # used in HeartbeatClean
+loadfile = True
+# Check if gpu support is available
+cuda_avail = torch.cuda.is_available()
+
+
 
 class Unit(nn.Module):
     def __init__(self, in_channels, out_channels):
