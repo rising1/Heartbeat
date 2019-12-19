@@ -19,12 +19,12 @@ global faff, snapshot_points, batch_sizes, \
     optimizer, loss_fn, pic_size, epoch, \
     loss, device, train_loader_class, \
     learning_rate, test_loader, \
-    single_loader_class, num_epochs, decay_cycles
+    single_loader_class, num_epochs, decay_cycles, cuda_avail
 
 def build_model(dataPathRoot_in,computer):
     global  dataPathRoot, faff, snapshot_points, \
             batch_sizes, loadfile, model, optimizer, \
-            loss_fn, pic_size, learning_rate, decay_cycles
+            loss_fn, pic_size, learning_rate, decay_cycles, cuda_avail
 
     # Hyper-parameters
     colour_channels = 3  # used in SimpleNet
@@ -45,7 +45,8 @@ def build_model(dataPathRoot_in,computer):
     batch_sizes = 128  # used in HeartbeatClean
     #  batch_sizes = 6 # used in HeartbeatClean
     loadfile = True
-
+    # Check if gpu support is available
+    cuda_avail = torch.cuda.is_available()
     #  dataPathRoot = 'F:/BirdiesData/' # used in DataLoaderHeartbeat
     #  dataPathRoot = 'C:/Users/phfro/Documents/python/data/BirdiesData/' # used in DataLoaderHeartbeat
     #  if not (os.path.exists(dataPathRoot)):
@@ -65,6 +66,8 @@ def build_model(dataPathRoot_in,computer):
     optimizer = Adam(model.parameters(), lr=learning_rate,
                  weight_decay=weight_decay)
     loss_fn = nn.CrossEntropyLoss()
+    if cuda_avail:
+        model.cuda()
     print("model now built")
 
 def get_lr(optimizer):
@@ -238,8 +241,9 @@ def train(num_epochs):
                 #print('Epoch=',epoch,' batch=',batch_counter," of ",no_of_batches)
 
                 #  push the data to the GPU
-                inputs = inputs.to(device)
-                labels = labels.to(device)
+                if cuda_avail:
+                    inputs = Variable(inputs.cuda())
+                    labels = Variable(labels.cuda())
 
                 # track history if only in train
                 # zero the parameter gradients
@@ -473,7 +477,7 @@ if __name__ == "__main__":
             build_model('C:/Users/phfro/PycharmProjects/Heartbeat',computer)
         elif computer == "work":
             build_model('C:/Users/peter.frost/PycharmProjects/heartbeat',computer)
-        transfer_to_gpu()
+        # transfer_to_gpu()
         # load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
         load_latest_saved_model("new")
         # load_latest_saved_model()
