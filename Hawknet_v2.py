@@ -126,12 +126,12 @@ batch_size = (128)
 
 
 
- #Load the training set
+#Load the training set
 train_set = CIFAR10(root="./data", train=True, transform=train_transformations, download=True)
- #Create a loder for the training set
-train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=0)
+#Create a loder for the training set
+train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=4)
 
- #Define transformations for the test set
+#Define transformations for the test set
 test_transformations = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
@@ -139,10 +139,9 @@ test_transformations = transforms.Compose([
 # Load the test set, note that train is set to False
 test_set = CIFAR10(root="./data", train=False, transform=test_transformations, download=True)
 
- # Create a loder for the test set, note that both shuffle is set to false for the test loader
- test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=0)
-
- Check if gpu support is available
+# Create a loder for the test set, note that both shuffle is set to false for the test loader
+test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=0)
+# Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 
 # Create model, optimizer and loss function
