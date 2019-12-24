@@ -140,7 +140,7 @@ test_transformations = transforms.Compose([
 test_set = CIFAR10(root="./data", train=False, transform=test_transformations, download=True)
 
 # Create a loder for the test set, note that both shuffle is set to false for the test loader
-test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=0)
+test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=4)
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 
