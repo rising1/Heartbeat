@@ -123,72 +123,26 @@ train_transformations = transforms.Compose([
 ])
 
 batch_size = (128)
-data_transforms = {
-    'train': transforms.Compose([
-        transforms.Resize(80),
-        # transforms.RandomResizedCrop(self.pic_size),
-        transforms.CenterCrop(self.pic_size),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ]),
-    'val': transforms.Compose([
-        transforms.Resize(80),
-        transforms.CenterCrop(self.pic_size),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ]),
-    'test': transforms.Compose([
-        transforms.Resize(80),
-        transforms.CenterCrop(self.pic_size),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ]),
-}
-if (computer == "home_laptop" or computer == "home_red_room"):
-    image_datasets = {x: datasets.ImageFolder(os.path.join(self.dir_path, x),
-                                              data_transforms[x]) for x in ['train', 'val', 'test']}
-elif computer == "work":
-    image_datasets = {x: datasets.ImageFolder(os.path.join('D:/', x),
-                                              data_transforms[x]) for x in ['train', 'val', 'test']}
-self.dataloaders = {x: torch.utils.data.DataLoader(
-    image_datasets[x],
-    batch_size=self.batch_sizes,
-    shuffle=True, num_workers=0)
-    for x in ['train', 'val', 'test']}
-# print(type(self.dataloaders["train"][0]))
-self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val', 'test']}
-train_loader_class = \
-    HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size, computer)
-val_loader_class = \
-    HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size, computer)
-test_loader_class = \
-    HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size, computer)
-train_loader = train_loader_class.dataloaders["train"]
-test_loader = val_loader_class.dataloaders["val"]
-# test_loader = test_loader_class.dataloaders["test"]
 
 
-# Load the training set
-# train_set = CIFAR10(root="./data", train=True, transform=train_transformations, download=True)
 
-# Create a loder for the training set
-# train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=0)
+ #Load the training set
+train_set = CIFAR10(root="./data", train=True, transform=train_transformations, download=True)
+ #Create a loder for the training set
+train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=0)
 
-# Define transformations for the test set
-# test_transformations = transforms.Compose([
-#    transforms.ToTensor(),
-#    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-
-# ])
-
+ #Define transformations for the test set
+test_transformations = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+ ])
 # Load the test set, note that train is set to False
-# test_set = CIFAR10(root="./data", train=False, transform=test_transformations, download=True)
+test_set = CIFAR10(root="./data", train=False, transform=test_transformations, download=True)
 
-# Create a loder for the test set, note that both shuffle is set to false for the test loader
-# test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=0)
+ # Create a loder for the test set, note that both shuffle is set to false for the test loader
+ test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=0)
 
-# Check if gpu support is available
+ Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 
 # Create model, optimizer and loss function
