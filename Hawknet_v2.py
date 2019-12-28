@@ -140,11 +140,12 @@ batch_size = (64)
 # Create a loder for the test set, note that both shuffle is set to false for #the test loader
 #test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, #num_workers=4)
 
-train_loader = Hawkdataloader.Hawkloader('E:/',no_feature_detectors,
-pic_size, 'home_red_room').dataloaders('train')
-
-test_loader = Hawkdataloader.Hawkloader('E:/',no_feature_detectors,
-pic_size, 'home_red_room').dataloaders('val')
+loader = Hawkdataloader.Hawkloader('E:/',no_feature_detectors,
+pic_size, 'home_red_room')
+train_loader = loader.dataloaders('train')
+test_loader = loader.dataloaders('val')
+train_size = loader.train_sizes('train')
+test_size = loader.train_sizes('val')
 
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
@@ -203,7 +204,7 @@ def test():
         test_acc_abs += torch.sum(prediction == labels.data)
 
     # Compute the average acc and loss over all 10000 test images
-    test_acc = test_acc_abs.cpu().numpy() / 10000
+    test_acc = test_acc_abs.cpu().numpy() / test_size
     return (test_acc, test_acc_abs)
 
 
@@ -243,8 +244,8 @@ def train(num_epochs):
         adjust_learning_rate(epoch)
 
         # Compute the average acc and loss over all 50000 training images
-        train_acc = train_acc.cpu().numpy() / 50000
-        train_loss = train_loss / 50000
+        train_acc = train_acc.cpu().numpy() / train_size
+        train_loss = train_loss / train_size
 
         # Evaluate on the test set
         results = test()
