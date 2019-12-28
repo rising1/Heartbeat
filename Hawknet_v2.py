@@ -140,12 +140,12 @@ batch_size = (64)
 # Create a loder for the test set, note that both shuffle is set to false for #the test loader
 #test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, #num_workers=4)
 
-loader = Hawkdataloader.Hawkloader('E:/',no_feature_detectors,
-pic_size, 'home_red_room')
-train_loader = loader.dataloaders('train')
-test_loader = loader.dataloaders('val')
-train_size = loader.train_sizes('train')
-test_size = loader.train_sizes('val')
+loader = HawkDataLoader.HawkLoader('E:/',no_feature_detectors,
+                                    pic_size, 'home_red_room')
+train_loader = loader.dataloaders['train']
+test_loader = loader.dataloaders['val']
+train_size = loader.dataset_sizes['train']
+test_size = loader.dataset_sizes['val']
 
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
