@@ -11,12 +11,12 @@ import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 32  # used in ??????
+no_feature_detectors = 64 # used in ??????
 kernel_sizes = 3  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
-pic_size = 32  # used in SimpleNet
+pic_size = 48 # used in SimpleNet
 output_classes = 220  # used in SimpleNet
 learning_rate = 0.001  # used in HeartbeatClean
 decay_cycles = 1  # default to start
@@ -25,7 +25,7 @@ dropout_factor = 0.4  # used in Unit
 faff = 'false'
 num_epochs = 20  # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 128  # used in HeartbeatClean
+batch_sizes = 64 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 
@@ -115,32 +115,34 @@ class SimpleNet(nn.Module):
 
 
 # Define transformations for the training set, flip the images randomly, crop out and apply mean and std normalization
-train_transformations = transforms.Compose([
-    transforms.RandomHorizontalFlip(),
-    transforms.RandomCrop(32, padding=4),
-    transforms.ToTensor(),
-    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-])
+#train_transformations = transforms.Compose([
+#transforms.RandomHorizontalFlip(),
+#transforms.RandomCrop(32, padding=4),
+#transforms.ToTensor(),
+#transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+#])
 
-batch_size = (128)
-
-
+batch_size = (64)
 
 #Load the training set
-train_set = CIFAR10(root="./data", train=True, transform=train_transformations, download=True)
+#train_set = CIFAR10(root="./data", train=True, #transform=train_transformations, download=True)
 #Create a loder for the training set
-train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=4)
+#train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, #num_workers=4)
 
 #Define transformations for the test set
-test_transformations = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
- ])
+#test_transformations = transforms.Compose([
+# transforms.ToTensor(),
+# transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+#])
 # Load the test set, note that train is set to False
-test_set = CIFAR10(root="./data", train=False, transform=test_transformations, download=True)
+#test_set = CIFAR10(root="./data", train=False, transform=test_transformations, #download=True)
 
-# Create a loder for the test set, note that both shuffle is set to false for the test loader
-test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, num_workers=4)
+# Create a loder for the test set, note that both shuffle is set to false for #the test loader
+#test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, #num_workers=4)
+
+#train_loader = Hawkdataloader.Hawkloader('E:/'
+
+
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 
@@ -262,4 +264,4 @@ if __name__ == "__main__":
     # Changed num_workers to 0, fixed prediction == labels.data,
     #-------------------------------------------------------------------
 
-    train(50)
+    train(200)
