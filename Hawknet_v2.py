@@ -12,7 +12,7 @@ import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 80 # used in ??????
+no_feature_detectors = 80 # used in Unit
 kernel_sizes = 3  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
@@ -262,8 +262,8 @@ def train(num_epochs):
             # Print the metrics
         time_elapsed = time.time() - since
         print("Epoch {}, Train Accuracy: {:.1%} , TrainLoss: {:.4f} , Test Accuracy: {:.1%}," \
-              "Test Accuracy Absolute: {}".format(epoch, train_acc, train_loss, test_acc, test_acc_abs),
-              '\n time {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
+              "Test Corrects: {}".format(epoch, train_acc, train_loss, test_acc, test_acc_abs),
+              ' time {:.0f}h {:.0f}m {:.0f}s'.format(time_elapsed // 3600,time_elapsed // 60, time_elapsed % 60))
 
 
 if __name__ == "__main__":
