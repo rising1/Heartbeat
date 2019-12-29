@@ -7,6 +7,8 @@ from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torch.autograd import Variable
 import time
+import os, csv
+import glob
 import numpy as np
 import HawkDataLoader
 
@@ -22,7 +24,7 @@ output_classes = 220  # used in SimpleNet
 learning_rate = 0.001  # used in HeartbeatClean
 decay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
-dropout_factor = 0.4  # used in Unit
+dropout_factor = 0.2  # used in Unit
 faff = 'false'
 num_epochs = 200  # used in HeartbeatClean
 snapshot_points = num_epochs / 1
@@ -53,11 +55,13 @@ class Unit(nn.Module):
                                in_channels = in_channel, out_channels = out_channel)
         self.bn = nn.BatchNorm2d(num_features=out_channel)
         self.relu = nn.ReLU()
+        # self.do = nn.Dropout(0.2)
 
     def forward(self, input):
         output = self.conv(input)
         output = self.bn(output)
         output = self.relu(output)
+        # output = self.do(output)
         return output
 
 
@@ -115,13 +119,90 @@ class SimpleNet(nn.Module):
         return output
 
 
-# Define transformations for the training set, flip the images randomly, crop out and apply mean and std normalization
-#train_transformations = transforms.Compose([
-#transforms.RandomHorizontalFlip(),
-#transforms.RandomCrop(32, padding=4),
-#transforms.ToTensor(),
-#transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-#])
+def get_lr(optimizer):
+    for param_group in optimizer.param_groups:
+        return param_group['lr']
+
+
+def first_learning_rate(optimizer, lr):
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
+
+
+def lr_decay_cycles(cycles):
+    global decay_cycles
+    decay_cycles = cycles
+    return decay_cycles
+
+
+def adjust_learning_rate(optimizer, epoch):
+    """Sets the learning rate to the initial LR decayed by 10 every decay epochs"""
+    global decay_cycles
+    learning_rate = get_lr(optimizer) * (0.1 ** (epoch // decay_cycles))
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = learning_rate
+
+
+def get_latest_file(path, *paths):
+    """Returns the name of the latest (most recent) file
+    of the joined path(s)"""
+    fullpath = os.path.join(path, *paths)
+    list_of_files = glob.glob(fullpath)  # You may use iglob in Python3
+    if not list_of_files:                # I prefer using the negation
+        return None                      # because it behaves like a shortcut
+    latest_file = max(list_of_files, key=os.path.getctime)
+    _, filename = os.path.split(latest_file)
+    return filename
+
+def load_latest_saved_model(chosen_model = None,is_eval = False):
+    global dataPathRoot, loadfile, model, optimizer, \
+            epoch, loss, device
+    # load a saved model if one exists
+    comp_root = dataPathRoot + "/saved_models/"
+
+    if chosen_model is not None:
+        selected_model = chosen_model
+        print("looking for ",comp_root + selected_model)
+        print("exists = ",os.path.isfile(comp_root + selected_model))
+    else:
+        stub_name = "Birdies_model_*"
+        selected_model = get_latest_file(comp_root, stub_name)
+        print("latest filename=", selected_model)
+
+    if os.path.isfile(comp_root + selected_model) and loadfile == True:
+        checkpoint = torch.load(comp_root +  selected_model,map_location='cpu')
+        model.load_state_dict(checkpoint['model_state_dict'])
+        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        for state in optimizer.state.values():
+            for k, v in state.items():
+                if isinstance(v, torch.Tensor):
+                    state[k] = v.to(device)
+        epoch = checkpoint['epoch']
+        loss = checkpoint['loss']
+        #  model.train()
+        if not is_eval:
+            model_file_path = comp_root + selected_model
+            interim_fig_prev_text = model_file_path[(model_file_path.rfind('_') + 1):(len(model_file_path) - 6)]
+            interim_fig_prev = float(interim_fig_prev_text)
+            print("using saved model ", model_file_path, " Loss: {:.4f}".format(interim_fig_prev))
+    else:
+        print("using new model")
+    #  finished deciding where the model comes from
+
+    #  For the given model
+
+    #  Print model's state_dict
+    #  print("Model's state_dict:")
+    #  for param_tensor in model.state_dict():
+    #    print(param_tensor, "\t", model.state_dict()[param_tensor].size())
+
+    # Print optimizer's state_dict
+    print("Optimizer's state_dict:")
+    for var_name in optimizer.state_dict():
+        if var_name == "param_groups":
+            print(var_name, "\t", optimizer.state_dict()[var_name])
+    first_learning_rate(optimizer,learning_rate)
+    print("model loaded")
 
 batch_size = batch_sizes
 
@@ -182,9 +263,24 @@ def adjust_learning_rate(epoch):
         param_group["lr"] = lr
 
 
-def save_models(epoch,test_corrects):
-    torch.save(model.state_dict(), "cifar10model" + test_corrects +"_{}.model".format(epoch))
+#def save_models(epoch,test_corrects):
+#    torch.save(model.state_dict(), "cifar10model" + test_corrects +"_{}.model".format(epoch))
+#    print("Checkpoint saved")
+
+def save_models(epoch, loss, save_point):
+    print("save path types = ",str(type(dataPathRoot))+"\t",str(type(epoch))+"\t",str(type(save_point)))
+    save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}_".format(epoch) + "_best_" \
+                                + str(save_point) + "_loss_" + str(loss.detach().cpu().numpy()) + ".model"
+    checkpoint = {
+            'epoch': epoch,
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            'loss': loss,
+            }
+    torch.save(checkpoint, save_PATH)
     print("Checkpoint saved")
+    if (os.path.exists(save_PATH)):
+        print("verified save ", save_PATH)
 
 
 def test():
@@ -256,7 +352,7 @@ def train(num_epochs):
 
             # Save the model if the test acc is greater than our current best
         if test_acc_abs > best_acc and epoch%5 == 0 and epoch > 1:
-                save_models(epoch,str(test_acc_abs.cpu().numpy()))
+                save_models(epoch,loss,str(test_acc_abs.cpu().numpy()))
                 best_acc = test_acc_abs
 
             # Print the metrics
@@ -271,5 +367,5 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     # Changed num_workers to 0, fixed prediction == labels.data,
     #-------------------------------------------------------------------
-
+    load_latest_saved_model("new")
     train(200)
