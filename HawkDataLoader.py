@@ -14,21 +14,21 @@ class HawkLoader:
         self.pic_size = pic_size
         data_transforms = {
             'train': transforms.Compose([
-                transforms.Resize(80),
-                transforms.RandomResizedCrop(self.pic_size),
+                transforms.Resize(120),
+                #  transforms.RandomResizedCrop(self.pic_size),
                 transforms.CenterCrop(self.pic_size),
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
             'val': transforms.Compose([
-                transforms.Resize(80),
+                transforms.Resize(120),
                 transforms.CenterCrop(self.pic_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
             'test': transforms.Compose([
-                transforms.Resize(80),
+                transforms.Resize(120),
                 transforms.CenterCrop(self.pic_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -46,7 +46,7 @@ class HawkLoader:
         self.dataloaders = {x: torch.utils.data.DataLoader(
                             image_datasets[x],
                             batch_size=self.batch_sizes,
-                            shuffle=True, num_workers=5)
+                            shuffle=True, num_workers=4)
                        for x in ['train', 'val', 'test']}
         #print(type(self.dataloaders["train"][0]))
         self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val', 'test']}

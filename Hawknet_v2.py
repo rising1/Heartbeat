@@ -6,26 +6,27 @@ from torchvision.transforms import transforms
 from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torch.autograd import Variable
+import time
 import numpy as np
 import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 64 # used in ??????
+no_feature_detectors = 80 # used in ??????
 kernel_sizes = 3  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
-pic_size = 48 # used in SimpleNet
+pic_size = 40 # used in SimpleNet
 output_classes = 220  # used in SimpleNet
 learning_rate = 0.001  # used in HeartbeatClean
 decay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
 dropout_factor = 0.4  # used in Unit
 faff = 'false'
-num_epochs = 20  # used in HeartbeatClean
+num_epochs = 200  # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 64 # used in HeartbeatClean
+batch_sizes = 128 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 
@@ -122,7 +123,7 @@ class SimpleNet(nn.Module):
 #transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 #])
 
-batch_size = (64)
+batch_size = batch_sizes
 
 #Load the training set
 #train_set = CIFAR10(root="./data", train=True, #transform=train_transformations, download=True)
@@ -164,17 +165,17 @@ loss_fn = nn.CrossEntropyLoss()
 def adjust_learning_rate(epoch):
     lr = 0.001
 
-    if epoch > 180:
+    if epoch > 300:
         lr = lr / 1000000
-    elif epoch > 150:
+    elif epoch > 250:
         lr = lr / 100000
-    elif epoch > 120:
+    elif epoch > 200:
         lr = lr / 10000
-    elif epoch > 90:
+    elif epoch > 150:
         lr = lr / 1000
-    elif epoch > 60:
+    elif epoch > 100:
         lr = lr / 100
-    elif epoch > 30:
+    elif epoch > 50:
         lr = lr / 10
 
     for param_group in optimizer.param_groups:
@@ -212,6 +213,7 @@ def train(num_epochs):
     global best_acc, train_acc, train_loss
     best_acc = 0
 
+    since = time.time()
     for epoch in range(num_epochs):
         model.train()
         train_acc = 0.0
@@ -258,8 +260,10 @@ def train(num_epochs):
                 best_acc = test_acc_abs
 
             # Print the metrics
+        time_elapsed = time.time() - since
         print("Epoch {}, Train Accuracy: {:.1%} , TrainLoss: {:.4f} , Test Accuracy: {:.1%}," \
-              "Test Accuracy Absolute: {}".format(epoch, train_acc, train_loss, test_acc, test_acc_abs))
+              "Test Accuracy Absolute: {}".format(epoch, train_acc, train_loss, test_acc, test_acc_abs),
+              '\n time {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
 
 
 if __name__ == "__main__":
