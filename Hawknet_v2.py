@@ -21,7 +21,7 @@ padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
 pic_size = 72 # used in SimpleNet
 output_classes = 220  # used in SimpleNet
-learning_rate = 0.001  # used in HeartbeatClean
+learning_rate = 0.0001  # used in HeartbeatClean
 decay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
 dropout_factor = 0.2  # used in Unit
@@ -356,7 +356,7 @@ def train(num_epochs):
         test_acc_abs = results[1]
 
             # Save the model if the test acc is greater than our current best
-        if test_acc_abs > best_acc and epoch%5 == 0 and epoch > 1:
+        if test_acc_abs > best_acc and epoch > 1:
                 save_models(epoch,loss,str(test_acc_abs.cpu().numpy()))
                 best_acc = test_acc_abs
 
@@ -372,5 +372,5 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    load_latest_saved_model("new")
+    load_latest_saved_model()
     train(200)
