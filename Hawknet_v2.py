@@ -255,17 +255,17 @@ loss_fn = nn.CrossEntropyLoss()
 def adjust_learning_rate(epoch):
     lr = 0.001
 
-    if epoch > 350:
-        lr = lr / 10
-    elif epoch > 300:
-        lr = lr / 10
-    elif epoch > 200:
+    if epoch > 180:
         lr = lr / 10
     elif epoch > 150:
         lr = lr / 10
-    elif epoch > 100:
+    elif epoch > 120:
         lr = lr / 10
-    elif epoch > 50:
+    elif epoch > 90:
+        lr = lr / 10
+    elif epoch > 60:
+        lr = lr / 10
+    elif epoch > 30:
         lr = lr / 10
 
     for param_group in optimizer.param_groups:
