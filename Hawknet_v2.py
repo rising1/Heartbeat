@@ -14,12 +14,12 @@ import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 80 # used in Unit
+no_feature_detectors = 64 # used in Unit
 kernel_sizes = 3  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
-pic_size = 40 # used in SimpleNet
+pic_size = 72 # used in SimpleNet
 output_classes = 220  # used in SimpleNet
 learning_rate = 0.001  # used in HeartbeatClean
 decay_cycles = 1  # default to start
@@ -28,7 +28,7 @@ dropout_factor = 0.2  # used in Unit
 faff = 'false'
 num_epochs = 200  # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 128 # used in HeartbeatClean
+batch_sizes = 32 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 
@@ -38,6 +38,7 @@ computer = "home_laptop"
 
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Args lists to pass through to models
 UnitArgs = [kernel_sizes, stride_pixels, padding_pixels]
@@ -110,12 +111,15 @@ class SimpleNet(nn.Module):
                                  , self.unit7, self.pool2, self.unit8, self.unit9, self.unit10, self.unit11, self.pool3,
                                  self.unit12, self.unit13, self.unit14, self.avgpool)
 
-        self.fc = nn.Linear(no_feature_detectors * 4, output_classes)
+        self.fc = nn.Linear(no_feature_detectors * 4 * 4, output_classes)
 
     def forward(self, input):
         output = self.net(input)
-        output = output.view(-1, no_feature_detectors * 4)
+        #print("net(input) ",output.shape)
+        output = output.view(-1, no_feature_detectors * 4 * 4)
+        #print("output.view ",output.shape)
         output = self.fc(output)
+        #print("fc(output) ",output.shape)
         return output
 
 
@@ -222,7 +226,7 @@ batch_size = batch_sizes
 # Create a loder for the test set, note that both shuffle is set to false for #the test loader
 #test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, #num_workers=4)
 
-loader = HawkDataLoader.HawkLoader('E:/',no_feature_detectors,
+loader = HawkDataLoader.HawkLoader('E:/',batch_size,
                                     pic_size, 'home_red_room')
 train_loader = loader.dataloaders['train']
 test_loader = loader.dataloaders['val']
@@ -246,9 +250,9 @@ loss_fn = nn.CrossEntropyLoss()
 def adjust_learning_rate(epoch):
     lr = 0.001
 
-    if epoch > 300:
+    if epoch > 350:
         lr = lr / 1000000
-    elif epoch > 250:
+    elif epoch > 300:
         lr = lr / 100000
     elif epoch > 200:
         lr = lr / 10000
@@ -325,6 +329,7 @@ def train(num_epochs):
             # Predict classes using images from the test set
             outputs = model(images)
             # Compute the loss based on the predictions and actual labels
+            #print("outputs ", outputs.shape," labels ",labels.shape)
             loss = loss_fn(outputs, labels)
             # Backpropagate the loss
             loss.backward()
@@ -357,15 +362,15 @@ def train(num_epochs):
 
             # Print the metrics
         time_elapsed = time.time() - since
-        print("Epoch {}, Train Accuracy: {:.1%} , TrainLoss: {:.4f} , Test Accuracy: {:.1%}," \
+        print("Epoch {}, Train Accuracy: {:.1%} , TrainLoss: {:.4f} , Test Accuracy: {:.1%},"
               "Test Corrects: {}".format(epoch, train_acc, train_loss, test_acc, test_acc_abs),
-              ' time {:.0f}h {:.0f}m {:.0f}s'.format(time_elapsed // 3600,time_elapsed // 60, time_elapsed % 60))
+              ' time {:.0f}h {:.0f}m {:.0f}s'.format(time_elapsed // 3600,(time_elapsed // 60) % 60, time_elapsed % 60))
 
 
 if __name__ == "__main__":
 
     # ------------------------------------------------------------------
-    # Changed num_workers to 0, fixed prediction == labels.data,
+    #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
     load_latest_saved_model("new")
     train(200)
