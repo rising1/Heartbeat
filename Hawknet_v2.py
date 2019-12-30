@@ -9,7 +9,8 @@ from torch.autograd import Variable
 import time
 import os, csv
 import glob
-import numpy as np
+import Hawknet_Depld
+import View_Test
 import HawkDataLoader
 
 # Hyper-parameters
@@ -21,7 +22,7 @@ padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
 pic_size = 72 # used in SimpleNet
 output_classes = 220  # used in SimpleNet
-learning_rate = 0.0001  # used in HeartbeatClean
+learning_rate = 0.001  # used in HeartbeatClean
 decay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
 dropout_factor = 0.2  # used in Unit
@@ -32,10 +33,12 @@ batch_sizes = 32 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 
-dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
+# dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
+dataPathRoot = 'E:/'
+# validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
+validate_path = 'E:/Class_validate.txt'
 computer = "home_laptop"
-
+deploy_test = Hawknet_Depld.test_images(12, False)
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -56,13 +59,13 @@ class Unit(nn.Module):
                                in_channels = in_channel, out_channels = out_channel)
         self.bn = nn.BatchNorm2d(num_features=out_channel)
         self.relu = nn.ReLU()
-        # self.do = nn.Dropout(0.2)
+        self.do = nn.Dropout(0.5)
 
     def forward(self, input):
         output = self.conv(input)
         output = self.bn(output)
         output = self.relu(output)
-        # output = self.do(output)
+        output = self.do(output)
         return output
 
 
@@ -131,6 +134,7 @@ def get_lr(optimizer):
 def first_learning_rate(optimizer, lr):
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
+        print("learning rate adjusted to ", lr)
 
 
 def lr_decay_cycles(cycles):
@@ -251,15 +255,15 @@ def adjust_learning_rate(epoch):
     lr = 0.001
 
     if epoch > 350:
-        lr = lr / 1000000
+        lr = lr / 10
     elif epoch > 300:
-        lr = lr / 100000
+        lr = lr / 10
     elif epoch > 200:
-        lr = lr / 10000
+        lr = lr / 10
     elif epoch > 150:
-        lr = lr / 1000
+        lr = lr / 10
     elif epoch > 100:
-        lr = lr / 100
+        lr = lr / 10
     elif epoch > 50:
         lr = lr / 10
 
@@ -367,10 +371,13 @@ def train(num_epochs):
               ' time {:.0f}h {:.0f}m {:.0f}s'.format(time_elapsed // 3600,(time_elapsed // 60) % 60, time_elapsed % 60))
 
 
+        View_Test.test(model,deploy_test, validate_path)
+
+
 if __name__ == "__main__":
 
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    load_latest_saved_model()
+    load_latest_saved_model("new")
     train(200)
