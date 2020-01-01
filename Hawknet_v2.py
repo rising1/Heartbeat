@@ -58,14 +58,14 @@ class Unit(nn.Module):
                                padding = UnitArgs[2],
                                in_channels = in_channel, out_channels = out_channel)
         self.bn = nn.BatchNorm2d(num_features=out_channel)
-        self.do = nn.Dropout(0.2)
+        # self.do = nn.Dropout(dropout_factor)
         self.relu = nn.ReLU()
 
 
     def forward(self, input):
         output = self.conv(input)
         output = self.bn(output)
-        output = self.do(output)
+        # output = self.do(output)
         output = self.relu(output)
         return output
 
