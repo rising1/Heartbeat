@@ -4,9 +4,10 @@ import torch
 import numpy as np
 import csv
 import Hawknet_Depld
-dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
-
+# dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
+# validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
+dataPathRoot = 'F:/'
+validate_path = 'F:/Class_validate.txt'
 
 def test(model,my_test_loader,validate_path):
     bird_list = ['Owl', 'Bittern', 'Blackbird', 'Tit', 'Chicken', 'Parakeet', 'Peregrine', 'Dove', 'Plover',
