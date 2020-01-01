@@ -116,15 +116,16 @@ class SimpleNet(nn.Module):
         self.net = nn.Sequential(self.unit1, self.unit2, self.unit3, self.pool1, self.unit4, self.unit5, self.unit6
                                  , self.unit7, self.pool2, self.unit8, self.unit9, self.unit10, self.unit11, self.pool3,
                                  self.unit12, self.unit13, self.unit14, self.avgpool)
-
-        self.fc = nn.Linear(no_feature_detectors * 4 * 4, output_classes)
+        self.fc = nn.Linear(no_feature_detectors * 4 * 4 * 4, output_classes)
+        # self.fc = nn.Linear(no_feature_detectors * 4 * 4, output_classes)
         # self.fc = nn.Linear(no_feature_detectors * 4 , output_classes)
         # self.fc = nn.Linear(int (no_feature_detectors / 4), output_classes)
 
     def forward(self, input):
         output = self.net(input)
         print("net(input) ",output.shape)
-        output = output.view(-1, no_feature_detectors * 4 * 4)
+        output = output.view(-1, no_feature_detectors * 4 * 4 * 4)
+        # output = output.view(-1, no_feature_detectors * 4 * 4)
         # output = output.view(-1, no_feature_detectors * 4 )
         # output = output.view(-1, int(no_feature_detectors / 4))
         print("output.view ",output.shape)
