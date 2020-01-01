@@ -20,7 +20,7 @@ kernel_sizes = 3  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
-pic_size = 72 # used in SimpleNet
+pic_size = 128 # used in SimpleNet
 output_classes = 220  # used in SimpleNet
 learning_rate = 0.001  # used in HeartbeatClean
 decay_cycles = 1  # default to start
@@ -33,10 +33,12 @@ batch_sizes = 32 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 
+validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
+dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-dataPathRoot = 'E:/'
+# dataPathRoot = 'E:/'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
-validate_path = 'E:/Class_validate.txt'
+# validate_path = 'E:/Class_validate.txt'
 computer = "home_laptop"
 deploy_test = Hawknet_Depld.test_images(12, False)
 # Check if gpu support is available
@@ -231,8 +233,8 @@ batch_size = batch_sizes
 # Create a loder for the test set, note that both shuffle is set to false for #the test loader
 #test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, #num_workers=4)
 
-loader = HawkDataLoader.HawkLoader('E:/',batch_size,
-                                    pic_size, 'home_red_room')
+loader = HawkDataLoader.HawkLoader(dataPathRoot,batch_size,
+                                    pic_size, computer)
 train_loader = loader.dataloaders['train']
 test_loader = loader.dataloaders['val']
 train_size = loader.dataset_sizes['train']

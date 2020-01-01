@@ -13,8 +13,8 @@ class test_images():
         self.batch_sizes = batch_size
         self.shuffle_data = shuffle_data
         data_transform = transforms.Compose([
-                    transforms.Resize(80),
-                    transforms.CenterCrop(72),
+                    transforms.Resize(128),
+                    # transforms.CenterCrop(72),
                     transforms.ToTensor(),
                     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 

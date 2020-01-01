@@ -14,7 +14,7 @@ class HawkLoader:
         self.pic_size = pic_size
         data_transforms = {
             'train': transforms.Compose([
-                transforms.Resize(120),
+                transforms.Resize(128),
                 # transforms.RandomResizedCrop(self.pic_size),
                 transforms.CenterCrop(self.pic_size),
                 transforms.RandomHorizontalFlip(),
