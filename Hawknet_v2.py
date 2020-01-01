@@ -29,7 +29,7 @@ dropout_factor = 0.2  # used in Unit
 faff = 'false'
 num_epochs = 200  # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 128 # used in HeartbeatClean
+batch_sizes = 64 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 
