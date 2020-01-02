@@ -123,14 +123,14 @@ class SimpleNet(nn.Module):
 
     def forward(self, input):
         output = self.net(input)
-        print("net(input) ",output.shape)
+        # print("net(input) ",output.shape)
         output = output.view(-1, no_feature_detectors * 4 * 4 * 4)
         # output = output.view(-1, no_feature_detectors * 4 * 4)
         # output = output.view(-1, no_feature_detectors * 4 )
         # output = output.view(-1, int(no_feature_detectors / 4))
-        print("output.view ",output.shape)
+        # print("output.view ",output.shape)
         output = self.fc(output)
-        print("fc(output) ",output.shape)
+        # print("fc(output) ",output.shape)
         return output
 
 
