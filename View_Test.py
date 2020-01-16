@@ -6,13 +6,13 @@ import csv
 import Hawknet_Depld
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
-dataPathRoot = 'F:/'
-validate_path = 'F:/Class_validate.txt'
+dataPathRoot = 'E:/'
+validate_path = 'E:/Class_validate.txt'
 
 def test(model,my_test_loader,validate_path):
     bird_list = ['Owl', 'Bittern', 'Blackbird', 'Tit', 'Chicken', 'Parakeet', 'Peregrine', 'Dove', 'Plover',
                  'Puffin', 'Robin', 'sparrowhawk']
-    my_test_loader_eval = my_test_loader.eval_test(dataPathRoot)
+    my_test_loader_eval = my_test_loader
     model.eval()
     test_acct = 0.0
     test_history = []

@@ -16,19 +16,27 @@ class HawkLoader:
             'train': transforms.Compose([
                 transforms.Resize(128),
                 # transforms.RandomResizedCrop(self.pic_size),
-                transforms.CenterCrop(self.pic_size),
+                # transforms.CenterCrop(self.pic_size),
                 transforms.RandomHorizontalFlip(),
+                # transforms.RandomResizedCrop(self.pic_size),
+                transforms.CenterCrop(self.pic_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
             'val': transforms.Compose([
-                transforms.Resize(120),
+                transforms.Resize(128),
                 transforms.CenterCrop(self.pic_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
             'test': transforms.Compose([
-                transforms.Resize(120),
+                # transforms.Resize(120),
+                transforms.CenterCrop(self.pic_size),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ]),
+            'eval': transforms.Compose([
+                transforms.Resize(128),
                 transforms.CenterCrop(self.pic_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -39,17 +47,17 @@ class HawkLoader:
         # print(os.path.join(self.dir_path, 'train'))
         if (computer == "home_laptop" or computer == "home_red_room" ):
             image_datasets = {x: datasets.ImageFolder(os.path.join(self.dir_path, x),
-                              data_transforms[x]) for x in ['train', 'val', 'test']}
+                              data_transforms[x]) for x in ['train', 'val', 'test', 'eval']}
         elif computer == "work":
             image_datasets = {x: datasets.ImageFolder(os.path.join('D:/', x),
-                              data_transforms[x]) for x in ['train', 'val', 'test']}
+                              data_transforms[x]) for x in ['train', 'val', 'test','eval']}
         self.dataloaders = {x: torch.utils.data.DataLoader(
                             image_datasets[x],
                             batch_size=self.batch_sizes,
-                            shuffle=True, num_workers=4)
-                       for x in ['train', 'val', 'test']}
+                            shuffle=True, num_workers=3)
+                       for x in ['train', 'val', 'test','eval']}
         #print(type(self.dataloaders["train"][0]))
-        self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val', 'test']}
+        self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val', 'test','eval']}
 
         #  self.classes = open('BirdList.txt').read().splitlines()
         #  self.classesTest = ('buzzard', 'golden eagle','kestrel', 'peregrine falcon',

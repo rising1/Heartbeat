@@ -234,6 +234,7 @@ loader = HawkDataLoader.HawkLoader('E:/', batch_size,
                                    pic_size, 'home_red_room')
 train_loader = loader.dataloaders['train']
 test_loader = loader.dataloaders['val']
+eval_loader = loader.dataloaders['eval']
 train_size = loader.dataset_sizes['train']
 test_size = loader.dataset_sizes['val']
 
@@ -371,12 +372,13 @@ def train(num_epochs):
               ' time {:.0f}h {:.0f}m {:.0f}s'.format(time_elapsed // 3600, (time_elapsed // 60) % 60,
                                                      time_elapsed % 60))
 
-        View_Test.test(model, deploy_test, validate_path)
+
 
 
 if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     # -------------------------------------------------------------------
-    load_latest_saved_model("new")
-    train(200)
+    model = load_latest_saved_model()
+    # train(200)
+    View_Test.test(model, eval_loader, 'E:/Class_validate.txt')
