@@ -21,13 +21,13 @@ stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
 pic_size = 64 # used in SimpleNet
-output_classes = 220  # used in SimpleNet
-learning_rate = 0.0001  # used in HeartbeatClean
+output_classes = 220  # used in SimpleNet0
+learning_rate = 0.001  # used in HeartbeatClean
 decay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
 dropout_factor = 0.2  # used in Unit
 faff = 'false'
-linear_mid_layer = 1024
+linear_mid_layer = 230
 num_epochs = 200  # used in HeartbeatClean
 snapshot_points = num_epochs / 1
 batch_sizes = 64 # used in HeartbeatClean
@@ -117,11 +117,12 @@ class SimpleNet(nn.Module):
         self.net = nn.Sequential(self.unit1, self.unit2, self.unit3, self.pool1, self.unit4, self.unit5, self.unit6
                                  , self.unit7, self.pool2, self.unit8, self.unit9, self.unit10, self.unit11, self.pool3,
                                  self.unit12, self.unit13, self.unit14, self.avgpool)
-        self.fc = nn.Linear(no_feature_detectors * 4 * 4 , output_classes)
+        # self.fc = nn.Linear(no_feature_detectors * 4 * 4 , output_classes)
+        self.fc = nn.Linear(no_feature_detectors * 4 * 4 , linear_mid_layer)
         #self.fc = nn.Linear(no_feature_detectors * 4 * 4, output_classes)
         # self.fc = nn.Linear(no_feature_detectors * 4 , output_classes)
         # self.fc = nn.Linear(int (no_feature_detectors / 4), output_classes)
-        # self.fc_final = nn.Linear(linear_mid_layer, output_classes)
+        self.fc_final = nn.Linear(linear_mid_layer, output_classes)
 
     def forward(self, input):
         output = self.net(input)
@@ -132,7 +133,8 @@ class SimpleNet(nn.Module):
         # output = output.view(-1, int(no_feature_detectors / 4))
         #print("output.view ",output.shape)
         output = self.fc(output)
-        #output = self.fc_final(output)
+        #print("fc_final(output) ",output.shape)
+        output = self.fc_final(output)
         #print("fc(output) ",output.shape)
         return output
 
@@ -393,6 +395,7 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
+    #loaded_model = load_latest_saved_model("new")
     loaded_model = load_latest_saved_model()
-    # train(200)
+    #train(200)
     View_Test.test(model,eval_loader, 'E:/Class_validate.txt')
