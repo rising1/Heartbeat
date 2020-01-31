@@ -66,7 +66,7 @@ def show_images(images, cols=1, titles=None):
     #  fig.set_size_inches(np.array(fig.get_size_inches()) * n_images)
     #  fig = plt.figure(figsize=(6, 3))
     plt.show(block=False)
-    plt.pause(8)
+    plt.pause(20)
     plt.close()
 
 def imshow(inp, title=None):

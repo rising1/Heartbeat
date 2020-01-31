@@ -15,19 +15,20 @@ import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 48 # used in Unit
+no_feature_detectors = 36 # used in Unit
 kernel_sizes = 3  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
-pic_size = 64 # used in SimpleNet
+pic_size = 72 # used in SimpleNet
 output_classes = 220  # used in SimpleNet0
 learning_rate = 0.001  # used in HeartbeatClean
 decay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
 dropout_factor = 0.2  # used in Unit
 faff = 'false'
-linear_mid_layer = 230
+linear_mid_layer = 250
+linear_mid_layer_2 = 230
 num_epochs = 200  # used in HeartbeatClean
 snapshot_points = num_epochs / 1
 batch_sizes = 64 # used in HeartbeatClean
@@ -119,10 +120,11 @@ class SimpleNet(nn.Module):
                                  self.unit12, self.unit13, self.unit14, self.avgpool)
         # self.fc = nn.Linear(no_feature_detectors * 4 * 4 , output_classes)
         self.fc = nn.Linear(no_feature_detectors * 4 * 4 , linear_mid_layer)
+        self.fc2 = nn.Linear(linear_mid_layer , linear_mid_layer_2)
         #self.fc = nn.Linear(no_feature_detectors * 4 * 4, output_classes)
         # self.fc = nn.Linear(no_feature_detectors * 4 , output_classes)
         # self.fc = nn.Linear(int (no_feature_detectors / 4), output_classes)
-        self.fc_final = nn.Linear(linear_mid_layer, output_classes)
+        self.fc_final = nn.Linear(linear_mid_layer_2, output_classes)
 
     def forward(self, input):
         output = self.net(input)
@@ -133,6 +135,7 @@ class SimpleNet(nn.Module):
         # output = output.view(-1, int(no_feature_detectors / 4))
         #print("output.view ",output.shape)
         output = self.fc(output)
+        output = self.fc2(output)
         #print("fc_final(output) ",output.shape)
         output = self.fc_final(output)
         #print("fc(output) ",output.shape)
@@ -395,7 +398,8 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    #loaded_model = load_latest_saved_model("new")
-    loaded_model = load_latest_saved_model()
-    #train(200)
+    # loaded_model = load_latest_saved_model("new")
+    # loaded_model = load_latest_saved_model("Birdies_model_110__best_38_loss_0.081436545.model")
+    # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
+    # train(200)
     View_Test.test(model,eval_loader, 'E:/Class_validate.txt')
