@@ -1,4 +1,4 @@
-# Import needed packages
+   # Import needed packages
 import torch
 import torch.nn as nn
 from torchvision.datasets import CIFAR10
@@ -15,30 +15,31 @@ import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 36 # used in Unit
+no_feature_detectors = 256 # used in Unit
 kernel_sizes = 3  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
-pic_size = 72 # used in SimpleNet
+pic_size = 192 # used in SimpleNet
+feature_multiplier = 144
 output_classes = 220  # used in SimpleNet0
-learning_rate = 0.001  # used in HeartbeatClean
+learning_rate = 0.0001  # used in HeartbeatClean
 decay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
 dropout_factor = 0.2  # used in Unit
 faff = 'false'
-linear_mid_layer = 250
-linear_mid_layer_2 = 230
-num_epochs = 200  # used in HeartbeatClean
+# linear_mid_layer = 1024
+# linear_mid_layer_2 = 230
+num_epochs = 500  # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 64 # used in HeartbeatClean
+batch_sizes = 2 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 
 #validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
 #dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-dataPathRoot = 'E:/'
+dataPathRoot = 'G:/'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 98
 computer = "home_laptop"
@@ -118,26 +119,28 @@ class SimpleNet(nn.Module):
         self.net = nn.Sequential(self.unit1, self.unit2, self.unit3, self.pool1, self.unit4, self.unit5, self.unit6
                                  , self.unit7, self.pool2, self.unit8, self.unit9, self.unit10, self.unit11, self.pool3,
                                  self.unit12, self.unit13, self.unit14, self.avgpool)
-        # self.fc = nn.Linear(no_feature_detectors * 4 * 4 , output_classes)
-        self.fc = nn.Linear(no_feature_detectors * 4 * 4 , linear_mid_layer)
-        self.fc2 = nn.Linear(linear_mid_layer , linear_mid_layer_2)
+        self.fc = nn.Linear(no_feature_detectors * feature_multiplier , output_classes)
+        # self.fc = nn.Linear(no_feature_detectors * 4 *4 , linear_mid_layer)
+        # self.fc2 = nn.Linear(linear_mid_layer , linear_mid_layer_2)
         #self.fc = nn.Linear(no_feature_detectors * 4 * 4, output_classes)
         # self.fc = nn.Linear(no_feature_detectors * 4 , output_classes)
         # self.fc = nn.Linear(int (no_feature_detectors / 4), output_classes)
-        self.fc_final = nn.Linear(linear_mid_layer_2, output_classes)
+        # self.fc_final = nn.Linear(linear_mid_layer_2, output_classes)
+        # self.fc_final = nn.Linear(linear_mid_layer, output_classes)
 
     def forward(self, input):
         output = self.net(input)
         #print("net(input) ",output.shape)
-        output = output.view(-1, no_feature_detectors * 4 * 4 )
+        output = output.view(-1, no_feature_detectors * feature_multiplier)
         #output = output.view(-1, no_feature_detectors * 4 * 4)
         # output = output.view(-1, no_feature_detectors * 4 )
         # output = output.view(-1, int(no_feature_detectors / 4))
         #print("output.view ",output.shape)
         output = self.fc(output)
-        output = self.fc2(output)
         #print("fc_final(output) ",output.shape)
-        output = self.fc_final(output)
+        #output = self.fc2(output)
+        #print("fc_final(output) ",output.shape)
+        # output = self.fc_final(output)
         #print("fc(output) ",output.shape)
         return output
 
@@ -265,25 +268,25 @@ model = SimpleNet(SimpleNetArgs)
 if cuda_avail:
     model.cuda()
 
-optimizer = Adam(model.parameters(), lr=0.001, weight_decay=0.0001)
+optimizer = Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 loss_fn = nn.CrossEntropyLoss()
 
 
 # Create a learning rate adjustment function that divides the learning rate by 10 every 30 epochs
-def adjust_learning_rate(epoch):
-    lr = 0.001
+def adjust_learning_rate(epoch,lr):
 
-    if epoch > 180:
+
+    if epoch == 200:
         lr = lr / 10
-    elif epoch > 150:
+    elif epoch == 150:
         lr = lr / 10
-    elif epoch > 120:
+    elif epoch == 100:
         lr = lr / 10
-    elif epoch > 90:
+    elif epoch == 60:
         lr = lr / 10
-    elif epoch > 60:
+    elif epoch == 40:
         lr = lr / 10
-    elif epoch > 30:
+    elif epoch == 20:
         lr = lr / 10
 
     for param_group in optimizer.param_groups:
@@ -297,7 +300,8 @@ def adjust_learning_rate(epoch):
 def save_models(epoch, loss, save_point):
     print("save path types = ",str(type(dataPathRoot))+"\t",str(type(epoch))+"\t",str(type(save_point)))
     save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}_".format(epoch) + "_best_" \
-                                + str(save_point) + "_loss_" + str(loss.detach().cpu().numpy()) + ".model"
+                                + str(save_point) + "_FDpsBS_" + str(no_feature_detectors) + "_" +\
+                str(pic_size) + "_" + str(batch_size) + ".model"
     checkpoint = {
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
@@ -367,7 +371,7 @@ def train(num_epochs):
             train_acc += torch.sum(prediction == labels.data)
 
         # Call the learning rate adjustment function
-        adjust_learning_rate(epoch)
+        adjust_learning_rate(epoch, get_lr(optimizer))
 
         # Compute the average acc and loss over all 50000 training images
         train_acc = train_acc.cpu().numpy() / train_size
@@ -398,8 +402,8 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    # loaded_model = load_latest_saved_model("new")
-    # loaded_model = load_latest_saved_model("Birdies_model_110__best_38_loss_0.081436545.model")
+    loaded_model = load_latest_saved_model("new")
+    #loaded_model = load_latest_saved_model("Birdies_model_42__best_40_FDpsBS_64_72_16.model")
     # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
-    # train(200)
-    View_Test.test(model,eval_loader, 'E:/Class_validate.txt')
+    train(200)
+    #View_Test.test(model,eval_loader, 'G:/Class_validate.txt')

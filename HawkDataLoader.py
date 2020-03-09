@@ -12,9 +12,10 @@ class HawkLoader:
         self.batch_sizes = batch_sizes
         self.dir_path = dir_path
         self.pic_size = pic_size
+        self.scale_size = 224
         data_transforms = {
             'train': transforms.Compose([
-                transforms.Resize(128),
+                transforms.Resize(self.scale_size),
                 # transforms.RandomResizedCrop(self.pic_size),
                 # transforms.CenterCrop(self.pic_size),
                 transforms.RandomHorizontalFlip(),
@@ -24,19 +25,19 @@ class HawkLoader:
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
             'val': transforms.Compose([
-                transforms.Resize(128),
+                transforms.Resize(self.scale_size),
                 transforms.CenterCrop(self.pic_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
             'test': transforms.Compose([
-                # transforms.Resize(120),
+                # transforms.Resize(self.scale_size),
                 transforms.CenterCrop(self.pic_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
             'eval': transforms.Compose([
-                transforms.Resize(128),
+                transforms.Resize(self.scale_size),
                 transforms.CenterCrop(self.pic_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -54,7 +55,7 @@ class HawkLoader:
         self.dataloaders = {x: torch.utils.data.DataLoader(
                             image_datasets[x],
                             batch_size=self.batch_sizes,
-                            shuffle=True, num_workers=4)
+                            shuffle=True, num_workers=0)
                        for x in ['train', 'val', 'test','eval']}
         #print(type(self.dataloaders["train"][0]))
         self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val', 'test','eval']}
