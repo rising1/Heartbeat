@@ -15,13 +15,13 @@ import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 256 # used in Unit
+no_feature_detectors = 16 # used in Unit
 kernel_sizes = 3  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
-pic_size = 192 # used in SimpleNet
-feature_multiplier = 144
+pic_size = 128 # used in SimpleNet
+flattener = 64
 output_classes = 220  # used in SimpleNet0
 learning_rate = 0.0001  # used in HeartbeatClean
 decay_cycles = 1  # default to start
@@ -32,7 +32,7 @@ faff = 'false'
 # linear_mid_layer_2 = 230
 num_epochs = 500  # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 2 # used in HeartbeatClean
+batch_sizes = 64 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 
@@ -119,7 +119,7 @@ class SimpleNet(nn.Module):
         self.net = nn.Sequential(self.unit1, self.unit2, self.unit3, self.pool1, self.unit4, self.unit5, self.unit6
                                  , self.unit7, self.pool2, self.unit8, self.unit9, self.unit10, self.unit11, self.pool3,
                                  self.unit12, self.unit13, self.unit14, self.avgpool)
-        self.fc = nn.Linear(no_feature_detectors * feature_multiplier , output_classes)
+        self.fc = nn.Linear(no_feature_detectors * flattener , output_classes)
         # self.fc = nn.Linear(no_feature_detectors * 4 *4 , linear_mid_layer)
         # self.fc2 = nn.Linear(linear_mid_layer , linear_mid_layer_2)
         #self.fc = nn.Linear(no_feature_detectors * 4 * 4, output_classes)
@@ -130,8 +130,8 @@ class SimpleNet(nn.Module):
 
     def forward(self, input):
         output = self.net(input)
-        #print("net(input) ",output.shape)
-        output = output.view(-1, no_feature_detectors * feature_multiplier)
+        # print("net(input) ",output.shape)
+        output = output.view(-1, no_feature_detectors * flattener)
         #output = output.view(-1, no_feature_detectors * 4 * 4)
         # output = output.view(-1, no_feature_detectors * 4 )
         # output = output.view(-1, int(no_feature_detectors / 4))
