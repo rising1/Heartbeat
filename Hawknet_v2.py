@@ -15,26 +15,26 @@ import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 16 # used in Unit
-kernel_sizes = 3  # used in Unit
+no_feature_detectors = 32 # used in Unit
+kernel_sizes = 2 # 3 works  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
 pic_size = 128 # used in SimpleNet
-flattener = 64
+flattener = 100
 output_classes = 220  # used in SimpleNet0
-learning_rate = 0.0001  # used in HeartbeatClean
-decay_cycles = 1  # default to start
+learning_rate = 0.0001  # used in HeartbeatCleandecay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
-dropout_factor = 0.2  # used in Unit
+dropout_factor = 0.0  # used in Unit
 faff = 'false'
 # linear_mid_layer = 1024
 # linear_mid_layer_2 = 230
-num_epochs = 500  # used in HeartbeatClean
+num_epochs = 50 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 64 # used in HeartbeatClean
+batch_sizes = 8 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
+print_shape = False
 
 #validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
 #dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
@@ -63,14 +63,14 @@ class Unit(nn.Module):
                                padding = UnitArgs[2],
                                in_channels = in_channel, out_channels = out_channel)
         self.bn = nn.BatchNorm2d(num_features=out_channel)
-        # self.do = nn.Dropout(dropout_factor)
+        self.do = nn.Dropout(dropout_factor)
         self.relu = nn.ReLU()
 
 
     def forward(self, input):
         output = self.conv(input)
         output = self.bn(output)
-        # output = self.do(output)
+        output = self.do(output)
         output = self.relu(output)
         return output
 
@@ -129,8 +129,10 @@ class SimpleNet(nn.Module):
         # self.fc_final = nn.Linear(linear_mid_layer, output_classes)
 
     def forward(self, input):
+        global print_shape
         output = self.net(input)
-        # print("net(input) ",output.shape)
+        if(print_shape):
+            print("net(input) ",output.shape)
         output = output.view(-1, no_feature_detectors * flattener)
         #output = output.view(-1, no_feature_detectors * 4 * 4)
         # output = output.view(-1, no_feature_detectors * 4 )
@@ -300,8 +302,8 @@ def adjust_learning_rate(epoch,lr):
 def save_models(epoch, loss, save_point):
     print("save path types = ",str(type(dataPathRoot))+"\t",str(type(epoch))+"\t",str(type(save_point)))
     save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}_".format(epoch) + "_best_" \
-                                + str(save_point) + "_FDpsBS_" + str(no_feature_detectors) + "_" +\
-                str(pic_size) + "_" + str(batch_size) + ".model"
+                                + str(save_point) + "_FDpsBSksFn_" + str(no_feature_detectors) + "_" +\
+                str(pic_size) + "_" + str(batch_size) + "_" + str(kernel_sizes) + "_" + str(flattener) +".model"
     checkpoint = {
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
@@ -313,6 +315,9 @@ def save_models(epoch, loss, save_point):
     if (os.path.exists(save_PATH)):
         print("verified save ", save_PATH)
 
+def set_print_shape(printit):
+    global print_shape
+    print_shape = printit
 
 def test():
     global test_acc, test_acc_abs
@@ -402,8 +407,9 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    loaded_model = load_latest_saved_model("new")
+    loaded_model = load_latest_saved_model("Birdies_model_24__best_36_FDpsBSksFn_32_128_8_2_100.model")
     #loaded_model = load_latest_saved_model("Birdies_model_42__best_40_FDpsBS_64_72_16.model")
     # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
-    train(200)
-    #View_Test.test(model,eval_loader, 'G:/Class_validate.txt')
+    #set_print_shape(True)
+    #train(100)
+    View_Test.test(model,eval_loader, 'G:/Class_validate.txt')
