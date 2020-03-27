@@ -15,13 +15,13 @@ import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 32 # used in Unit
-kernel_sizes = 2 # 3 works  # used in Unit
+no_feature_detectors = 96 # used in Unit
+kernel_sizes = 4 # 3 works  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
 pic_size = 128 # used in SimpleNet
-flattener = 100
+flattener = 16
 output_classes = 220  # used in SimpleNet0
 learning_rate = 0.0001  # used in HeartbeatCleandecay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
@@ -31,7 +31,7 @@ faff = 'false'
 # linear_mid_layer_2 = 230
 num_epochs = 50 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 8 # used in HeartbeatClean
+batch_sizes = 6 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 print_shape = False
@@ -41,7 +41,7 @@ print_shape = False
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
 dataPathRoot = 'G:/'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
-98
+
 computer = "home_laptop"
 deploy_test = Hawknet_Depld.test_images(12, False)
 # Check if gpu support is available
@@ -407,9 +407,9 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    loaded_model = load_latest_saved_model("Birdies_model_24__best_36_FDpsBSksFn_32_128_8_2_100.model")
+    loaded_model = load_latest_saved_model("Birdies_model_20__best_24_FDpsBSksFn_96_128_6_4_16.model")
     #loaded_model = load_latest_saved_model("Birdies_model_42__best_40_FDpsBS_64_72_16.model")
     # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
     #set_print_shape(True)
-    #train(100)
-    View_Test.test(model,eval_loader, 'G:/Class_validate.txt')
+    train(100)
+    # View_Test.test(model,eval_loader, 'G:/Class_validate.txt')
