@@ -6,12 +6,12 @@ import csv
 import Hawknet_Depld
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
-dataPathRoot = 'E:/'
-validate_path = 'E:/Class_validate.txt'
+dataPathRoot = 'f:/'
+validate_path = 'f:/Class_validate.txt'
 
 def test(model,my_test_loader,validate_path):
-    bird_list = ['Owl', 'Bittern', 'Blackbird', 'Tit', 'Chicken', 'Parakeet', 'Peregrine', 'Dove', 'Plover',
-                 'Puffin', 'Robin', 'sparrowhawk']
+    bird_list = [ 'Bittern', 'Blackbird',  'Chicken', 'Dove','sparrowhawk', 'Owl','Parakeet', 'Peregrine', 'Plover',
+                 'Puffin', 'Robin', 'Tit']
     my_test_loader_eval = my_test_loader
     model.eval()
     test_acct = 0.0
@@ -36,8 +36,8 @@ def test(model,my_test_loader,validate_path):
         else:
                 tick = "No"     # str(u'\2717'.encode('utf-8')) # cross mark
         predictions_list.append(birds_listing(validate_path)[int(prediction[i].cpu().numpy())]  +
-                                "\n" + "\n" + "       " + tick)
-                                # "\n" + bird_list[labels.data[i].cpu().numpy()] + " " + tick)
+                                # "\n" + "\n" + "       " + tick)
+                                 "\n" + bird_list[labels.data[i].cpu().numpy()] + " " + tick)
     show_images(image_list,2,predictions_list)
 
 def show_images(images, cols=1, titles=None):
@@ -66,7 +66,7 @@ def show_images(images, cols=1, titles=None):
     #  fig.set_size_inches(np.array(fig.get_size_inches()) * n_images)
     #  fig = plt.figure(figsize=(6, 3))
     plt.show(block=False)
-    plt.pause(20)
+    plt.pause(120)
     plt.close()
 
 def imshow(inp, title=None):

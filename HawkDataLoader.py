@@ -12,7 +12,7 @@ class HawkLoader:
         self.batch_sizes = batch_sizes
         self.dir_path = dir_path
         self.pic_size = pic_size
-        self.scale_size = 224
+        self.scale_size = 96
         data_transforms = {
             'train': transforms.Compose([
                 transforms.Resize(self.scale_size),
@@ -31,7 +31,7 @@ class HawkLoader:
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
             'test': transforms.Compose([
-                # transforms.Resize(self.scale_size),
+                transforms.Resize(self.scale_size),
                 transforms.CenterCrop(self.pic_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -52,11 +52,16 @@ class HawkLoader:
         elif computer == "work":
             image_datasets = {x: datasets.ImageFolder(os.path.join('D:/', x),
                               data_transforms[x]) for x in ['train', 'val', 'test','eval']}
-        self.dataloaders = {x: torch.utils.data.DataLoader(
+        self.dataloader_train = {x: torch.utils.data.DataLoader(
                             image_datasets[x],
                             batch_size=self.batch_sizes,
                             shuffle=True, num_workers=4)
-                       for x in ['train', 'val', 'test','eval']}
+                       for x in ['train']}
+        self.dataloaders = {x: torch.utils.data.DataLoader(
+                            image_datasets[x],
+                            batch_size=self.batch_sizes,
+                            shuffle=False, num_workers=4)
+                       for x in [ 'val', 'test','eval']}
         #print(type(self.dataloaders["train"][0]))
         self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val', 'test','eval']}
 
