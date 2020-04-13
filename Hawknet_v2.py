@@ -15,7 +15,7 @@ import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 48 # used in Unit
+no_feature_detectors = 96 # used in Unit
 kernel_sizes = 3 # 3 works  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
@@ -23,7 +23,7 @@ pooling_factor = 2  # used in SimpleNet
 pic_size = 64 # used in SimpleNet
 flattener = 16
 output_classes = 220  # used in SimpleNet0
-learning_rate = 0.0001  # used in HeartbeatCleandecay_cycles = 1  # default to start
+learning_rate = 0.00001  # used in HeartbeatCleandecay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
 dropout_factor = 0.0  # used in Unit
 faff = 'false'
@@ -31,7 +31,7 @@ faff = 'false'
 # linear_mid_layer_2 = 230
 num_epochs = 50 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 4 # used in HeartbeatClean
+batch_sizes = 24 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 print_shape = False
@@ -39,7 +39,8 @@ print_shape = False
 #validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
 #dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-dataPathRoot = 'f:/'
+#dataPathRoot = 'f:/'
+dataPathRoot = 'G:/'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 computer = "home_laptop"
@@ -237,21 +238,13 @@ def load_latest_saved_model(chosen_model = None,is_eval = False):
 batch_size = batch_sizes
 
 #Load the training set
-#train_set = CIFAR10(root="./data", train=True, #transform=train_transformations, download=True)
-#Create a loder for the training set
-#train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, #num_workers=4)
-
-#Define transformations for the test set
-#test_transformations = transforms.Compose([
-# transforms.ToTensor(),
-# transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-#])
+#loader = HawkDataLoader.HawkLoader(dataPathRoot,batch_size,
+#                                    pic_size, computer)
+#train_loader = loader.cifar10_train_loader()[0]
+#train_size = loader.cifar10_train_loader()[1]
 # Load the test set, note that train is set to False
-#test_set = CIFAR10(root="./data", train=False, transform=test_transformations, #download=True)
-
-# Create a loder for the test set, note that both shuffle is set to false for #the test loader
-#test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, #num_workers=4)
-
+#test_loader = loader.cifar10_test_loader()[0]
+#test_size = loader.cifar10_test_loader()[1]
 loader = HawkDataLoader.HawkLoader(dataPathRoot,batch_size,
                                     pic_size, computer)
 train_loader = loader.dataloader_train['train']
@@ -408,9 +401,9 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    loaded_model = load_latest_saved_model("new")
-    #loaded_model = load_latest_saved_model("Birdies_model_28__best_12_FDpsBSksFn_24_32_40_3_4.model")
+    loaded_model = load_latest_saved_model("Birdies_model_94__best_13_FDpsBSksFn_96_64_24_3_16.model")
+    #loaded_model = load_latest_saved_model("Birdies_model_67__best_9156_FDpsBSksFn_96_64_24_3_4.model")
     # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
     #set_print_shape(True)
     train(100)
-    #View_Test.test(model,eval_loader, 'f:/Class_validate.txt')
+    #View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')

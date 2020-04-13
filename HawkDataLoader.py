@@ -15,8 +15,8 @@ class HawkLoader:
         self.scale_size = 96
         data_transforms = {
             'train': transforms.Compose([
-                transforms.Resize(self.scale_size),
-                # transforms.RandomResizedCrop(self.pic_size),
+                # transforms.Resize(self.scale_size),
+                transforms.RandomResizedCrop(self.scale_size),
                 # transforms.CenterCrop(self.pic_size),
                 transforms.RandomHorizontalFlip(),
                 # transforms.RandomResizedCrop(self.pic_size),
@@ -90,11 +90,11 @@ class HawkLoader:
 
         # Load the training set
         train_set = CIFAR10(root="./data", train=True, transform=train_transformations, download=True)
-
+        train_set_size = train_set.__sizeof__()
         # Create a loder for the training set
         train_loader = DataLoader(train_set, batch_size=32, shuffle=True, num_workers=0)
         print ("returning train loader object")
-        return train_loader
+        return [train_loader, train_set_size]
 
     def cifar10_test_loader(self):
         # Define transformations for the test set
@@ -106,7 +106,7 @@ class HawkLoader:
 
         # Load the test set, note that train is set to False
         test_set = CIFAR10(root="./data", train=False, transform=test_transformations, download=True)
-
+        test_set_size = test_set.__sizeof__()
         # Create a loder for the test set, note that both shuffle is set to false for the test loader
         test_loader = DataLoader(test_set, batch_size=32, shuffle=False, num_workers=0)
-        return test_loader
+        return [test_loader,test_set_size]

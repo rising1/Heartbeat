@@ -10,7 +10,7 @@ dataPathRoot = 'f:/'
 validate_path = 'f:/Class_validate.txt'
 
 def test(model,my_test_loader,validate_path):
-    bird_list = [ 'Bittern', 'Blackbird',  'Chicken', 'Dove','sparrowhawk', 'Owl','Parakeet', 'Peregrine', 'Plover',
+    bird_list = [ 'Bittern', 'Blackbird',  'Chicken', 'Dove','Sparrowhawk', 'Owl','Parakeet', 'Peregrine', 'Plover',
                  'Puffin', 'Robin', 'Tit']
     my_test_loader_eval = my_test_loader
     model.eval()
