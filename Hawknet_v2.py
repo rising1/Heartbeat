@@ -24,7 +24,7 @@ pic_size = 64 # used in SimpleNet
 flattener = 16
 output_classes = 220  # used in SimpleNet0
 learning_rate = 0.00001  # used in HeartbeatCleandecay_cycles = 1  # default to start
-weight_decay = 0.0001  # used in HeartbeatClean
+weight_decay = 0.01  # used in HeartbeatClean
 dropout_factor = 0.0  # used in Unit
 faff = 'false'
 # linear_mid_layer = 1024
@@ -370,7 +370,7 @@ def train(num_epochs):
             train_acc += torch.sum(prediction == labels.data)
 
         # Call the learning rate adjustment function
-        adjust_learning_rate(epoch, get_lr(optimizer))
+        # adjust_learning_rate(epoch, get_lr(optimizer))
 
         # Compute the average acc and loss over all 50000 training images
         train_acc = train_acc.cpu().numpy() / train_size
@@ -401,9 +401,9 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    loaded_model = load_latest_saved_model("Birdies_model_94__best_13_FDpsBSksFn_96_64_24_3_16.model")
+    loaded_model = load_latest_saved_model("Birdies_model_6__best_14_FDpsBSksFn_96_64_24_3_16.model")
     #loaded_model = load_latest_saved_model("Birdies_model_67__best_9156_FDpsBSksFn_96_64_24_3_4.model")
     # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
     #set_print_shape(True)
-    train(100)
+    train(1000)
     #View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')

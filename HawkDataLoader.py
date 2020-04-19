@@ -15,12 +15,12 @@ class HawkLoader:
         self.scale_size = 96
         data_transforms = {
             'train': transforms.Compose([
-                # transforms.Resize(self.scale_size),
-                transforms.RandomResizedCrop(self.scale_size),
+                transforms.Resize(self.scale_size),
+                transforms.RandomResizedCrop(self.pic_size),
                 # transforms.CenterCrop(self.pic_size),
                 transforms.RandomHorizontalFlip(),
                 # transforms.RandomResizedCrop(self.pic_size),
-                transforms.CenterCrop(self.pic_size),
+                #transforms.CenterCrop(self.pic_size),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),

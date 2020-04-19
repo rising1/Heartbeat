@@ -21,7 +21,7 @@ class findExtraPix:
             i=0
             print(short_item)
             print(short_item[0] + keyword_mod)
-            # self.downloadimages(short_item[0],short_item[1])
+            self.downloadimages(short_item[0],short_item[1])
             if (load_new_pix):
                 BingPix.pre_prep(self.rootDir + "/" + short_item[0], True, (short_item[0] + keyword_mod), short_item[1],20)
             else:
@@ -66,7 +66,7 @@ class findExtraPix:
                  "type": "photo",
                  "aspect_ratio": "square",
                  "delay": 0.1,
-                 "output_directory": os.path.join("F:/top-up-images" )  }
+                 "output_directory": os.path.join("g:/top-up-images" )  }
 
         if (int(no_of_images)) < 100:
             try:
@@ -80,7 +80,7 @@ class findExtraPix:
                      "limit": (100 - int(no_of_images)),
                      "print_urls": True,
                      "size": "medium",
-                     "output_directory": os.path.join("F:/top-up-images" )}
+                     "output_directory": os.path.join("G:/top-up-images" )}
 
             # Providing arguments for the searched query
             try:
@@ -93,7 +93,7 @@ class findExtraPix:
 
 if __name__ == "__main__":
     # findExtraPix("F:/train_2","image_count.txt"," bird", False)
-    findExtraPix("C:/Users/phfro/PycharmProjects/Heartbeat/train","image_count.txt"," bird", False)
+    findExtraPix("C:/Users/phfro/PycharmProjects/Heartbeat/","bird_dir_list.txt"," bird", True)
     # findExtraPix("F:/train","image_count.txt"," bird", False)
     # findExtraPix("D:/train","image_count.txt"," bird", False)
     # findExtraPix("E:/top-up-images","image_count.txt", " bird")
