@@ -15,7 +15,7 @@ import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 96 # used in Unit
+no_feature_detectors = 48 # used in Unit
 kernel_sizes = 3 # 3 works  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
@@ -23,15 +23,15 @@ pooling_factor = 2  # used in SimpleNet
 pic_size = 64 # used in SimpleNet
 flattener = 16
 output_classes = 220  # used in SimpleNet0
-learning_rate = 0.00001  # used in HeartbeatCleandecay_cycles = 1  # default to start
-weight_decay = 0.01  # used in HeartbeatClean
+learning_rate = 0.001  # used in HeartbeatCleandecay_cycles = 1  # default to start
+weight_decay = 0.0001  # used in HeartbeatClean
 dropout_factor = 0.0  # used in Unit
 faff = 'false'
 # linear_mid_layer = 1024
 # linear_mid_layer_2 = 230
 num_epochs = 50 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 24 # used in HeartbeatClean
+batch_sizes = 5 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 print_shape = False
@@ -39,8 +39,8 @@ print_shape = False
 #validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
 #dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-#dataPathRoot = 'f:/'
-dataPathRoot = 'G:/'
+dataPathRoot = 'f:/'
+#dataPathRoot = 'G:/'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 computer = "home_laptop"
@@ -370,7 +370,7 @@ def train(num_epochs):
             train_acc += torch.sum(prediction == labels.data)
 
         # Call the learning rate adjustment function
-        # adjust_learning_rate(epoch, get_lr(optimizer))
+        adjust_learning_rate(epoch, get_lr(optimizer))
 
         # Compute the average acc and loss over all 50000 training images
         train_acc = train_acc.cpu().numpy() / train_size
@@ -401,9 +401,9 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    loaded_model = load_latest_saved_model("Birdies_model_6__best_14_FDpsBSksFn_96_64_24_3_16.model")
+    loaded_model = load_latest_saved_model("new")
     #loaded_model = load_latest_saved_model("Birdies_model_67__best_9156_FDpsBSksFn_96_64_24_3_4.model")
     # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
     #set_print_shape(True)
-    train(1000)
+    train(100)
     #View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')
