@@ -94,7 +94,7 @@ def persist_image(folder_path: str, url: str):
 
 
 def search_and_download(search_term: str, driver_path: str, target_path='./images', number_images=5):
-    target_folder = os.path.join(target_path, '_'.join(search_term.lower().split('_')))
+    target_folder = os.path.join(target_path, (search_term.lower().split('_'))[0])
 
     if not os.path.exists(target_folder):
         os.makedirs(target_folder)
@@ -108,14 +108,14 @@ def search_and_download(search_term: str, driver_path: str, target_path='./image
 
 if __name__ == "__main__":
     try:
-        search_file = "G:/bird_list_2.txt"
+        search_file = "h:/bird_list_2.txt"
         inputFile=open(search_file)
     except (OSError, IOError):
         print("Couldn't open file {}".format(search_file))
         exit(1)
     for search_term in inputFile.readlines():
-        search_and_download(search_term.strip().replace(' ', '_'), DRIVER_PATH, 'g:/exp', 50)
-        backup_history()
+        search_and_download(search_term.strip().replace(' ', '_'), DRIVER_PATH, 'h:/train', 50)
+        # backup_history()
         time.sleep(10)
         inputFile.close()
 
