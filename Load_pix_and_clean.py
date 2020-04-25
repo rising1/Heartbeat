@@ -5,7 +5,7 @@ import os, time, io, requests, hashlib
 # This is the path I use
 # DRIVER_PATH = '.../Desktop/Scraping/chromedriver 2'
 # Put the path for your ChromeDriver here
-DRIVER_PATH = 'C:/Users/phfro/Downloads/chromedriver_win32 (2)/chromedriver.exe'
+DRIVER_PATH = 'C:/Users/phfro/PycharmProjects/chromedriver.exe'
 wd = webdriver.Chrome(executable_path=DRIVER_PATH)
 
 
@@ -94,7 +94,7 @@ def persist_image(folder_path: str, url: str):
 
 
 def search_and_download(search_term: str, driver_path: str, target_path='./images', number_images=5):
-    target_folder = os.path.join(target_path, '_'.join(search_term.lower().split(' ')))
+    target_folder = os.path.join(target_path, '_'.join(search_term.lower().split('_')))
 
     if not os.path.exists(target_folder):
         os.makedirs(target_folder)
@@ -106,13 +106,19 @@ def search_and_download(search_term: str, driver_path: str, target_path='./image
         persist_image(target_folder, elem)
 
 
-# In[24]:
+if __name__ == "__main__":
+    try:
+        search_file = "G:/bird_list_2.txt"
+        inputFile=open(search_file)
+    except (OSError, IOError):
+        print("Couldn't open file {}".format(search_file))
+        exit(1)
+    for search_term in inputFile.readlines():
+        search_and_download(search_term.strip().replace(' ', '_'), DRIVER_PATH, 'g:/exp', 50)
+        backup_history()
+        time.sleep(10)
+        inputFile.close()
 
-
-search_term = "martin bird"
-search_and_download(search_term, DRIVER_PATH, 'F:/topup', 50)
-
-# In[ ]:
 
 
 
