@@ -48,7 +48,7 @@ class CleanDirectories:
 
 if __name__ == "__main__":
     # CleanDirectories("C:/Users/phfro/Documents/python/data/BirdiesData/train")
-    CleanDirectories('C:/Users/phfro/PycharmProjects/Heartbeat/train')
-    CleanDirectories('C:/Users/phfro/PycharmProjects/Heartbeat/val')
-    CleanDirectories('C:/Users/phfro/PycharmProjects/Heartbeat/test')
+    CleanDirectories('h:/train')
+    #CleanDirectories('C:/Users/phfro/PycharmProjects/Heartbeat/val')
+    #CleanDirectories('C:/Users/phfro/PycharmProjects/Heartbeat/test')
     #  CleanDirectories("F:/BirdiesData/train")
