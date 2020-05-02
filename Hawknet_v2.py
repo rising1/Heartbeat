@@ -15,15 +15,15 @@ import HawkDataLoader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 48 # used in Unit
+no_feature_detectors = 64 # used in Unit
 kernel_sizes = 3 # 3 works  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
-pic_size = 64 # used in SimpleNet
+pic_size = 72 # used in SimpleNet
 flattener = 16
 output_classes = 220  # used in SimpleNet0
-learning_rate = 0.001  # used in HeartbeatCleandecay_cycles = 1  # default to start
+learning_rate = 0.00001  # used in HeartbeatCleandecay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
 dropout_factor = 0.0  # used in Unit
 faff = 'false'
@@ -31,7 +31,7 @@ faff = 'false'
 # linear_mid_layer_2 = 230
 num_epochs = 50 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 5 # used in HeartbeatClean
+batch_sizes = 24 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 print_shape = False
@@ -39,8 +39,8 @@ print_shape = False
 #validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
 #dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-dataPathRoot = 'f:/'
-#dataPathRoot = 'G:/'
+#dataPathRoot = 'f:/'
+dataPathRoot = 'h:/'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 computer = "home_laptop"
@@ -271,18 +271,14 @@ loss_fn = nn.CrossEntropyLoss()
 # Create a learning rate adjustment function that divides the learning rate by 10 every 30 epochs
 def adjust_learning_rate(epoch,lr):
 
-
-    if epoch == 200:
+    global num_epochs
+    if epoch == 8 * num_epochs / 10:
         lr = lr / 2
-    elif epoch == 150:
+    elif epoch == 6 * num_epochs / 10:
         lr = lr / 2
-    elif epoch == 100:
+    elif epoch == 4 * num_epochs / 10:
         lr = lr / 2
-    elif epoch == 60:
-        lr = lr / 2
-    elif epoch == 40:
-        lr = lr / 2
-    elif epoch == 20:
+    elif epoch == 2 * num_epochs / 10:
         lr = lr / 2
 
     for param_group in optimizer.param_groups:
@@ -335,9 +331,10 @@ def test():
     return (test_acc, test_acc_abs)
 
 
-def train(num_epochs):
-    global best_acc, train_acc, train_loss
+def train(num_epochs_in):
+    global best_acc, train_acc, train_loss, num_epochs
     best_acc = 0
+    num_epochs = num_epochs_in
 
     since = time.time()
     for epoch in range(num_epochs):
@@ -382,9 +379,10 @@ def train(num_epochs):
         test_acc_abs = results[1]
 
             # Save the model if the test acc is greater than our current best
-        if test_acc_abs > best_acc and epoch > 1:
+        if (test_acc_abs > best_acc and epoch > 1) or (epoch % num_epochs/4 == 0):
                 save_models(epoch,loss,str(test_acc_abs.cpu().numpy()))
                 best_acc = test_acc_abs
+
 
             # Print the metrics
         time_elapsed = time.time() - since
@@ -401,9 +399,9 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    loaded_model = load_latest_saved_model("new")
+    loaded_model = load_latest_saved_model("Birdies_model_4__best_14_FDpsBSksFn_64_72_16_3_16.model")
     #loaded_model = load_latest_saved_model("Birdies_model_67__best_9156_FDpsBSksFn_96_64_24_3_4.model")
     # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
     #set_print_shape(True)
-    train(100)
+    train(500)
     #View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')

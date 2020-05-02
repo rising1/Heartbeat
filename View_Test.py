@@ -26,7 +26,7 @@ def test(model,my_test_loader,validate_path):
     #  Predict classes using images from the test set
     outputs = model(images)
     _, prediction = torch.max(outputs.data, 1)
-    probs_val = torch.max(outputs.data, 1).__getitem__()
+    # probs_val = torch.max(outputs.data).item()
 
     for image in images:
         image = image.cpu()
@@ -34,9 +34,9 @@ def test(model,my_test_loader,validate_path):
     for i in range(len(prediction)):
         if (birds_listing(validate_path)[int(prediction[i].cpu().numpy())]) == (
                 bird_list[labels.data[i].cpu().numpy()]):
-                tick = "|Y" # str(probs_val[i].cpu().numpy())    # str(u'\2714'.encode('utf-8')) # approval tick mark
+                tick = "Y " + str("{:.1f}".format(_[i].cpu().numpy()))    # str(u'\2714'.encode('utf-8')) # approval tick mark
         else:
-                tick = "No"     # str(u'\2717'.encode('utf-8')) # cross mark
+                tick = "No" + str("{:.1f}".format(_[i].cpu().numpy()))    # str(u'\2717'.encode('utf-8')) # cross mark
         predictions_list.append(birds_listing(validate_path)[int(prediction[i].cpu().numpy())]  +
                                 # "\n" + "\n" + "       " + tick)
                                  "\n" + bird_list[labels.data[i].cpu().numpy()] + " " + tick)

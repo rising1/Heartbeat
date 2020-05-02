@@ -12,12 +12,12 @@ class HawkLoader:
         self.batch_sizes = batch_sizes
         self.dir_path = dir_path
         self.pic_size = pic_size
-        self.scale_size = 224
+        self.scale_size = 104
         data_transforms = {
             'train': transforms.Compose([
-                # transforms.Resize(self.scale_size),
-                transforms.RandomResizedCrop(self.pic_size),
-                # transforms.CenterCrop(self.pic_size),
+                transforms.Resize(self.scale_size),
+                #transforms.RandomResizedCrop(self.pic_size),
+                transforms.CenterCrop(self.pic_size),
                 transforms.RandomHorizontalFlip(),
                 # transforms.RandomResizedCrop(self.pic_size),
                 #transforms.CenterCrop(self.pic_size),
