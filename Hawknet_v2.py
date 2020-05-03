@@ -31,7 +31,7 @@ faff = 'false'
 # linear_mid_layer_2 = 230
 num_epochs = 50 # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 24 # used in HeartbeatClean
+batch_sizes = 32 # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
 print_shape = False
@@ -40,7 +40,7 @@ print_shape = False
 #dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
 #dataPathRoot = 'f:/'
-dataPathRoot = 'h:/'
+dataPathRoot = 'g:/'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 computer = "home_laptop"
@@ -399,7 +399,7 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    loaded_model = load_latest_saved_model("Birdies_model_4__best_14_FDpsBSksFn_64_72_16_3_16.model")
+    loaded_model = load_latest_saved_model("Birdies_model_4__best_14_FDpsBSksFn_64_72_24_3_16.model")
     #loaded_model = load_latest_saved_model("Birdies_model_67__best_9156_FDpsBSksFn_96_64_24_3_4.model")
     # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
     #set_print_shape(True)
