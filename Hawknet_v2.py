@@ -40,7 +40,7 @@ print_shape = False
 #dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
 #dataPathRoot = 'f:/'
-dataPathRoot = 'g:/'
+dataPathRoot = 'f:/'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 computer = "home_laptop"
@@ -403,5 +403,5 @@ if __name__ == "__main__":
     #loaded_model = load_latest_saved_model("Birdies_model_67__best_9156_FDpsBSksFn_96_64_24_3_4.model")
     # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
     #set_print_shape(True)
-    train(500)
-    #View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')
+    #train(500)
+    View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')
