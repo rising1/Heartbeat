@@ -28,6 +28,8 @@ with open("F:/exp/woodpigeon/6ea941e5d1.jpg", 'rb') as f:
     tensor = transform_image(image_bytes=image_bytes)
     #print(tensor)
 
+def get_prediction(image_bytes):
+    Hawknet_v2.predict(image_bytes)
 
 @app.route('/', methods=['POST'])
 def predict():

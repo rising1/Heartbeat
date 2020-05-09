@@ -331,6 +331,14 @@ def test():
     test_acc = test_acc_abs.cpu().numpy() / test_size
     return (test_acc, test_acc_abs)
 
+def predict(image_bytes):
+    images = image_bytes
+    model.eval()
+    if cuda_avail:
+       images = Variable(images.cuda())
+    outputs = model(images)
+    _, prediction = torch.max(outputs.data, 1)
+
 
 def train(num_epochs_in):
     global best_acc, train_acc, train_loss, num_epochs
