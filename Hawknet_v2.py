@@ -250,11 +250,12 @@ loader = HawkDataLoader.HawkLoader(dataPathRoot,batch_size,
 train_loader = loader.dataloader_train['train']
 test_loader = loader.dataloaders['val']
 eval_loader = loader.dataloaders['eval']
+single_loader = loader.dataloader_single['single']
 
 train_size = loader.dataset_sizes['train']
 test_size = loader.dataset_sizes['val']
 eval_size = loader.dataset_sizes['eval']
-
+single_size = loader.dataset_sizes['single']
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 
@@ -404,4 +405,5 @@ if __name__ == "__main__":
     # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
     #set_print_shape(True)
     #train(500)
-    View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')
+    #View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')
+    View_Test.test(model,single_loader, dataPathRoot + 'Class_validate.txt')

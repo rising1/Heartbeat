@@ -62,8 +62,13 @@ class HawkLoader:
                             batch_size=self.batch_sizes,
                             shuffle=False, num_workers=4)
                        for x in [ 'val', 'test','eval']}
+        self.dataloader_single = {x: torch.utils.data.DataLoader(
+                            image_datasets[x],
+                            batch_size=self.batch_sizes,
+                            shuffle=True, num_workers=4)
+                       for x in ['single']}
         #print(type(self.dataloaders["train"][0]))
-        self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val', 'test','eval']}
+        self.dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'val', 'test','eval','single']}
 
         #  self.classes = open('BirdList.txt').read().splitlines()
         #  self.classesTest = ('buzzard', 'golden eagle','kestrel', 'peregrine falcon',

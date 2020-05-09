@@ -10,6 +10,7 @@ flask run
 import io
 import torchvision.transforms as transforms
 from PIL import Image
+import Hawknet_v2
 
 
 def transform_image(image_bytes):
@@ -22,7 +23,7 @@ def transform_image(image_bytes):
     image = Image.open(io.BytesIO(image_bytes))
     return my_transforms(image).unsqueeze(0)
 
-with open("F:/exp/woodpigeon/6ea941e5d1.jpeg", 'rb') as f:
+with open("F:/exp/woodpigeon/6ea941e5d1.jpg", 'rb') as f:
     image_bytes = f.read()
     tensor = transform_image(image_bytes=image_bytes)
     #print(tensor)
