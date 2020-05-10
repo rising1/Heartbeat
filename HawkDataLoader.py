@@ -42,13 +42,19 @@ class HawkLoader:
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ]),
+            'single': transforms.Compose([
+                transforms.Resize(self.scale_size),
+                transforms.CenterCrop(self.pic_size),
+                transforms.ToTensor(),
+                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+            ]),
         }
 
         # transforms.RandomResizedCrop(120,(1,1),(1,1),2),
         # print(os.path.join(self.dir_path, 'train'))
         if (computer == "home_laptop" or computer == "home_red_room" ):
             image_datasets = {x: datasets.ImageFolder(os.path.join(self.dir_path, x),
-                              data_transforms[x]) for x in ['train', 'val', 'test', 'eval']}
+                              data_transforms[x]) for x in ['train', 'val', 'test', 'eval', 'single']}
         elif computer == "work":
             image_datasets = {x: datasets.ImageFolder(os.path.join('D:/', x),
                               data_transforms[x]) for x in ['train', 'val', 'test','eval']}

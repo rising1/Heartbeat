@@ -413,5 +413,4 @@ if __name__ == "__main__":
     # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
     #set_print_shape(True)
     #train(500)
-    #View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')
-    View_Test.test(model,single_loader, dataPathRoot + 'Class_validate.txt')
+    View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')
