@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 app = Flask(__name__)
 
 ''' to run flask:
@@ -23,12 +23,13 @@ def transform_image(image_bytes):
     image = Image.open(io.BytesIO(image_bytes))
     return my_transforms(image).unsqueeze(0)
 
-with open("F:/exp/woodpigeon/6ea941e5d1.jpg", 'rb') as f:
-    image_bytes = f.read()
-    tensor = transform_image(image_bytes=image_bytes)
+#with open("F:/exp/woodpigeon/6ea941e5d1.jpg", 'rb') as f:
+#    image_bytes = f.read()
+#    tensor = transform_image(image_bytes=image_bytes)
     #print(tensor)
 
 def get_prediction(image_bytes):
+    tensor = transform_image(image_bytes=image_bytes)
     Hawknet_v2.predict(image_bytes)
 
 @app.route('/', methods=['POST'])
@@ -36,6 +37,6 @@ def predict():
     if request.method == 'POST':
         file = request.files['file']
         img_bytes = file.read()
-        class_id, class_name = get_prediction(image_bytes=img_bytes)
-        return str(type(tensor))
+        prediction = get_prediction(image_bytes=img_bytes)
+        return str(type(prediction))
 

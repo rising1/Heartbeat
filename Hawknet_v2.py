@@ -338,6 +338,7 @@ def predict(image_bytes):
        images = Variable(images.cuda())
     outputs = model(images)
     _, prediction = torch.max(outputs.data, 1)
+    return prediction
 
 
 def train(num_epochs_in):
