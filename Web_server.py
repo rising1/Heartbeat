@@ -1,5 +1,4 @@
-from flask import Flask, request
-app = Flask(__name__)
+from app import app
 
 ''' to run flask:
 go to conda prompt
@@ -7,7 +6,7 @@ Set FLASK_ENV=development
 Set FLASK_APP=Web_server.py
 flask run
 '''
-import io
+import io, requests
 import torchvision.transforms as transforms
 from PIL import Image
 import Hawknet_v2
@@ -32,11 +31,16 @@ def get_prediction(image_bytes):
     tensor = transform_image(image_bytes=image_bytes)
     Hawknet_v2.predict(image_bytes)
 
-@app.route('/', methods=['POST'])
+
 def predict():
     if request.method == 'POST':
         file = request.files['file']
         img_bytes = file.read()
         prediction = get_prediction(image_bytes=img_bytes)
         return str(type(prediction))
+    if request.method == 'GET':
+        response = requests.get('http://localhost:5000/predict/index.html')
+        return response.url
 
+if __name__ == "__main__":
+    app.run()
