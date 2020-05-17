@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% if title %}
+    <title>{{ title }} - What Bird?</title>
+    {% else %}
+    <title> Welcome to What Bird?</title>
+    {% endif %}
+</head>
+<body>
+    <div>What bird: <a href="/index">Home</a></div>
+    <div>What bird: <a href="/upload">Upload bird</a></div>
+    <hr>
+    {% block content %}{% endblock %}
+</body>
+</html>
