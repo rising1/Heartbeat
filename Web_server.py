@@ -2,6 +2,7 @@ import io, requests
 import torchvision.transforms as transforms
 from PIL import Image
 import Hawknet_v2
+import View_Test
 
 def transform_image(image_bytes):
     my_transforms = transforms.Compose([transforms.Resize(255),
