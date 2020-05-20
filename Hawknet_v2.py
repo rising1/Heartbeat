@@ -338,6 +338,7 @@ def predict(image_bytes):
        images = Variable(images.cuda())
     outputs = model(images)
     _, prediction = torch.max(outputs.data, 1)
+    # print("prediction=" + str(prediction))
     return prediction
 
 
