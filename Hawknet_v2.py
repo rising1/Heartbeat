@@ -66,6 +66,7 @@ class Unit(nn.Module):
         self.bn = nn.BatchNorm2d(num_features=out_channel)
         self.do = nn.Dropout(dropout_factor)
         self.relu = nn.ReLU()
+        self.softmax = nn.Softmax()
 
 
     def forward(self, input):
@@ -73,6 +74,7 @@ class Unit(nn.Module):
         output = self.bn(output)
         output = self.do(output)
         output = self.relu(output)
+       # output = self.softmax(output)
         return output
 
 
