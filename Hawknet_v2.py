@@ -39,8 +39,8 @@ print_shape = False
 #validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
 #dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-#dataPathRoot = 'f:/'
-dataPathRoot = 'h:/'
+dataPathRoot = 'f:/'
+# dataPathRoot = 'h:/'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 computer = "home_laptop"
@@ -66,15 +66,15 @@ class Unit(nn.Module):
         self.bn = nn.BatchNorm2d(num_features=out_channel)
         self.do = nn.Dropout(dropout_factor)
         self.relu = nn.ReLU()
-        self.softmax = nn.Softmax()
+        # self.softmax = nn.Softmax()
 
 
     def forward(self, input):
         output = self.conv(input)
         output = self.bn(output)
         output = self.do(output)
-        # output = self.relu(output)
-        output = self.softmax(output)
+        output = self.relu(output)
+        # output = self.softmax(output)
         return output
 
 
