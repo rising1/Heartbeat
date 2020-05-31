@@ -40,7 +40,7 @@ print_shape = False
 #dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
 #dataPathRoot = 'f:/'
-dataPathRoot = 'f:/'
+dataPathRoot = 'h:/'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 computer = "home_laptop"
@@ -73,8 +73,8 @@ class Unit(nn.Module):
         output = self.conv(input)
         output = self.bn(output)
         output = self.do(output)
-        output = self.relu(output)
-       # output = self.softmax(output)
+        # output = self.relu(output)
+        output = self.softmax(output)
         return output
 
 
@@ -412,9 +412,10 @@ if __name__ == "__main__":
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
     #-------------------------------------------------------------------
-    loaded_model = load_latest_saved_model("Birdies_model_4__best_14_FDpsBSksFn_64_72_24_3_16.model")
+    loaded_model = load_latest_saved_model("Birdies_model_94__best_11_FDpsBSksFn_64_72_32_3_16.model")
+    # loaded_model = load_latest_saved_model("Birdies_model_0__best_1_FDpsBSksFn_64_72_24_3_16.model")
     #loaded_model = load_latest_saved_model("Birdies_model_67__best_9156_FDpsBSksFn_96_64_24_3_4.model")
     # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
     #set_print_shape(True)
-    #train(500)
-    View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')
+    train(200)
+    #View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')

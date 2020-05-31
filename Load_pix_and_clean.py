@@ -108,13 +108,13 @@ def search_and_download(search_term: str, driver_path: str, target_path='./image
 
 if __name__ == "__main__":
     try:
-        search_file = "g:/bird_list_2.txt"
+        search_file = "g:/bird_list_3.txt"
         inputFile=open(search_file)
     except (OSError, IOError):
         print("Couldn't open file {}".format(search_file))
         exit(1)
     for search_term in inputFile.readlines():
-        search_and_download(search_term.strip().replace(' ', '_'), DRIVER_PATH, 'g:/train', 50)
+        search_and_download(search_term.strip().replace(' ', '_'), DRIVER_PATH, 'g:/exp', 50)
         # backup_history()
         time.sleep(10)
         inputFile.close()
