@@ -1,26 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form action = "http://localhost:5000/uploader" method = "POST"
-      enctype = "multipart/form-data">
-    <input type = "file" name = "file" />
-    <input type = "submit" />
-</form>
-<style>
-  .droparea {
-      width: 200px;
-      height: 200px;
-      border-style: solid;
-      border-width: 3px;
-      border-color: red;
-      float: left;
-      line-height: 200px;
-      text-align: center;
-  }
-</style>
+
 <div class="container">
     <div class="droparea">Drop Here</div>
     <div class="tablearea" id="tablearea"></div>
+    <div class="prediction" id="prediction">
+        <h3> {{ prediction }} </h3>
+    </div>
 </div>
 
+<script>
+    var dragHandler = function(evt){
+        evt.preventDefault();
+    };
+
+    var dropHandler = function(evt){
+        evt.preventDefault();
+        var files = evt.originalEvent.dataTransfer.files;
+
+        var formData = new FormData();
+        formData.append("file2upload", files[0]);
+
+        var req = {
+            url: "/uploader",
+            //url: "/test",
+            // url: "/sendfile",
+            method: "post",
+            processData: false,
+            contentType: false,
+            data: formData
+        };
+
+        var promise = $.ajax(req);
+    };
+
+    var dropHandlerSet = {
+        dragover: dragHandler,
+        drop: dropHandler
+    };
+
+    $(".droparea").on(dropHandlerSet);
+
+</script>
 {% endblock %}
