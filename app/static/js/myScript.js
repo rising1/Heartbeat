@@ -12,7 +12,5 @@
         dragover: dragHandler,
         drop: dropHandler
     };
-    if (typeof $(".droparea") != "undefined") {
-        alert("GOT THERE");
-    }
+
     $(".droparea").on(dropHandlerSet);

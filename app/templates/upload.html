@@ -6,7 +6,7 @@
     <div class="droparea">Drop Here</div>
     <div class="tablearea" id="tablearea"></div>
     <div class="prediction" id="prediction">
-        <h3> {{ prediction }} </h3>
+        <h3> prediction = {{ $.ajax(req) }} </h3>
     </div>
 </div>
 
@@ -32,7 +32,7 @@
             data: formData
         };
 
-         var promise = $.ajax(req);
+         var prediction = $.ajax(req);
     };
 
     var dropHandlerSet = {
@@ -42,5 +42,10 @@
 
     $(".droparea").on(dropHandlerSet);
 
+
+    $.ajax($(".droparea").on(dropHandlerSet)).done(data);
+
+
 </script>
+
 {% endblock %}
