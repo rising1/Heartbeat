@@ -6,52 +6,8 @@
     <div class="droparea">Drop Here</div>
     <div class="tablearea" id="tablearea"></div>
     <div class="prediction" id="prediction">
-        <h3>  </h3>
+        <h3> empty </h3>
     </div>
 </div>
-
-<script>
-    var dragHandler = function(evt){
-        evt.preventDefault();
-    };
-
-    var dropHandler = function(evt){
-        evt.preventDefault();
-        var files = evt.originalEvent.dataTransfer.files;
-
-        var formData = new FormData();
-        formData.append("file2upload", files[0]);
-
-        var req = {
-            url: "/uploader",
-            //url: "/test",
-            // url: "/sendfile",
-            method: "post",
-            processData: false,
-            contentType: false,
-            data: formData
-        };
-        console.log('Posted');
-
-        // $.ajax(req)
-         $.ajax(req)
-            .done(function(data){
-                $('#prediction').text(data).show();
-            } );
-
-         event.preventDefault();
-    };
-
-    var dropHandlerSet = {
-        dragover: dragHandler,
-        drop: dropHandler
-    };
-
-    $(".droparea").on(dropHandlerSet);
-
-
-    document.getElementById("prediction").innerHTML = "awaited";
-
-</script>
 
 {% endblock %}
