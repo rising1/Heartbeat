@@ -6,7 +6,7 @@
     <div class="droparea">Drop Here</div>
     <div class="tablearea" id="tablearea"></div>
     <div class="prediction" id="prediction">
-        <h3> prediction = {{ $.ajax(req) }} </h3>
+        <h3>  </h3>
     </div>
 </div>
 
@@ -31,8 +31,15 @@
             contentType: false,
             data: formData
         };
+        console.log('Posted');
 
-         var prediction = $.ajax(req);
+        // $.ajax(req)
+         $.ajax(req)
+            .done(function(data){
+                $('#prediction').text(data).show();
+            } );
+
+         event.preventDefault();
     };
 
     var dropHandlerSet = {
@@ -43,8 +50,7 @@
     $(".droparea").on(dropHandlerSet);
 
 
-    $.ajax($(".droparea").on(dropHandlerSet)).done(data);
-
+    document.getElementById("prediction").innerHTML = "awaited";
 
 </script>
 
