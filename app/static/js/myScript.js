@@ -8,6 +8,21 @@
         evt.preventDefault();
         var files = evt.originalEvent.dataTransfer.files;
 
+
+        var reader  = new FileReader();
+
+        // it's onload event and you forgot (parameters)
+
+        reader.onload = function(e)  {
+            var image = document.createElement("img");
+            // the result image data
+            image.src = e.target.result;
+            document.getElementById("prediction").appendChild(image);
+        }
+
+        reader.readAsDataURL(files[0]);
+
+
         var formData = new FormData();
         formData.append("file2upload", files[0]);
 
@@ -38,4 +53,13 @@
 
     $(".droparea").on(dropHandlerSet);
 
+    // to display the image in the box
+
+    function myFunction() {
+
+        var file = document.getElementById('file').files[0];
+
+        // you have to declare the file loading
+        reader.readAsDataURL(file);
+    }
 
