@@ -5,11 +5,22 @@ a {
   color: #369;
 }
 .droparea {
+      border: 2px dashed #ccc;
       width: 200px;
+      float: left;
+      line-height: 200px;
+      text-align: center;
+  }
+ .spacer {
+      width: 20px;
       height: 200px;
-      border-style: solid;
-      border-width: 3px;
-      border-color: red;
+      float: left;
+      line-height: 200px;
+      text-align: center;
+  }
+ .prediction {
+      width: 120px;
+      height: 200px;
       float: left;
       line-height: 200px;
       text-align: center;
@@ -21,12 +32,10 @@ a {
   color: #333;
   text-align: justify;
 }
-#drop-area {
-  border: 2px dashed #ccc;
-  border-radius: 20px;
+
+.image {
   width: 480px;
   margin: 50px auto;
-  padding: 20px;
 }
 #drop-area.highlight {
   border-color: purple;
