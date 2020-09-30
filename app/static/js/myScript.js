@@ -1,4 +1,4 @@
-    document.getElementById("prediction").innerHTML = "awaited";
+  document.getElementById("prediction").innerHTML = "awaited";
 
     var dragHandler = function(evt){
         evt.preventDefault();
@@ -17,23 +17,22 @@
             //var image = document.createElement("img");
             // the result image data
             //image.src = e.target.result;
-            const width = 200;
-            const height = 200;
-            reader.readAsDataURL(files[0]);
-            reader.onload = event => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    const elem = document.createElement('canvas');
-                    elem.width = width;
-                    elem.height = height;
-                    const ctx = elem.getContext('2d');
+            var image = document.createElement("img");
+	    image.src = e.target.result;
+            // the result image data
+            console.log(this.width)
+            imgRatio = this.height / this.width
+            console.log(imgRatio)
+            const widthout = 200;
+            const heightout  = parseInt(imgRatio * widthout);
+            const elem = document.createElement('canvas');
+            elem.width = widthout;
+            elem.height = heightout;
+            const ctx = elem.getContext('2d');
                     // img.width and img.height will contain the original dimensions
-                    ctx.drawImage(img, 0, 0, width, height);
-                    imageout.src = elem.toDataURL("image/png")
-                },
+            ctx.drawImage(img, 0, 0, widthout, heightout);
+            imageout.src = elem.toDataURL("image/png")
             reader.onerror = error => console.log(error);
-            };
             $("#birdpic").empty().append(imageout);
         }
 

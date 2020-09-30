@@ -39,8 +39,8 @@ print_shape = False
 #validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
 #dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-# dataPathRoot = 'f:/'
-dataPathRoot = 'h:/'
+dataPathRoot = 'f:/'
+# dataPathRoot = 'h:/'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 computer = "home_laptop"

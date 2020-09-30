@@ -3,7 +3,8 @@ from flask import render_template, request, make_response
 from werkzeug.utils import secure_filename
 import os, Web_server, View_Test
 
-validate_path = 'h:/Class_validate.txt'
+rootdir = 'f:/'
+validate_path = 'f:/Class_validate.txt'
 
 @app.route('/')
 
@@ -38,7 +39,7 @@ def uploader_file():
 
     return identified
 
-app.config["UPLOAD_FOLDER"] = "h:/uploads"
+app.config["UPLOAD_FOLDER"] =  "f:/uploads"
 
 @app.route('/test')
 def test():
