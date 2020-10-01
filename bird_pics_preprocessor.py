@@ -6,7 +6,6 @@ import torch
 import csv
 import os
 
-
 class BirdPicsPreprocessor:
     def __init__(self, dir_path, batch_sizes, pic_size, computer):
         self.batch_sizes = batch_sizes
