@@ -1,17 +1,13 @@
    # Import needed packages
 import torch
 import torch.nn as nn
-from torchvision.datasets import CIFAR10
-from torchvision.transforms import transforms
-from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torch.autograd import Variable
 import time
-import os, csv
+import os
 import glob
-import Hawknet_Depld
-import View_Test
-import HawkDataLoader
+import hawknet_depld
+# import bird_pics_preprocessor
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
@@ -36,15 +32,12 @@ batch_sizes = 32 # used in HeartbeatClean
 loadfile = True
 print_shape = False
 
-#validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
-#dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
-# dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-dataPathRoot = 'f:/'
-# dataPathRoot = 'h:/'
+dataPathRoot = '/Users/katiefrost/documents/bird'
+
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 computer = "home_laptop"
-deploy_test = Hawknet_Depld.test_images(12, False)
+deploy_test = hawknet_depld.test_images(12, False)
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -78,9 +71,9 @@ class Unit(nn.Module):
         return output
 
 
-class SimpleNet(nn.Module):
+class ModelBuilder(nn.Module):
     def __init__(self, SimpleNetArgs):
-        super(SimpleNet, self).__init__()
+        super(ModelBuilder, self).__init__()
 
         # Break out the parameters for the model
         UnitArgs = SimpleNetArgs[0]
@@ -123,13 +116,6 @@ class SimpleNet(nn.Module):
                                  , self.unit7, self.pool2, self.unit8, self.unit9, self.unit10, self.unit11, self.pool3,
                                  self.unit12, self.unit13, self.unit14, self.avgpool)
         self.fc = nn.Linear(no_feature_detectors * flattener , output_classes)
-        # self.fc = nn.Linear(no_feature_detectors * 4 *4 , linear_mid_layer)
-        # self.fc2 = nn.Linear(linear_mid_layer , linear_mid_layer_2)
-        #self.fc = nn.Linear(no_feature_detectors * 4 * 4, output_classes)
-        # self.fc = nn.Linear(no_feature_detectors * 4 , output_classes)
-        # self.fc = nn.Linear(int (no_feature_detectors / 4), output_classes)
-        # self.fc_final = nn.Linear(linear_mid_layer_2, output_classes)
-        # self.fc_final = nn.Linear(linear_mid_layer, output_classes)
 
     def forward(self, input):
         global print_shape
@@ -239,30 +225,11 @@ def load_latest_saved_model(chosen_model = None,is_eval = False):
 
 batch_size = batch_sizes
 
-#Load the training set
-#loader = HawkDataLoader.HawkLoader(dataPathRoot,batch_size,
-#                                    pic_size, computer)
-#train_loader = loader.cifar10_train_loader()[0]
-#train_size = loader.cifar10_train_loader()[1]
-# Load the test set, note that train is set to False
-#test_loader = loader.cifar10_test_loader()[0]
-#test_size = loader.cifar10_test_loader()[1]
-loader = HawkDataLoader.HawkLoader(dataPathRoot,batch_size,
-                                    pic_size, computer)
-train_loader = loader.dataloader_train['train']
-test_loader = loader.dataloaders['val']
-eval_loader = loader.dataloaders['eval']
-single_loader = loader.dataloader_single['single']
 
-train_size = loader.dataset_sizes['train']
-test_size = loader.dataset_sizes['val']
-eval_size = loader.dataset_sizes['eval']
-single_size = loader.dataset_sizes['single']
-# Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 
 # Create model, optimizer and loss function
-model = SimpleNet(SimpleNetArgs)
+model = ModelBuilder(SimpleNetArgs)
 
 if cuda_avail:
     model.cuda()
@@ -287,11 +254,6 @@ def adjust_learning_rate(epoch,lr):
     for param_group in optimizer.param_groups:
         param_group["lr"] = lr
 
-
-#def save_models(epoch,test_corrects):
-#    torch.save(model.state_dict(), "cifar10model" + test_corrects +"_{}.model".format(epoch))
-#    print("Checkpoint saved")
-
 def save_models(epoch, loss, save_point):
     print("save path types = ",str(type(dataPathRoot))+"\t",str(type(epoch))+"\t",str(type(save_point)))
     save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}_".format(epoch) + "_best_" \
@@ -312,26 +274,7 @@ def set_print_shape(printit):
     global print_shape
     print_shape = printit
 
-def test():
-    global test_acc, test_acc_abs
-    model.eval()
-    test_acc_abs = 0
-    test_acc = 0.0
-    for i, (images, labels) in enumerate(test_loader):
-
-        if cuda_avail:
-            images = Variable(images.cuda())
-            labels = Variable(labels.cuda())
-
-        # Predict classes using images from the test set
-        outputs = model(images)
-        _, prediction = torch.max(outputs.data, 1)
-        # prediction = prediction.cpu()
-        test_acc_abs += torch.sum(prediction == labels.data)
-
-    # Compute the average acc and loss over all 10000 test images
-    test_acc = test_acc_abs.cpu().numpy() / test_size
-    return (test_acc, test_acc_abs)
+# ---------------------------------------------------------------------
 
 def predict(image_bytes):
     images = image_bytes
@@ -343,79 +286,3 @@ def predict(image_bytes):
     # print("prediction=" + str(prediction))
     return prediction
 
-
-def train(num_epochs_in):
-    global best_acc, train_acc, train_loss, num_epochs
-    best_acc = 0
-    num_epochs = num_epochs_in
-
-    since = time.time()
-    for epoch in range(num_epochs):
-        model.train()
-        train_acc = 0.0
-        train_loss = 0.0
-        for i, (images, labels) in enumerate(train_loader):
-            # Move images and labels to gpu if available
-            if cuda_avail:
-                images = Variable(images.cuda())
-                labels = Variable(labels.cuda())
-
-            # Clear all accumulated gradients
-            optimizer.zero_grad()
-            # Predict classes using images from the test set
-            outputs = model(images)
-            # Compute the loss based on the predictions and actual labels
-            #print("outputs ", outputs.shape," labels ",labels.shape)
-            loss = loss_fn(outputs, labels)
-            # Backpropagate the loss
-            loss.backward()
-
-            # Adjust parameters according to the computed gradients
-            optimizer.step()
-
-            # train_loss += loss.cpu().data[0] * images.size(0)
-            train_loss += loss.cpu().item() * images.size(0)
-            _, prediction = torch.max(outputs.data, 1)
-
-            train_acc += torch.sum(prediction == labels.data)
-
-        # Call the learning rate adjustment function
-        adjust_learning_rate(epoch, get_lr(optimizer))
-
-        # Compute the average acc and loss over all 50000 training images
-        train_acc = train_acc.cpu().numpy() / train_size
-        train_loss = train_loss / train_size
-
-        # Evaluate on the test set
-        results = test()
-        test_acc = results[0]
-        test_acc_abs = results[1]
-
-            # Save the model if the test acc is greater than our current best
-        if (test_acc_abs > best_acc and epoch > 1) or (epoch % num_epochs/4 == 0):
-                save_models(epoch,loss,str(test_acc_abs.cpu().numpy()))
-                best_acc = test_acc_abs
-
-
-            # Print the metrics
-        time_elapsed = time.time() - since
-        print("Epoch {}, Train Accuracy: {:.1%} , TrainLoss: {:.4f} , Test Accuracy: {:.1%},"
-              "Test Corrects: {}".format(epoch, train_acc, train_loss, test_acc, test_acc_abs),
-              ' time {:.0f}h {:.0f}m {:.0f}s'.format(time_elapsed // 3600,(time_elapsed // 60) % 60, time_elapsed % 60))
-
-
-
-
-
-if __name__ == "__main__":
-
-    # ------------------------------------------------------------------
-    #  fixed prediction == labels.data,
-    #-------------------------------------------------------------------
-    loaded_model = load_latest_saved_model("Birdies_model_94__best_11_FDpsBSksFn_64_72_32_3_16.model")
-    # loaded_model = load_latest_saved_model("Birdies_model_0__best_1_FDpsBSksFn_64_72_24_3_16.model")
-    #loaded_model = load_latest_saved_model("Birdies_model_67__best_9156_FDpsBSksFn_96_64_24_3_4.model")
-    # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
-    #set_print_shape(True)
-    train(200)
-    #View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')

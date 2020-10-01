@@ -6,7 +6,7 @@ from torchvision.transforms import transforms
 from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torch.autograd import Variable
-import hawk_data_loader
+import bird_pics_preprocessor
 
 
 class Unit(nn.Module):
@@ -114,13 +114,13 @@ validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 
 train_loader_class = \
-    hawk_data_loader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+    bird_pics_preprocessor.BirdPicsPreprocessor(dataPathRoot, batch_sizes, pic_size)
 val_loader_class = \
-    hawk_data_loader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+    bird_pics_preprocessor.BirdPicsPreprocessor(dataPathRoot, batch_sizes, pic_size)
 test_loader_class = \
-    hawk_data_loader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+    bird_pics_preprocessor.BirdPicsPreprocessor(dataPathRoot, batch_sizes, pic_size)
 single_loader_class = \
-    hawk_data_loader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+    bird_pics_preprocessor.BirdPicsPreprocessor(dataPathRoot, batch_sizes, pic_size)
 train_loader = train_loader_class.dataloaders["train"]
 # val_loader = val_loader_class.dataloaders["val"]
 test_loader = test_loader_class.dataloaders["val"]

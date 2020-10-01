@@ -7,7 +7,7 @@ import csv
 import os
 
 
-class HawkLoader:
+class BirdPicsPreprocessor:
     def __init__(self, dir_path, batch_sizes, pic_size, computer):
         self.batch_sizes = batch_sizes
         self.dir_path = dir_path

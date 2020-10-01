@@ -3,7 +3,7 @@ from torch.autograd import Variable
 import torch
 import numpy as np
 import csv
-import Hawknet_Depld
+import hawknet_depld
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 dataPathRoot = 'f:/'
