@@ -7,7 +7,7 @@ import time
 import os
 import glob
 import hawknet_depld
-# import bird_pics_preprocessor
+
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet

@@ -2,10 +2,10 @@ import io
 import torchvision.transforms as transforms
 from PIL import Image
 from model import model_builder
+import constants
 
-model_builder.load_latest_saved_model(
-    "Birdies_model_4__best_14_FDpsBSksFn_64_72_24_3_16.model")
-print("loading model .. " + "Birdies_model_4__best_14_FDpsBSksFn_64_72_24_3_16.model" )
+model_builder.load_latest_saved_model(constants.BIRDIES_MODEL)
+print("loading model .. " + constants.BIRDIES_MODEL )
 def transform_image(image_bytes):
     my_transforms = transforms.Compose([transforms.Rexsize(96),
                                         transforms.CenterCrop(72),
