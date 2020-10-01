@@ -8,7 +8,7 @@ import os
 import glob
 import hawknet_depld
 from bird_checker import view_test
-import bird_pics_preprocessor
+import hawk_data_loader
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
@@ -227,8 +227,8 @@ batch_size = batch_sizes
 # Create a loder for the test set, note that both shuffle is set to false for #the test loader
 # test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, #num_workers=4)
 
-loader = bird_pics_preprocessor.BirdPicsPreprocessor('E:/', batch_size,
-                                                     pic_size, 'home_red_room')
+loader = hawk_data_loader.HawkLoader('E:/', batch_size,
+                                     pic_size, 'home_red_room')
 train_loader = loader.dataloaders['train']
 test_loader = loader.dataloaders['val']
 eval_loader = loader.dataloaders['eval']
