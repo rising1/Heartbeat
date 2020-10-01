@@ -7,6 +7,8 @@ import time
 import os
 import glob
 import hawknet_depld
+import constants
+import constants
 
 
 # Hyper-parameters
@@ -176,19 +178,18 @@ def load_latest_saved_model(chosen_model = None,is_eval = False):
     global dataPathRoot, loadfile, model, optimizer, \
             epoch, loss, device
     # load a saved model if one exists
-    comp_root = dataPathRoot + "/saved_models/"
 
     if chosen_model is not None:
         selected_model = chosen_model
-        print("looking for ",comp_root + selected_model)
-        print("exists = ",os.path.isfile(comp_root + selected_model))
+        print("looking for ", constants.BIRDIES_MODEL)
+        print("exists = ",constants.BIRDIES_MODEL)
     else:
         stub_name = "Birdies_model_*"
-        selected_model = get_latest_file(comp_root, stub_name)
+        selected_model = get_latest_file(constants.BIRDIES_MODEL)
         print("latest filename=", selected_model)
 
-    if os.path.isfile(comp_root + selected_model) and loadfile == True:
-        checkpoint = torch.load(comp_root +  selected_model,map_location='cpu')
+    if os.path.isfile(constants.BIRDIES_MODEL) and loadfile == True:
+        checkpoint = torch.load(constants.BIRDIES_MODEL,map_location='cpu')
         model.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         for state in optimizer.state.values():
@@ -199,7 +200,7 @@ def load_latest_saved_model(chosen_model = None,is_eval = False):
         loss = checkpoint['loss']
         #  model.train()
         if not is_eval:
-            model_file_path = comp_root + selected_model
+            model_file_path = constants.BIRDIES_MODEL
             interim_fig_prev_text = model_file_path[(model_file_path.rfind('_') + 1):(len(model_file_path) - 6)]
             interim_fig_prev = float(interim_fig_prev_text)
             print("using saved model ", model_file_path, " Loss: {:.4f}".format(interim_fig_prev))
