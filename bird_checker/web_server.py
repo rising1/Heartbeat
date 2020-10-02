@@ -7,7 +7,7 @@ import constants
 model_builder.load_latest_saved_model(constants.BIRDIES_MODEL)
 print("loading model .. " + constants.BIRDIES_MODEL )
 def transform_image(image_bytes):
-    my_transforms = transforms.Compose([transforms.Rexsize(96),
+    my_transforms = transforms.Compose([transforms.Resize(96),
                                         transforms.CenterCrop(72),
                                         transforms.ToTensor(),
                                         transforms.Normalize(
