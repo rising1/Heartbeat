@@ -1,80 +1,67 @@
-   # Import needed packages
+# Import needed packages
 import torch
 import torch.nn as nn
-from torchvision.datasets import CIFAR10
-from torchvision.transforms import transforms
-from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torch.autograd import Variable
 import time
-import os, csv
+import os
 import glob
-import Hawknet_Depld
-import View_Test
-import HawkDataLoader
+import hawknet_depld
+from bird_checker import view_test
+from bird_pics_preprocessor import BirdPicsPreprocessor
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
-no_feature_detectors = 64 # used in Unit
-kernel_sizes = 3 # 3 works  # used in Unit
+no_feature_detectors = 64  # used in Unit
+kernel_sizes = 3  # used in Unit
 stride_pixels = 1  # used in Unit
 padding_pixels = 1  # used in Unit
 pooling_factor = 2  # used in SimpleNet
-pic_size = 72 # used in SimpleNet
-flattener = 16
-output_classes = 220  # used in SimpleNet0
-learning_rate = 0.00001  # used in HeartbeatCleandecay_cycles = 1  # default to start
+pic_size = 72  # used in SimpleNet
+output_classes = 220  # used in SimpleNet
+learning_rate = 0.001  # used in HeartbeatClean
+decay_cycles = 1  # default to start
 weight_decay = 0.0001  # used in HeartbeatClean
-dropout_factor = 0.0  # used in Unit
+dropout_factor = 0.2  # used in Unit
 faff = 'false'
-# linear_mid_layer = 1024
-# linear_mid_layer_2 = 230
-num_epochs = 50 # used in HeartbeatClean
+num_epochs = 200  # used in HeartbeatClean
 snapshot_points = num_epochs / 1
-batch_sizes = 32 # used in HeartbeatClean
+batch_sizes = 32  # used in HeartbeatClean
 #  batch_sizes = 6 # used in HeartbeatClean
 loadfile = True
-print_shape = False
 
-#validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
-#dataPathRoot = '/content/drive/My Drive/Colab Notebooks'
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-dataPathRoot = 'f:/'
-# dataPathRoot = 'h:/'
+dataPathRoot = 'E:/'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
-
+validate_path = 'E:/Class_validate.txt'
 computer = "home_laptop"
-deploy_test = Hawknet_Depld.test_images(12, False)
+deploy_test = hawknet_depld.test_images(12, False)
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Args lists to pass through to models
 UnitArgs = [kernel_sizes, stride_pixels, padding_pixels]
-SimpleNetArgs = [UnitArgs, dropout_factor,output_classes, 
-                 colour_channels, no_feature_detectors, 
+SimpleNetArgs = [UnitArgs, dropout_factor, output_classes,
+                 colour_channels, no_feature_detectors,
                  pooling_factor]
 
 
 class Unit(nn.Module):
     def __init__(self, UnitArgs, in_channel, out_channel):
-        
         super(Unit, self).__init__()
-        self.conv = nn.Conv2d( kernel_size = UnitArgs[0], stride = UnitArgs[1],
-                               padding = UnitArgs[2],
-                               in_channels = in_channel, out_channels = out_channel)
+        self.conv = nn.Conv2d(kernel_size=UnitArgs[0], stride=UnitArgs[1],
+                              padding=UnitArgs[2],
+                              in_channels=in_channel, out_channels=out_channel)
         self.bn = nn.BatchNorm2d(num_features=out_channel)
-        self.do = nn.Dropout(dropout_factor)
+        # self.do = nn.Dropout(dropout_factor)
         self.relu = nn.ReLU()
-        # self.softmax = nn.Softmax()
-
 
     def forward(self, input):
         output = self.conv(input)
         output = self.bn(output)
-        output = self.do(output)
+        # output = self.do(output)
         output = self.relu(output)
-        # output = self.softmax(output)
         return output
 
 
@@ -90,31 +77,30 @@ class SimpleNet(nn.Module):
         no_feature_detectors = SimpleNetArgs[4]
         pooling_factor = SimpleNetArgs[5]
 
-
         # Create 14 layers of the unit with max pooling in between
-        self.unit1 = Unit(UnitArgs,colour_channels, no_feature_detectors)
-        self.unit2 = Unit(UnitArgs,no_feature_detectors, no_feature_detectors)
-        self.unit3 = Unit(UnitArgs,no_feature_detectors, no_feature_detectors)
+        self.unit1 = Unit(UnitArgs, colour_channels, no_feature_detectors)
+        self.unit2 = Unit(UnitArgs, no_feature_detectors, no_feature_detectors)
+        self.unit3 = Unit(UnitArgs, no_feature_detectors, no_feature_detectors)
 
         self.pool1 = nn.MaxPool2d(kernel_size=2)
 
-        self.unit4 = Unit(UnitArgs,no_feature_detectors, no_feature_detectors * 2)
-        self.unit5 = Unit(UnitArgs,no_feature_detectors * 2, no_feature_detectors * 2)
-        self.unit6 = Unit(UnitArgs,no_feature_detectors * 2, no_feature_detectors * 2)
-        self.unit7 = Unit(UnitArgs,no_feature_detectors * 2, no_feature_detectors * 2)
+        self.unit4 = Unit(UnitArgs, no_feature_detectors, no_feature_detectors * 2)
+        self.unit5 = Unit(UnitArgs, no_feature_detectors * 2, no_feature_detectors * 2)
+        self.unit6 = Unit(UnitArgs, no_feature_detectors * 2, no_feature_detectors * 2)
+        self.unit7 = Unit(UnitArgs, no_feature_detectors * 2, no_feature_detectors * 2)
 
         self.pool2 = nn.MaxPool2d(kernel_size=2)
 
-        self.unit8 = Unit(UnitArgs,no_feature_detectors * 2, no_feature_detectors * 4)
-        self.unit9 = Unit(UnitArgs,no_feature_detectors * 4, no_feature_detectors * 4)
-        self.unit10 = Unit(UnitArgs,no_feature_detectors * 4, no_feature_detectors * 4)
-        self.unit11 = Unit(UnitArgs,no_feature_detectors * 4, no_feature_detectors * 4)
+        self.unit8 = Unit(UnitArgs, no_feature_detectors * 2, no_feature_detectors * 4)
+        self.unit9 = Unit(UnitArgs, no_feature_detectors * 4, no_feature_detectors * 4)
+        self.unit10 = Unit(UnitArgs, no_feature_detectors * 4, no_feature_detectors * 4)
+        self.unit11 = Unit(UnitArgs, no_feature_detectors * 4, no_feature_detectors * 4)
 
         self.pool3 = nn.MaxPool2d(kernel_size=2)
 
-        self.unit12 = Unit(UnitArgs,no_feature_detectors * 4, no_feature_detectors * 4)
-        self.unit13 = Unit(UnitArgs,no_feature_detectors * 4, no_feature_detectors * 4)
-        self.unit14 = Unit(UnitArgs,no_feature_detectors * 4, no_feature_detectors * 4)
+        self.unit12 = Unit(UnitArgs, no_feature_detectors * 4, no_feature_detectors * 4)
+        self.unit13 = Unit(UnitArgs, no_feature_detectors * 4, no_feature_detectors * 4)
+        self.unit14 = Unit(UnitArgs, no_feature_detectors * 4, no_feature_detectors * 4)
 
         self.avgpool = nn.AvgPool2d(kernel_size=4)
 
@@ -122,31 +108,16 @@ class SimpleNet(nn.Module):
         self.net = nn.Sequential(self.unit1, self.unit2, self.unit3, self.pool1, self.unit4, self.unit5, self.unit6
                                  , self.unit7, self.pool2, self.unit8, self.unit9, self.unit10, self.unit11, self.pool3,
                                  self.unit12, self.unit13, self.unit14, self.avgpool)
-        self.fc = nn.Linear(no_feature_detectors * flattener , output_classes)
-        # self.fc = nn.Linear(no_feature_detectors * 4 *4 , linear_mid_layer)
-        # self.fc2 = nn.Linear(linear_mid_layer , linear_mid_layer_2)
-        #self.fc = nn.Linear(no_feature_detectors * 4 * 4, output_classes)
-        # self.fc = nn.Linear(no_feature_detectors * 4 , output_classes)
-        # self.fc = nn.Linear(int (no_feature_detectors / 4), output_classes)
-        # self.fc_final = nn.Linear(linear_mid_layer_2, output_classes)
-        # self.fc_final = nn.Linear(linear_mid_layer, output_classes)
+
+        self.fc = nn.Linear(no_feature_detectors * 4 * 4, output_classes)
 
     def forward(self, input):
-        global print_shape
         output = self.net(input)
-        if(print_shape):
-            print("net(input) ",output.shape)
-        output = output.view(-1, no_feature_detectors * flattener)
-        #output = output.view(-1, no_feature_detectors * 4 * 4)
-        # output = output.view(-1, no_feature_detectors * 4 )
-        # output = output.view(-1, int(no_feature_detectors / 4))
-        #print("output.view ",output.shape)
+        # print("net(input) ",output.shape)
+        output = output.view(-1, no_feature_detectors * 4 * 4)
+        # print("output.view ",output.shape)
         output = self.fc(output)
-        #print("fc_final(output) ",output.shape)
-        #output = self.fc2(output)
-        #print("fc_final(output) ",output.shape)
-        # output = self.fc_final(output)
-        #print("fc(output) ",output.shape)
+        # print("fc(output) ",output.shape)
         return output
 
 
@@ -180,29 +151,30 @@ def get_latest_file(path, *paths):
     of the joined path(s)"""
     fullpath = os.path.join(path, *paths)
     list_of_files = glob.glob(fullpath)  # You may use iglob in Python3
-    if not list_of_files:                # I prefer using the negation
-        return None                      # because it behaves like a shortcut
+    if not list_of_files:  # I prefer using the negation
+        return None  # because it behaves like a shortcut
     latest_file = max(list_of_files, key=os.path.getctime)
     _, filename = os.path.split(latest_file)
     return filename
 
-def load_latest_saved_model(chosen_model = None,is_eval = False):
+
+def load_latest_saved_model(chosen_model=None, is_eval=False):
     global dataPathRoot, loadfile, model, optimizer, \
-            epoch, loss, device
+        epoch, loss, device
     # load a saved model if one exists
     comp_root = dataPathRoot + "/saved_models/"
 
     if chosen_model is not None:
         selected_model = chosen_model
-        print("looking for ",comp_root + selected_model)
-        print("exists = ",os.path.isfile(comp_root + selected_model))
+        print("looking for ", comp_root + selected_model)
+        print("exists = ", os.path.isfile(comp_root + selected_model))
     else:
         stub_name = "Birdies_model_*"
         selected_model = get_latest_file(comp_root, stub_name)
         print("latest filename=", selected_model)
 
     if os.path.isfile(comp_root + selected_model) and loadfile == True:
-        checkpoint = torch.load(comp_root +  selected_model,map_location='cpu')
+        checkpoint = torch.load(comp_root + selected_model, map_location='cpu')
         model.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         for state in optimizer.state.values():
@@ -233,31 +205,36 @@ def load_latest_saved_model(chosen_model = None,is_eval = False):
     for var_name in optimizer.state_dict():
         if var_name == "param_groups":
             print(var_name, "\t", optimizer.state_dict()[var_name])
-    first_learning_rate(optimizer,learning_rate)
+    first_learning_rate(optimizer, learning_rate)
     print("model loaded")
-    return model
+
 
 batch_size = batch_sizes
 
-#Load the training set
-#loader = HawkDataLoader.HawkLoader(dataPathRoot,batch_size,
-#                                    pic_size, computer)
-#train_loader = loader.cifar10_train_loader()[0]
-#train_size = loader.cifar10_train_loader()[1]
+# Load the training set
+# train_set = CIFAR10(root="./data", train=True, #transform=train_transformations, download=True)
+# Create a loder for the training set
+# train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, #num_workers=4)
+
+# Define transformations for the test set
+# test_transformations = transforms.Compose([
+# transforms.ToTensor(),
+# transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+# ])
 # Load the test set, note that train is set to False
-#test_loader = loader.cifar10_test_loader()[0]
-#test_size = loader.cifar10_test_loader()[1]
-loader = HawkDataLoader.HawkLoader(dataPathRoot,batch_size,
-                                    pic_size, computer)
-train_loader = loader.dataloader_train['train']
+# test_set = CIFAR10(root="./data", train=False, transform=test_transformations, #download=True)
+
+# Create a loder for the test set, note that both shuffle is set to false for #the test loader
+# test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, #num_workers=4)
+
+loader = BirdPicsPreprocessor('E:/', batch_size,
+                                     pic_size, 'home_red_room')
+train_loader = loader.dataloaders['train']
 test_loader = loader.dataloaders['val']
 eval_loader = loader.dataloaders['eval']
-single_loader = loader.dataloader_single['single']
-
 train_size = loader.dataset_sizes['train']
 test_size = loader.dataset_sizes['val']
-eval_size = loader.dataset_sizes['eval']
-single_size = loader.dataset_sizes['single']
+
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 
@@ -267,50 +244,50 @@ model = SimpleNet(SimpleNetArgs)
 if cuda_avail:
     model.cuda()
 
-optimizer = Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+optimizer = Adam(model.parameters(), lr=0.001, weight_decay=0.0001)
 loss_fn = nn.CrossEntropyLoss()
 
 
 # Create a learning rate adjustment function that divides the learning rate by 10 every 30 epochs
-def adjust_learning_rate(epoch,lr):
+def adjust_learning_rate(epoch):
+    lr = 0.001
 
-    global num_epochs
-    if epoch == 8 * num_epochs / 10:
-        lr = lr / 2
-    elif epoch == 6 * num_epochs / 10:
-        lr = lr / 2
-    elif epoch == 4 * num_epochs / 10:
-        lr = lr / 2
-    elif epoch == 2 * num_epochs / 10:
-        lr = lr / 2
+    if epoch > 180:
+        lr = lr / 10
+    elif epoch > 150:
+        lr = lr / 10
+    elif epoch > 120:
+        lr = lr / 10
+    elif epoch > 90:
+        lr = lr / 10
+    elif epoch > 60:
+        lr = lr / 10
+    elif epoch > 30:
+        lr = lr / 10
 
     for param_group in optimizer.param_groups:
         param_group["lr"] = lr
 
 
-#def save_models(epoch,test_corrects):
+# def save_models(epoch,test_corrects):
 #    torch.save(model.state_dict(), "cifar10model" + test_corrects +"_{}.model".format(epoch))
 #    print("Checkpoint saved")
 
 def save_models(epoch, loss, save_point):
-    print("save path types = ",str(type(dataPathRoot))+"\t",str(type(epoch))+"\t",str(type(save_point)))
+    print("save path types = ", str(type(dataPathRoot)) + "\t", str(type(epoch)) + "\t", str(type(save_point)))
     save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}_".format(epoch) + "_best_" \
-                                + str(save_point) + "_FDpsBSksFn_" + str(no_feature_detectors) + "_" +\
-                str(pic_size) + "_" + str(batch_size) + "_" + str(kernel_sizes) + "_" + str(flattener) +".model"
+                + str(save_point) + "_loss_" + str(loss.detach().cpu().numpy()) + ".model"
     checkpoint = {
-            'epoch': epoch,
-            'model_state_dict': model.state_dict(),
-            'optimizer_state_dict': optimizer.state_dict(),
-            'loss': loss,
-            }
+        'epoch': epoch,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+        'loss': loss,
+    }
     torch.save(checkpoint, save_PATH)
     print("Checkpoint saved")
     if (os.path.exists(save_PATH)):
         print("verified save ", save_PATH)
 
-def set_print_shape(printit):
-    global print_shape
-    print_shape = printit
 
 def test():
     global test_acc, test_acc_abs
@@ -333,21 +310,10 @@ def test():
     test_acc = test_acc_abs.cpu().numpy() / test_size
     return (test_acc, test_acc_abs)
 
-def predict(image_bytes):
-    images = image_bytes
-    model.eval()
-    if cuda_avail:
-       images = Variable(images.cuda())
-    outputs = model(images)
-    _, prediction = torch.max(outputs.data, 1)
-    # print("prediction=" + str(prediction))
-    return prediction
 
-
-def train(num_epochs_in):
-    global best_acc, train_acc, train_loss, num_epochs
+def train(num_epochs):
+    global best_acc, train_acc, train_loss
     best_acc = 0
-    num_epochs = num_epochs_in
 
     since = time.time()
     for epoch in range(num_epochs):
@@ -365,7 +331,7 @@ def train(num_epochs_in):
             # Predict classes using images from the test set
             outputs = model(images)
             # Compute the loss based on the predictions and actual labels
-            #print("outputs ", outputs.shape," labels ",labels.shape)
+            # print("outputs ", outputs.shape," labels ",labels.shape)
             loss = loss_fn(outputs, labels)
             # Backpropagate the loss
             loss.backward()
@@ -380,7 +346,7 @@ def train(num_epochs_in):
             train_acc += torch.sum(prediction == labels.data)
 
         # Call the learning rate adjustment function
-        adjust_learning_rate(epoch, get_lr(optimizer))
+        adjust_learning_rate(epoch)
 
         # Compute the average acc and loss over all 50000 training images
         train_acc = train_acc.cpu().numpy() / train_size
@@ -391,31 +357,25 @@ def train(num_epochs_in):
         test_acc = results[0]
         test_acc_abs = results[1]
 
-            # Save the model if the test acc is greater than our current best
-        if (test_acc_abs > best_acc and epoch > 1) or (epoch % num_epochs/4 == 0):
-                save_models(epoch,loss,str(test_acc_abs.cpu().numpy()))
-                best_acc = test_acc_abs
+        # Save the model if the test acc is greater than our current best
+        if test_acc_abs > best_acc and epoch > 1:
+            save_models(epoch, loss, str(test_acc_abs.cpu().numpy()))
+            best_acc = test_acc_abs
 
-
-            # Print the metrics
+        # Print the metrics
         time_elapsed = time.time() - since
         print("Epoch {}, Train Accuracy: {:.1%} , TrainLoss: {:.4f} , Test Accuracy: {:.1%},"
               "Test Corrects: {}".format(epoch, train_acc, train_loss, test_acc, test_acc_abs),
-              ' time {:.0f}h {:.0f}m {:.0f}s'.format(time_elapsed // 3600,(time_elapsed // 60) % 60, time_elapsed % 60))
-
+              ' time {:.0f}h {:.0f}m {:.0f}s'.format(time_elapsed // 3600, (time_elapsed // 60) % 60,
+                                                     time_elapsed % 60))
 
 
 
 
 if __name__ == "__main__":
-
     # ------------------------------------------------------------------
     #  fixed prediction == labels.data,
-    #-------------------------------------------------------------------
-    loaded_model = load_latest_saved_model("Birdies_model_94__best_11_FDpsBSksFn_64_72_32_3_16.model")
-    # loaded_model = load_latest_saved_model("Birdies_model_0__best_1_FDpsBSksFn_64_72_24_3_16.model")
-    #loaded_model = load_latest_saved_model("Birdies_model_67__best_9156_FDpsBSksFn_96_64_24_3_4.model")
-    # loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
-    #set_print_shape(True)
-    train(200)
-    #View_Test.test(model,eval_loader, dataPathRoot + 'Class_validate.txt')
+    # -------------------------------------------------------------------
+    model = load_latest_saved_model()
+    # train(200)
+    view_test.test(model, eval_loader, 'E:/Class_validate.txt')

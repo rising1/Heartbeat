@@ -6,7 +6,7 @@ from torchvision.transforms import transforms
 from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torch.autograd import Variable
-import HawkDataLoader
+from bird_pics_preprocessor import BirdPicsPreprocessor
 
 
 class Unit(nn.Module):
@@ -48,39 +48,39 @@ class SimpleNet(nn.Module):
         self.pic_size = SimpleNetArgs[6]
         self.pooling_factor = SimpleNetArgs[7]
 
-        self.unit1 = UnitNet.Unit(self.UnitArgs, in_channels=self.colour_channels,
+        self.unit1 = Unit(self.UnitArgs, in_channels=self.colour_channels,
                                   out_channels=self.pic_size)
-        self.unit2 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size,
+        self.unit2 = Unit(self.UnitArgs, in_channels=self.pic_size,
                                   out_channels=self.pic_size)
-        self.unit3 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size,
+        self.unit3 = Unit(self.UnitArgs, in_channels=self.pic_size,
                                   out_channels=self.pic_size)
         self.pool1 = nn.MaxPool2d(kernel_size=self.pooling_factor)
 
-        self.unit4 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size,
+        self.unit4 = Unit(self.UnitArgs, in_channels=self.pic_size,
                                   out_channels=self.pic_size * 2)
-        self.unit5 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 2,
+        self.unit5 = Unit(self.UnitArgs, in_channels=self.pic_size * 2,
                                   out_channels=self.pic_size * 2)
-        self.unit6 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 2,
+        self.unit6 = Unit(self.UnitArgs, in_channels=self.pic_size * 2,
                                   out_channels=self.pic_size * 2)
-        self.unit7 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 2,
+        self.unit7 = Unit(self.UnitArgs, in_channels=self.pic_size * 2,
                                  out_channels=self.pic_size * 2)
         self.pool2 = nn.MaxPool2d(kernel_size=self.pooling_factor)
 
-        self.unit8 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 2,
+        self.unit8 = Unit(self.UnitArgs, in_channels=self.pic_size * 2,
                                   out_channels=self.pic_size * 4)
-        self.unit9 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 4,
+        self.unit9 = Unit(self.UnitArgs, in_channels=self.pic_size * 4,
                                   out_channels=self.pic_size * 4)
-        self.unit10 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 4,
+        self.unit10 = Unit(self.UnitArgs, in_channels=self.pic_size * 4,
                                    out_channels=self.pic_size * 4)
-        self.unit11 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 4,
+        self.unit11 = Unit(self.UnitArgs, in_channels=self.pic_size * 4,
                                    out_channels=self.pic_size * 4)
         self.pool3 = nn.MaxPool2d(kernel_size=self.pooling_factor)
 
-        self.unit12 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 4,
+        self.unit12 = Unit(self.UnitArgs, in_channels=self.pic_size * 4,
                                   out_channels=self.pic_size * 4)
-        self.unit13 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 4,
+        self.unit13 = Unit(self.UnitArgs, in_channels=self.pic_size * 4,
                                    out_channels=self.pic_size * 4)
-        self.unit14 = UnitNet.Unit(self.UnitArgs, in_channels=self.pic_size * 4,
+        self.unit14 = Unit(self.UnitArgs, in_channels=self.pic_size * 4,
                                    out_channels=self.pic_size * 4)
         self.avgpool = nn.AvgPool2d(kernel_size=(self.pooling_factor * 2) + 1)
 
@@ -114,13 +114,13 @@ validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 
 train_loader_class = \
-    HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+    BirdPicsPreprocessor(dataPathRoot, batch_sizes, pic_size)
 val_loader_class = \
-    HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+    BirdPicsPreprocessor(dataPathRoot, batch_sizes, pic_size)
 test_loader_class = \
-    HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+    BirdPicsPreprocessor(dataPathRoot, batch_sizes, pic_size)
 single_loader_class = \
-    HawkDataLoader.HawkLoader(dataPathRoot, batch_sizes, pic_size)
+    BirdPicsPreprocessor(dataPathRoot, batch_sizes, pic_size)
 train_loader = train_loader_class.dataloaders["train"]
 # val_loader = val_loader_class.dataloaders["val"]
 test_loader = test_loader_class.dataloaders["val"]
