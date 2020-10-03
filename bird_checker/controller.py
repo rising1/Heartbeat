@@ -5,8 +5,8 @@ import os
 
 from bird_checker import web_server, view_test
 
-rootdir = 'f:/'
-validate_path = 'f:/Class_validate.txt'
+
+validate_path = './Class_validate.txt'
 
 @app.route('/')
 
@@ -31,6 +31,7 @@ def uploader_file():
             app.config['UPLOAD_FOLDER'],filename)
         fileob.save(save_pathname)
         with open(save_pathname, 'rb') as f_bytes:
+            print("save pathname=" + save_pathname)
             image_bytes = f_bytes.read()
             prediction_number = int(web_server.get_prediction(
                 image_bytes).cpu().numpy())
@@ -41,7 +42,7 @@ def uploader_file():
 
     return identified
 
-app.config["UPLOAD_FOLDER"] =  "f:/uploads"
+app.config["UPLOAD_FOLDER"] =  "./temp"
 
 @app.route('/test')
 def test():

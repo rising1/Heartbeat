@@ -32,7 +32,7 @@ batch_sizes = 32 # used in HeartbeatClean
 loadfile = True
 print_shape = False
 
-dataPathRoot = '/Users/katiefrost/documents/bird'
+dataPathRoot = './'
 
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
@@ -176,8 +176,8 @@ def load_latest_saved_model(chosen_model = None,is_eval = False):
     global dataPathRoot, loadfile, model, optimizer, \
             epoch, loss, device
     # load a saved model if one exists
-    comp_root = dataPathRoot + "/saved_models/"
-
+    comp_root = os.path.join(dataPathRoot, "saved_models/")
+    print("comp_root=" + comp_root)
     if chosen_model is not None:
         selected_model = chosen_model
         print("looking for ",comp_root + selected_model)
@@ -283,6 +283,6 @@ def predict(image_bytes):
        images = Variable(images.cuda())
     outputs = model(images)
     _, prediction = torch.max(outputs.data, 1)
-    # print("prediction=" + str(prediction))
+    print("prediction=" + str(prediction))
     return prediction
 
