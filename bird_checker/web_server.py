@@ -18,7 +18,7 @@ def transform_image(image_bytes):
 
 def get_prediction(image_bytes):
     tensor = transform_image(image_bytes=image_bytes)
-    # print("type=" + str(type(tensor)) + str(tensor))
+
     return model_builder.predict(tensor)
 
 
