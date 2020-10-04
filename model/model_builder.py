@@ -299,7 +299,7 @@ def predict(image_bytes):
     #print ("firstchoice=" + str(int(firstchoice[1])) + "\n" +
     #       "secondchoice=" + str(int(secondchoice[1])) + "\n" +
     #       "thirdchoice=" + str(int(thirdchoice[1])))
-    scores = [float(birdvalrank[0][0]), float(birdvalrank[0][1]),float(birdvalrank[0][2])]
+    scores = [float(birdvalrank[0][0])+100, float(birdvalrank[0][1])+100,float(birdvalrank[0][2])+100]
     print(str(scores))
     rankings = [int(firstchoice[1]),int(secondchoice[1]),int(thirdchoice[1])]
     print(str(rankings))

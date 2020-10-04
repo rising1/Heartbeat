@@ -43,8 +43,8 @@ def uploader_file():
                      validate_path)[i] )
             for j in scores:
                 choiceslist.append( " (score " + str(np.round(j,2)) + ")")
-    return choiceslist[0] +"\n"+ choiceslist[3] + "\n" + "\n" + \
-           choiceslist[1] + "\n"+ choiceslist[4] + "\n" + choiceslist[2]  +"\n"+ choiceslist[5]
+    return choiceslist[0] +" "+ choiceslist[3] + "," + \
+           choiceslist[1] + " "+ choiceslist[4] + "," + choiceslist[2]  +" "+ choiceslist[5]
 
 app.config["UPLOAD_FOLDER"] =  "./temp"
 
