@@ -1,4 +1,4 @@
-  document.getElementById("prediction").innerHTML = "awaited";
+  document.getElementById("prediction1").innerHTML = "awaited";
 
     var dragHandler = function(evt){
         evt.preventDefault();
@@ -53,7 +53,8 @@
         // $.ajax(req)
          $.ajax(req)
             .done(function(data){
-                $('#prediction').text(data).show();
+                results = data.split(",")
+                $('#prediction1').text(results[0]).show();
             } );
 
          event.preventDefault();
