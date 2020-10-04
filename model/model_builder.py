@@ -36,7 +36,7 @@ print_shape = False
 
 dataPathRoot = '/Users/katiefrost/documents/bird'
 
-# validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
+# validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/bird_list.txt'
 
 computer = "home_laptop"
 deploy_test = hawknet_depld.test_images(12, False)
@@ -174,7 +174,8 @@ def get_latest_file(path, *paths):
     _, filename = os.path.split(latest_file)
     return filename
 
-def load_latest_saved_model(chosen_model = None,is_eval = False):
+def load_and_populate_model(chosen_model = None, is_eval = False):
+    #TODO:// Error handling to check model path exists
     global dataPathRoot, loadfile, model, optimizer, \
             epoch, loss, device
     # load a saved model if one exists

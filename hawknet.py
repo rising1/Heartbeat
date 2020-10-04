@@ -7,7 +7,7 @@ import time
 import os
 import glob
 import hawknet_depld
-from bird_checker import view_test
+from bird_image_predictor import view_test
 from image_preprocessor import ImagePreprocessor
 
 # Hyper-parameters
@@ -32,8 +32,8 @@ loadfile = True
 
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
 dataPathRoot = 'E:/'
-# validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
-validate_path = 'E:/Class_validate.txt'
+# validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/bird_list.txt'
+validate_path = 'E:/bird_list.txt'
 computer = "home_laptop"
 deploy_test = hawknet_depld.test_images(12, False)
 # Check if gpu support is available
@@ -378,4 +378,4 @@ if __name__ == "__main__":
     # -------------------------------------------------------------------
     model = load_latest_saved_model()
     # train(200)
-    view_test.test(model, eval_loader, 'E:/Class_validate.txt')
+    view_test.test(model, eval_loader, 'E:/bird_list.txt')

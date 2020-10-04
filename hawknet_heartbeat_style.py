@@ -110,7 +110,7 @@ class SimpleNet(nn.Module):
 batch_sizes = 72
 pic_size = 72
 dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
+validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/bird_list.txt'
 
 
 train_loader_class = \

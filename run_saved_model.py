@@ -76,4 +76,4 @@ if __name__ == "__main__":
     # loaded_model = load_latest_saved_model("Birdies_model_110__best_38_loss_0.081436545.model")
     loaded_model = load_latest_saved_model("Birdies_model_0.model_best_acc_4.2667")
     # train(200)
-    # View_Test.test(model,eval_loader, 'E:/Class_validate.txt')
+    # View_Test.test(model,eval_loader, 'E:/bird_list.txt')

@@ -80,11 +80,11 @@ class ImagePreprocessor:
         #                    'red kite', 'sparrow hawk')
 
     def birds_listing(self):
-        with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'r') as f:
+        with open('/content/drive/My Drive/Colab Notebooks/bird_list.txt', 'r') as f:
            reader = csv.reader(f)
            self.classes = list(reader)[0]
            self.classes.sort()
-           #  self.classes = open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt').read()
+           #  self.classes = open('/content/drive/My Drive/Colab Notebooks/bird_list.txt').read()
            #  print("self.classes=",self.classes)
            #  print("len self.classes=",len(self.classes))
         return self.classes

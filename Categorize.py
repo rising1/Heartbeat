@@ -96,7 +96,7 @@ class Categorize:
 
     def create_test(self,parent,number):
         #  walk the target directory and create a list of the directory names and save into a file
-        class_file = open(self.targetDir + "/" + "Class_validate.txt", "w")
+        class_file = open(self.targetDir + "/" + "bird_list.txt", "w")
         for tdirNames in next(os.walk(self.targetDir + "/train"))[1]:
             counter = 0
             #  print("tdirNames=",tdirNames)
@@ -120,7 +120,7 @@ class Categorize:
             class_file.write(tdirNames + ",")
         class_file.close()
 
-        with open(self.targetDir + "/" + "Class_validate.txt", 'rb+')\
+        with open(self.targetDir + "/" + "bird_list.txt", 'rb+')\
                 as filehandle:
             filehandle.seek(-1, os.SEEK_END)
             filehandle.truncate()

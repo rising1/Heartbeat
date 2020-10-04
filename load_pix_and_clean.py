@@ -47,8 +47,8 @@ def fetch_image_urls(query: str, max_links_to_fetch: int, wd: webdriver, sleep_b
             # extract image urls    
             actual_images = wd.find_elements_by_css_selector('img.n3VNCb')
             for actual_image in actual_images:
-                if actual_image.get_attribute('bird_checker') and 'http' in actual_image.get_attribute('bird_checker'):
-                    image_urls.add(actual_image.get_attribute('bird_checker'))
+                if actual_image.get_attribute('bird_image_predictor') and 'http' in actual_image.get_attribute('bird_image_predictor'):
+                    image_urls.add(actual_image.get_attribute('bird_image_predictor'))
 
             image_count = len(image_urls)
 
