@@ -3,11 +3,11 @@ from torch.autograd import Variable
 import torch
 import numpy as np
 import csv
-import Hawknet_Depld
+import hawknet_depld
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 dataPathRoot = 'f:/'
-validate_path = 'f:/Class_validate.txt'
+validate_path = '../val/Class_validate.txt'
 
 def test(model,my_test_loader,validate_path):
     bird_list = [ 'Bittern', 'Blackbird',  'Chicken', 'Dove','Sparrowhawk', 'Owl','Parakeet', 'Peregrine', 'Plover',

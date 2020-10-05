@@ -1,11 +1,11 @@
-import io, requests
+import io
 import torchvision.transforms as transforms
 from PIL import Image
-import Hawknet_v2
+from model import model_builder
+import constants
 
-Hawknet_v2.load_latest_saved_model(
-    "Birdies_model_4__best_14_FDpsBSksFn_64_72_24_3_16.model")
-print("loading model .. " + "Birdies_model_4__best_14_FDpsBSksFn_64_72_24_3_16.model" )
+model_builder.load_latest_saved_model(constants.BIRDIES_MODEL)
+print("loading model .. " + constants.BIRDIES_MODEL )
 def transform_image(image_bytes):
     my_transforms = transforms.Compose([transforms.Resize(96),
                                         transforms.CenterCrop(72),
@@ -18,7 +18,7 @@ def transform_image(image_bytes):
 
 def get_prediction(image_bytes):
     tensor = transform_image(image_bytes=image_bytes)
-    # print("type=" + str(type(tensor)) + str(tensor))
-    return Hawknet_v2.predict(tensor)
+
+    return model_builder.predict(tensor)
 
 

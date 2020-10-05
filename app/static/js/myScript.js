@@ -1,40 +1,37 @@
-  document.getElementById("prediction").innerHTML = "awaited";
+  document.getElementById("prediction1").innerHTML = "awaited";
 
     var dragHandler = function(evt){
         evt.preventDefault();
     };
 
     var dropHandler = function(evt){
+        var image = document.createElement("img");
         evt.preventDefault();
         var files = evt.originalEvent.dataTransfer.files;
-        var imageout = new Image();
-
         var reader  = new FileReader();
 
-        // it's onload event and you forgot (parameters)
-
         reader.onload = function(e)  {
-            //var image = document.createElement("img");
-            // the result image data
-            //image.src = e.target.result;
-            var image = document.createElement("img");
-	    image.src = e.target.result;
-            // the result image data
-            console.log(this.width)
-            imgRatio = this.height / this.width
-            console.log(imgRatio)
-            const widthout = 200;
-            const heightout  = parseInt(imgRatio * widthout);
-            const elem = document.createElement('canvas');
-            elem.width = widthout;
-            elem.height = heightout;
-            const ctx = elem.getContext('2d');
-                    // img.width and img.height will contain the original dimensions
-            ctx.drawImage(img, 0, 0, widthout, heightout);
-            imageout.src = elem.toDataURL("image/png")
-            reader.onerror = error => console.log(error);
-            $("#birdpic").empty().append(imageout);
+            image.src = e.target.result;
+            image.addEventListener("load",function(){
+                console.log('image has loaded')
+                console.log(image.width + " "  + image.height)
+                imgRatio = image.height / image.width
+                const widthout = 200;
+                const heightout  = parseInt(imgRatio * widthout);
+                const elem = document.createElement('canvas');
+                elem.width = widthout;
+                elem.height = heightout;
+                const ctx = elem.getContext('2d');
+                ctx.drawImage(image, 0, 0, widthout, heightout);
+                var dataurl = elem.toDataURL("image/jpeg");
+                var newimage = document.createElement("img");
+                newimage.src = dataurl
+                $("#birdpic").empty().append(newimage);
+                //$("#birdpic").empty().append(image);
+            })
         }
+
+        reader.onerror = error => console.log(error);
 
         reader.readAsDataURL(files[0]);
 
@@ -56,7 +53,11 @@
         // $.ajax(req)
          $.ajax(req)
             .done(function(data){
-                $('#prediction').text(data).show();
+                results = data.split(",")
+                // print(results[0] + " " + results[1] + " " + results[2])
+                $('#prediction1').text(results[0]).show();
+                $('#prediction2').text(results[1]).show();
+                $('#prediction3').text(results[2]).show();
             } );
 
          event.preventDefault();

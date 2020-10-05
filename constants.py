@@ -1,0 +1,1 @@
+BIRDIES_MODEL = "Birdies_model_4__best_14_FDpsBSksFn_64_72_24_3_16.model"
