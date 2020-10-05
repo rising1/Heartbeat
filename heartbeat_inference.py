@@ -1,7 +1,7 @@
 #import Categorize
 #import Load_pix_and_clean
 #import CleanDirectory
-#import Hawknet_Depld
+#import hawknet_depld
 #src_data = '/content/drive/My Drive/Colab Notebooks/train'
 #categorize = Categorize.Categorize('/content/drive/My Drive/Colab Notebooks/train',
 #               '/content/drive/My Drive/Colab Notebooks/train')
@@ -18,7 +18,7 @@
 # !python "Categorize.py"
 
 import hawknet
-import Hawknet_Depld
+import hawknet_depld
 from flask import Flask, request, render_template
 
 host = 'colab'
@@ -68,14 +68,14 @@ def hello():
                 return "file not uploaded"
             file = request.files['file']
             image = file.read()
-            deploy_test = Hawknet_Depld.test_images().get_tensor(image)
+            deploy_test = hawknet_depld.test_images().get_tensor(image)
             predicted_bird = hawknet.test_single(deploy_test, validate_path)
             return render_template('result.html', bird=predicted_bird, image=image)
 
 
 
 #HawkNet.train(50)
-# deploy_test = Hawknet_Depld.test_images(test_image )
+# deploy_test = hawknet_depld.test_images(test_image )
 # HawkNet.test_single(deploy_test.test_images, validate_path)
 
 
