@@ -18,7 +18,7 @@
 # !python "Categorize.py"
 
 import hawknet
-import hawknet_depld
+import Hawknet_Depld
 from flask import Flask, request, render_template
 
 host = 'colab'
@@ -68,7 +68,7 @@ def hello():
                 return "file not uploaded"
             file = request.files['file']
             image = file.read()
-            deploy_test = hawknet_depld.test_images().get_tensor(image)
+            deploy_test = Hawknet_Depld.test_images().get_tensor(image)
             predicted_bird = hawknet.test_single(deploy_test, validate_path)
             return render_template('result.html', bird=predicted_bird, image=image)
 
