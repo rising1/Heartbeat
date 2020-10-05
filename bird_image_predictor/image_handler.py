@@ -3,21 +3,31 @@ import torchvision.transforms as transforms
 from PIL import Image
 from model import model_builder
 import constants
+import numpy as np
 
 from bird_image_predictor import view_test
 
 #TODO:// move to do this on start of app
 model_builder.load_and_populate_model(constants.BIRDIES_MODEL)
 # print("loading model .. " + constants.BIRDIES_MODEL )
+
+
+
 def handle(filepath):
+    choiceslist = []
     with open(filepath, 'rb') as f_bytes:
         image_bytes = f_bytes.read()
-        prediction_number = int(_get_prediction(
-            image_bytes).cpu().numpy())
+        scores, predictedplaces = _get_prediction(
+            image_bytes)
         # print("prediction number=" + str(prediction_number))
-        identified = view_test.birds_listing(
-            constants.BIRD_LIST)[prediction_number]
-        return identified
+        for i in predictedplaces:
+            # print(i)
+            choiceslist.append(view_test.birds_listing(
+                constants.BIRD_LIST)[i])
+        for j in scores:
+            choiceslist.append(" (score " + str(np.round(j, 2)) + ")")
+    return choiceslist[0] + " " + choiceslist[3] + "," + \
+           choiceslist[1] + " " + choiceslist[4] + "," + choiceslist[2] + " " + choiceslist[5]
 
 def _transform_image(image_bytes):
     my_transforms = transforms.Compose([transforms.Resize(96),

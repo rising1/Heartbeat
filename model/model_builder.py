@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from torch.optim import Adam
 from torch.autograd import Variable
-import time
+import numpy as np
 import os
 import glob
 import hawknet_depld
@@ -34,7 +34,7 @@ batch_sizes = 32 # used in HeartbeatClean
 loadfile = True
 print_shape = False
 
-dataPathRoot = '/Users/katiefrost/documents/bird'
+dataPathRoot = './'
 
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/bird_list.txt'
 
@@ -134,7 +134,8 @@ class ModelBuilder(nn.Module):
         #output = self.fc2(output)
         #print("fc_final(output) ",output.shape)
         # output = self.fc_final(output)
-        #print("fc(output) ",output.shape)
+        if(print_shape):
+            print("fc(output) ",output.shape)
         return output
 
 
@@ -179,6 +180,8 @@ def load_and_populate_model(chosen_model = None, is_eval = False):
     global dataPathRoot, loadfile, model, optimizer, \
             epoch, loss, device
     # load a saved model if one exists
+    comp_root = os.path.join(dataPathRoot, "saved_models/")
+    print("comp_root=" + comp_root)
 
     if chosen_model is not None:
         selected_model = chosen_model
@@ -284,7 +287,24 @@ def predict(image_bytes):
     if cuda_avail:
        images = Variable(images.cuda())
     outputs = model(images)
-    _, prediction = torch.max(outputs.data, 1)
-    # print("prediction=" + str(prediction))
-    return prediction
-
+    # _, prediction = torch.max(outputs.data, 1)
+    #print("prediction=" + str(prediction))
+    #return prediction, (outputs.data).cpu().numpy()
+    # torch.sort(outputs.data[1])
+    # print ("outputs shape= " + str(outputs.data.shape))
+    birdrank = (outputs.data).cpu().numpy()
+    birdrank.flatten
+    #print("birdrank=" + str(birdrank))
+    birdvalrank = np.flip(np.sort(birdrank),1)
+    #print("birdrank=" + str(birdvalrank))
+    firstchoice = np.where(birdrank == birdvalrank[0][0])
+    secondchoice = np.where(birdrank == birdvalrank[0][1])
+    thirdchoice = np.where(birdrank == birdvalrank[0][2])
+    #print ("firstchoice=" + str(int(firstchoice[1])) + "\n" +
+    #       "secondchoice=" + str(int(secondchoice[1])) + "\n" +
+    #       "thirdchoice=" + str(int(thirdchoice[1])))
+    scores = [float(birdvalrank[0][0])+100, float(birdvalrank[0][1])+100,float(birdvalrank[0][2])+100]
+    print(str(scores))
+    rankings = [int(firstchoice[1]),int(secondchoice[1]),int(thirdchoice[1])]
+    print(str(rankings))
+    return scores, rankings

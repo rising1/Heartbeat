@@ -18,12 +18,17 @@ a {
       line-height: 200px;
       text-align: center;
   }
- .prediction {
-      width: 120px;
-      height: 200px;
-      float: left;
-      line-height: 200px;
+.words1 {
+      font-size: 15px
+      width: 100px;
       text-align: center;
+      border: 2px dashed #ccc;
+      border-color: purple;
+      float: bottom;
+      margin-left: 50px
+  }
+ .words2 {
+      font-size: 10px
   }
 .note {
   width: 500px;
@@ -34,7 +39,7 @@ a {
 }
 
 .image {
-  width: 480px;
+
   margin: 50px auto;
 }
 #drop-area.highlight {

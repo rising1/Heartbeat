@@ -25,20 +25,20 @@ host = 'colab'
 
 if host == 'redroom':
     dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-    validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/bird_list.txt'
+    validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
 
 if host == 'home':
-    validate_path = 'C:/Users/phfro/Documents/python/data/bird_list.txt'
+    validate_path = 'C:/Users/phfro/Documents/python/data/Class_validate.txt'
     dataPathRoot = 'C:/Users/phfro/Documents/python/data'
-    validate_path = 'C:/Users/phfro/Documents/python/data/bird_list.txt'
+    validate_path = 'C:/Users/phfro/Documents/python/data/Class_validate.txt'
 
 if host ==  'work':
-    validate_path = 'C:/Users/peter.frost/Downloads/bird_list.txt'
+    validate_path = 'C:/Users/peter.frost/Downloads/Class_validate.txt'
     dataPathRoot = 'C:/Users/peter.frost/Documents/python/data/birdiesdata'
     test_image = 'C:/Users/peter.frost/Documents/python/data/birdiesdata/eval/'
 
 if host ==  'colab':
-    validate_path = '/content/drive/My Drive/Colab Notebooks/bird_list.txt'
+    validate_path = '/content/drive/My Drive/Colab Notebooks/Class_validate.txt'
     dataPathRoot = '/content/drive/My Drive/Colab Notebooks/saved_models'
     test_image = '/content/drive/My Drive/Colab Notebooks/eval/'
 
