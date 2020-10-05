@@ -21,7 +21,7 @@ class TestImageHandler:
         prediction = image_handler.handle(image_filepath)
 
         #then
-        assert prediction == "Duck"
+        assert "Duck" in prediction
 
 
 

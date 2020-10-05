@@ -28,8 +28,9 @@ def uploader_file():
             app.config['UPLOAD_FOLDER'],filename)
         fileob.save(save_pathname)
 
-        identified = image_handler.handle()
-    return identified
+        choiceslist = image_handler.handle()
+    return choiceslist[0] + " " + choiceslist[3] + "," + \
+           choiceslist[1] + " " + choiceslist[4] + "," + choiceslist[2] + " " + choiceslist[5]
 
 app.config["UPLOAD_FOLDER"] =  "f:/uploads"
 
