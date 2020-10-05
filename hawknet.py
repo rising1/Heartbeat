@@ -6,9 +6,9 @@ from torch.autograd import Variable
 import time
 import os
 import glob
-import hawknet_depld
-from bird_checker import view_test
-from bird_pics_preprocessor import BirdPicsPreprocessor
+import Hawknet_Depld
+from bird_image_predictor import view_test
+from image_preprocessor import ImagePreprocessor
 
 # Hyper-parameters
 colour_channels = 3  # used in SimpleNet
@@ -32,10 +32,10 @@ loadfile = True
 
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
 dataPathRoot = 'E:/'
-# validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
-validate_path = 'E:/Class_validate.txt'
+# validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/bird_list.txt'
+validate_path = 'E:/bird_list.txt'
 computer = "home_laptop"
-deploy_test = hawknet_depld.test_images(12, False)
+deploy_test = Hawknet_Depld.test_images(12, False)
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -227,8 +227,8 @@ batch_size = batch_sizes
 # Create a loder for the test set, note that both shuffle is set to false for #the test loader
 # test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False, #num_workers=4)
 
-loader = BirdPicsPreprocessor('E:/', batch_size,
-                                     pic_size, 'home_red_room')
+loader = ImagePreprocessor('E:/', batch_size,
+                           pic_size, 'home_red_room')
 train_loader = loader.dataloaders['train']
 test_loader = loader.dataloaders['val']
 eval_loader = loader.dataloaders['eval']
@@ -378,4 +378,4 @@ if __name__ == "__main__":
     # -------------------------------------------------------------------
     model = load_latest_saved_model()
     # train(200)
-    view_test.test(model, eval_loader, 'E:/Class_validate.txt')
+    view_test.test(model, eval_loader, 'E:/bird_list.txt')

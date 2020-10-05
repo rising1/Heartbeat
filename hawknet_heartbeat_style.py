@@ -6,7 +6,7 @@ from torchvision.transforms import transforms
 from torch.utils.data import DataLoader
 from torch.optim import Adam
 from torch.autograd import Variable
-from bird_pics_preprocessor import BirdPicsPreprocessor
+from image_preprocessor import ImagePreprocessor
 
 
 class Unit(nn.Module):
@@ -110,17 +110,17 @@ class SimpleNet(nn.Module):
 batch_sizes = 72
 pic_size = 72
 dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
+validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/bird_list.txt'
 
 
 train_loader_class = \
-    BirdPicsPreprocessor(dataPathRoot, batch_sizes, pic_size)
+    ImagePreprocessor(dataPathRoot, batch_sizes, pic_size)
 val_loader_class = \
-    BirdPicsPreprocessor(dataPathRoot, batch_sizes, pic_size)
+    ImagePreprocessor(dataPathRoot, batch_sizes, pic_size)
 test_loader_class = \
-    BirdPicsPreprocessor(dataPathRoot, batch_sizes, pic_size)
+    ImagePreprocessor(dataPathRoot, batch_sizes, pic_size)
 single_loader_class = \
-    BirdPicsPreprocessor(dataPathRoot, batch_sizes, pic_size)
+    ImagePreprocessor(dataPathRoot, batch_sizes, pic_size)
 train_loader = train_loader_class.dataloaders["train"]
 # val_loader = val_loader_class.dataloaders["val"]
 test_loader = test_loader_class.dataloaders["val"]

@@ -3,11 +3,12 @@ from torch.autograd import Variable
 import torch
 import numpy as np
 import csv
-import hawknet_depld
+import Hawknet_Depld
+import constants
 # dataPathRoot = 'C:/Users/phfro/PycharmProjects/Heartbeat'
-# validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/Class_validate.txt'
+# validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/bird_list.txt'
 dataPathRoot = 'f:/'
-validate_path = '../val/Class_validate.txt'
+validate_path = constants.BIRD_LIST
 
 def test(model,my_test_loader,validate_path):
     bird_list = [ 'Bittern', 'Blackbird',  'Chicken', 'Dove','Sparrowhawk', 'Owl','Parakeet', 'Peregrine', 'Plover',
@@ -83,12 +84,12 @@ def imshow(inp, title=None):
 
 def birds_listing(validate_path):
     with open(validate_path,'r') as f:
-       #  with open('C:/Users/phfro/Documents/python/data/Class_validate.txt', 'r') as f:
-       #  with open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt', 'r') as f:
+       #  with open('C:/Users/phfro/Documents/python/data/bird_list.txt', 'r') as f:
+       #  with open('/content/drive/My Drive/Colab Notebooks/bird_list.txt', 'r') as f:
        reader = csv.reader(f)
        classes = list(reader)[0]
        classes.sort()
-       #  self.classes = open('/content/drive/My Drive/Colab Notebooks/Class_validate.txt').read()
+       #  self.classes = open('/content/drive/My Drive/Colab Notebooks/bird_list.txt').read()
        #  print("self.classes=",classes)
        #  print("len self.classes=",len(classes))
     return classes
