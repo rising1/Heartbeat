@@ -3,10 +3,7 @@ from flask import render_template, request
 from werkzeug.utils import secure_filename
 import os
 
-from bird_image_predictor import image_handler, view_test
-
-rootdir = 'f:/'
-validate_path = 'f:/bird_list.txt'
+from bird_image_predictor import image_handler
 
 @app.route('/')
 
@@ -28,11 +25,11 @@ def uploader_file():
             app.config['UPLOAD_FOLDER'],filename)
         fileob.save(save_pathname)
 
-        choiceslist = image_handler.handle()
+        choiceslist = image_handler.handle(save_pathname)
     return choiceslist[0] + " " + choiceslist[3] + "," + \
            choiceslist[1] + " " + choiceslist[4] + "," + choiceslist[2] + " " + choiceslist[5]
 
-app.config["UPLOAD_FOLDER"] =  "f:/uploads"
+app.config["UPLOAD_FOLDER"] =  "./temp"
 
 @app.route('/test')
 def test():
