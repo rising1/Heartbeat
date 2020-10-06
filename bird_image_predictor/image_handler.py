@@ -5,13 +5,7 @@ from model import model_builder
 import constants
 import numpy as np
 
-from bird_image_predictor import view_test
-
-#TODO:// move to do this on start of app
-model_builder.load_and_populate_model(constants.BIRDIES_MODEL)
-# print("loading model .. " + constants.BIRDIES_MODEL )
-
-
+from bird_image_predictor import view_test, setup
 
 def handle(filepath):
     choiceslist = []
