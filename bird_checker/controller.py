@@ -14,7 +14,7 @@ validate_path = './Class_validate.txt'
 @app.route('/index')
 def index():
     user = {'username': 'Pete'}
-    return render_template('index.html',title='Home',  user=user)
+    return render_template('answer.html',title='Home',  user=user)
 
 @app.route('/upload')
 def upload_file():
