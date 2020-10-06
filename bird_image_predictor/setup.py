@@ -6,6 +6,7 @@ from torch.optim import Adam
 import constants
 from model import model_builder
 
+
 loadfile = True
 optimizer = Adam(model_builder.model.parameters(), lr=constants.LEARNING_RATE, weight_decay=constants.WEIGHT_DECAY)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -71,4 +72,37 @@ def get_latest_file(path, *paths):
     return filename
 
 load_and_populate_model(constants.BIRDIES_MODEL)
+
+# TODO:// are these method important? and is it appropriate to be in this file? or back in model_builder
+
+# def adjust_learning_rate(epoch,lr):
+#
+#     global num_epochs
+#     if epoch == 8 * num_epochs / 10:
+#         lr = lr / 2
+#     elif epoch == 6 * num_epochs / 10:
+#         lr = lr / 2
+#     elif epoch == 4 * num_epochs / 10:
+#         lr = lr / 2
+#     elif epoch == 2 * num_epochs / 10:
+#         lr = lr / 2
+#
+#     for param_group in optimizer.param_groups:
+#         param_group["lr"] = lr
+
+# def save_models(epoch, loss, save_point):
+#     print("save path types = ",str(type(dataPathRoot))+"\t",str(type(epoch))+"\t",str(type(save_point)))
+#     save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}_".format(epoch) + "_best_" \
+#                                 + str(save_point) + "_FDpsBSksFn_" + str(no_feature_detectors) + "_" +\
+#                 str(pic_size) + "_" + str(batch_size) + "_" + str(kernel_sizes) + "_" + str(flattener) +".model"
+#     checkpoint = {
+#             'epoch': epoch,
+#             'model_state_dict': model.state_dict(),
+#             'optimizer_state_dict': optimizer.state_dict(),
+#             'loss': loss,
+#             }
+#     torch.save(checkpoint, save_PATH)
+#     print("Checkpoint saved")
+#     if (os.path.exists(save_PATH)):
+#         print("verified save ", save_PATH)
 
