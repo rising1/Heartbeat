@@ -5,7 +5,7 @@ from model import model_builder
 import constants
 import numpy as np
 
-from bird_image_predictor import view_test, setup
+from bird_image_predictor import view_test
 
 def handle(filepath):
     choiceslist = []

@@ -1,17 +1,13 @@
 import os
 
-import pytest
-
 import constants
-from bird_image_predictor import image_handler
-from model import model_builder
-
+from bird_image_predictor import image_handler, setup
 
 class TestImageHandler:
 
-    @pytest.fixture(autouse=True)
-    def setup(self):
-        model_builder.load_and_populate_model(constants.BIRDIES_MODEL)
+    # @pytest.fixture(autouse=True)
+    # def setup(self):
+    #     model_builder.load_and_populate_model(constants.BIRDIES_MODEL)
 
     def test_givenbirdpic_whenPostRequestToUploaderEndpoint_theReturnsPrediction(self):
         #given
