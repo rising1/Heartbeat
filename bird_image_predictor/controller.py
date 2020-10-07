@@ -3,7 +3,7 @@ from flask import render_template, request
 from werkzeug.utils import secure_filename
 import os
 
-from bird_image_predictor import image_handler
+from bird_image_predictor import image_handler, setup
 
 @app.route('/')
 

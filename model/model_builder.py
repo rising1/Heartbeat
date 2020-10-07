@@ -1,14 +1,9 @@
    # Import needed packages
 import torch
 import torch.nn as nn
-from torch.optim import Adam
 from torch.autograd import Variable
 import numpy as np
-import os
-import glob
 import hawknet_depld
-import constants
-import constants
 
 
 # Hyper-parameters
@@ -42,7 +37,6 @@ computer = "home_laptop"
 deploy_test = hawknet_depld.test_images(12, False)
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Args lists to pass through to models
 UnitArgs = [kernel_sizes, stride_pixels, padding_pixels]
@@ -143,13 +137,6 @@ def get_lr(optimizer):
     for param_group in optimizer.param_groups:
         return param_group['lr']
 
-
-def first_learning_rate(optimizer, lr):
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
-        print("learning rate adjusted to ", lr)
-
-
 def lr_decay_cycles(cycles):
     global decay_cycles
     decay_cycles = cycles
@@ -163,71 +150,6 @@ def adjust_learning_rate(optimizer, epoch):
     for param_group in optimizer.param_groups:
         param_group['lr'] = learning_rate
 
-
-def get_latest_file(path, *paths):
-    """Returns the name of the latest (most recent) file
-    of the joined path(s)"""
-    fullpath = os.path.join(path, *paths)
-    list_of_files = glob.glob(fullpath)  # You may use iglob in Python3
-    if not list_of_files:                # I prefer using the negation
-        return None                      # because it behaves like a shortcut
-    latest_file = max(list_of_files, key=os.path.getctime)
-    _, filename = os.path.split(latest_file)
-    return filename
-
-def load_and_populate_model(chosen_model = None, is_eval = False):
-    #TODO:// Error handling to check model path exists
-    global dataPathRoot, loadfile, model, optimizer, \
-            epoch, loss, device
-    # load a saved model if one exists
-    comp_root = os.path.join(dataPathRoot, "saved_models/")
-    print("comp_root=" + comp_root)
-
-    if chosen_model is not None:
-        selected_model = chosen_model
-        print("looking for ", constants.BIRDIES_MODEL)
-        print("exists = ",constants.BIRDIES_MODEL)
-    else:
-        stub_name = "Birdies_model_*"
-        selected_model = get_latest_file(constants.BIRDIES_MODEL)
-        print("latest filename=", selected_model)
-
-    if os.path.isfile(constants.BIRDIES_MODEL) and loadfile == True:
-        checkpoint = torch.load(constants.BIRDIES_MODEL,map_location='cpu')
-        model.load_state_dict(checkpoint['model_state_dict'])
-        optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-        for state in optimizer.state.values():
-            for k, v in state.items():
-                if isinstance(v, torch.Tensor):
-                    state[k] = v.to(device)
-        epoch = checkpoint['epoch']
-        loss = checkpoint['loss']
-        #  model.train()
-        if not is_eval:
-            model_file_path = constants.BIRDIES_MODEL
-            interim_fig_prev_text = model_file_path[(model_file_path.rfind('_') + 1):(len(model_file_path) - 6)]
-            interim_fig_prev = float(interim_fig_prev_text)
-            print("using saved model ", model_file_path, " Loss: {:.4f}".format(interim_fig_prev))
-    else:
-        print("using new model")
-    #  finished deciding where the model comes from
-
-    #  For the given model
-
-    #  Print model's state_dict
-    #  print("Model's state_dict:")
-    #  for param_tensor in model.state_dict():
-    #    print(param_tensor, "\t", model.state_dict()[param_tensor].size())
-
-    # Print optimizer's state_dict
-    print("Optimizer's state_dict:")
-    for var_name in optimizer.state_dict():
-        if var_name == "param_groups":
-            print(var_name, "\t", optimizer.state_dict()[var_name])
-    first_learning_rate(optimizer,learning_rate)
-    print("model loaded")
-    return model
-
 batch_size = batch_sizes
 
 
@@ -239,72 +161,8 @@ model = ModelBuilder(SimpleNetArgs)
 if cuda_avail:
     model.cuda()
 
-optimizer = Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 loss_fn = nn.CrossEntropyLoss()
-
-
-# Create a learning rate adjustment function that divides the learning rate by 10 every 30 epochs
-def adjust_learning_rate(epoch,lr):
-
-    global num_epochs
-    if epoch == 8 * num_epochs / 10:
-        lr = lr / 2
-    elif epoch == 6 * num_epochs / 10:
-        lr = lr / 2
-    elif epoch == 4 * num_epochs / 10:
-        lr = lr / 2
-    elif epoch == 2 * num_epochs / 10:
-        lr = lr / 2
-
-    for param_group in optimizer.param_groups:
-        param_group["lr"] = lr
-
-def save_models(epoch, loss, save_point):
-    print("save path types = ",str(type(dataPathRoot))+"\t",str(type(epoch))+"\t",str(type(save_point)))
-    save_PATH = dataPathRoot + "/saved_models/" + "Birdies_model_{}_".format(epoch) + "_best_" \
-                                + str(save_point) + "_FDpsBSksFn_" + str(no_feature_detectors) + "_" +\
-                str(pic_size) + "_" + str(batch_size) + "_" + str(kernel_sizes) + "_" + str(flattener) +".model"
-    checkpoint = {
-            'epoch': epoch,
-            'model_state_dict': model.state_dict(),
-            'optimizer_state_dict': optimizer.state_dict(),
-            'loss': loss,
-            }
-    torch.save(checkpoint, save_PATH)
-    print("Checkpoint saved")
-    if (os.path.exists(save_PATH)):
-        print("verified save ", save_PATH)
 
 def set_print_shape(printit):
     global print_shape
     print_shape = printit
-
-# ---------------------------------------------------------------------
-
-def predict(image_bytes):
-    images = image_bytes
-    model.eval()
-    if cuda_avail:
-       images = Variable(images.cuda())
-    outputs = model(images)
-    # _, prediction = torch.max(outputs.data, 1)
-    #print("prediction=" + str(prediction))
-    #return prediction, (outputs.data).cpu().numpy()
-    # torch.sort(outputs.data[1])
-    # print ("outputs shape= " + str(outputs.data.shape))
-    birdrank = (outputs.data).cpu().numpy()
-    birdrank.flatten
-    #print("birdrank=" + str(birdrank))
-    birdvalrank = np.flip(np.sort(birdrank),1)
-    #print("birdrank=" + str(birdvalrank))
-    firstchoice = np.where(birdrank == birdvalrank[0][0])
-    secondchoice = np.where(birdrank == birdvalrank[0][1])
-    thirdchoice = np.where(birdrank == birdvalrank[0][2])
-    #print ("firstchoice=" + str(int(firstchoice[1])) + "\n" +
-    #       "secondchoice=" + str(int(secondchoice[1])) + "\n" +
-    #       "thirdchoice=" + str(int(thirdchoice[1])))
-    scores = [float(birdvalrank[0][0])+100, float(birdvalrank[0][1])+100,float(birdvalrank[0][2])+100]
-    print(str(scores))
-    rankings = [int(firstchoice[1]),int(secondchoice[1]),int(thirdchoice[1])]
-    print(str(rankings))
-    return scores, rankings
