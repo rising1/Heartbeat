@@ -1,0 +1,2 @@
+FLASK_APP=bird_image_predictor/controller.py
+FLASK_ENV=development
