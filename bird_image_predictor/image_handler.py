@@ -1,10 +1,11 @@
 import io
 import torchvision.transforms as transforms
 from PIL import Image
-from model import model_builder
-import constants
+from torch.autograd import Variable
 import numpy as np
 
+from model.model_builder import model, cuda_avail
+import constants
 from bird_image_predictor import view_test
 
 def handle(filepath):
@@ -34,7 +35,20 @@ def _transform_image(image_bytes):
 
 def _get_prediction(image_bytes):
     tensor = _transform_image(image_bytes=image_bytes)
-    # print("type=" + str(type(tensor)) + str(tensor))
-    return model_builder.predict(tensor)
+    model.eval()
+    if cuda_avail:
+        tensor = Variable(tensor.cuda())
+    outputs = model(tensor)
+    birdrank = (outputs.data).cpu().numpy()
+    birdrank.flatten
+    birdvalrank = np.flip(np.sort(birdrank), 1)
+    firstchoice = np.where(birdrank == birdvalrank[0][0])
+    secondchoice = np.where(birdrank == birdvalrank[0][1])
+    thirdchoice = np.where(birdrank == birdvalrank[0][2])
+    scores = [float(birdvalrank[0][0]) + 100, float(birdvalrank[0][1]) + 100, float(birdvalrank[0][2]) + 100]
+    print(str(scores))
+    rankings = [int(firstchoice[1]), int(secondchoice[1]), int(thirdchoice[1])]
+    print(str(rankings))
+    return scores, rankings
 
 

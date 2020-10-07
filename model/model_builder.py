@@ -166,23 +166,3 @@ loss_fn = nn.CrossEntropyLoss()
 def set_print_shape(printit):
     global print_shape
     print_shape = printit
-
-# ---------------------------------------------------------------------
-
-def predict(image_bytes):
-    images = image_bytes
-    model.eval()
-    if cuda_avail:
-       images = Variable(images.cuda())
-    outputs = model(images)
-    birdrank = (outputs.data).cpu().numpy()
-    birdrank.flatten
-    birdvalrank = np.flip(np.sort(birdrank),1)
-    firstchoice = np.where(birdrank == birdvalrank[0][0])
-    secondchoice = np.where(birdrank == birdvalrank[0][1])
-    thirdchoice = np.where(birdrank == birdvalrank[0][2])
-    scores = [float(birdvalrank[0][0])+100, float(birdvalrank[0][1])+100,float(birdvalrank[0][2])+100]
-    print(str(scores))
-    rankings = [int(firstchoice[1]),int(secondchoice[1]),int(thirdchoice[1])]
-    print(str(rankings))
-    return scores, rankings

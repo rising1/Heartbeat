@@ -6,7 +6,6 @@ from torch.optim import Adam
 import constants
 from model import model_builder
 
-
 loadfile = True
 optimizer = Adam(model_builder.model.parameters(), lr=constants.LEARNING_RATE, weight_decay=constants.WEIGHT_DECAY)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
