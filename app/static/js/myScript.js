@@ -1,4 +1,4 @@
-  document.getElementById("prediction1").innerHTML = "awaited";
+
 
     var dragHandler = function(evt){
         evt.preventDefault();

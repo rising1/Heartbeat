@@ -14,15 +14,15 @@ a {
   background-color: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(0, 0, 0, 0.8);
   padding: 20px;
-  font-size: 30px;
+  font-size: 10px;
   text-align: center;
 }
 .droparea {
       border: 2px dashed #ccc;
-      width: 200px;
-      float: left;
-      line-height: 200px;
-      text-align: center;
+      width: 208px;
+      position: static;
+      line-height: 150px;
+      text-align: top;
   }
  .spacer {
       width: 20px;
@@ -32,12 +32,11 @@ a {
       text-align: center;
   }
 .words1 {
-      font-size: 15px
+      font-size: 30px
       width: 20px;
       text-align: center;
-      border: 2px dashed #ccc;
-      border-color: purple;
-  }
+      position:relative;
+ }
 .words2 {
       font-size: 30px
       width: 20px;
@@ -46,6 +45,9 @@ a {
   }
  .words3 {
       font-size: 10px
+      width: 15px;
+      text-align: center;
+      position:relative;
   }
 .note {
   width: 500px;
@@ -59,27 +61,23 @@ a {
 
   margin: 50px auto;
 }
-#drop-area.highlight {
-  border-color: purple;
-}
+
 p {
   margin-top: 0;
 }
 .my-form {
   margin-bottom: 10px;
 }
-div.gallery {
+.gallery {
   margin: 5px;
   border: 1px solid #ccc;
-  float: left;
   width: 180px;
 }
 
-div.gallery:hover {
+.gallery:hover {
   border: 1px solid #777;
 }
-
-div.gallery img {
+.gallery img {
   width: 100%;
   height: auto;
 }
