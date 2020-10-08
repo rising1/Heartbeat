@@ -8,6 +8,7 @@ a {
   display: grid;
   grid-template-columns: auto auto auto;
   background-color: #2196F3;
+  width:300;
   padding: 10px;
 }
 .grid-item {
@@ -71,7 +72,7 @@ p {
 .gallery {
   margin: 5px;
   border: 1px solid #ccc;
-  width: 180px;
+  width: 120px;
 }
 
 .gallery:hover {
