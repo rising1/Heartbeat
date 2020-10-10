@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from torch.autograd import Variable
 import numpy as np
-import hawknet_depld
+# import hawknet_depld
 
 
 # Hyper-parameters
@@ -34,7 +34,7 @@ dataPathRoot = './'
 # validate_path = 'C:/Users/phfro/PycharmProjects/Heartbeat/bird_list.txt'
 
 computer = "home_laptop"
-deploy_test = hawknet_depld.test_images(12, False)
+# deploy_test = hawknet_depld.test_images(12, False)
 # Check if gpu support is available
 cuda_avail = torch.cuda.is_available()
 

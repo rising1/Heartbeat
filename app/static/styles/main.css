@@ -6,8 +6,8 @@ a {
 }
 .grid-container {
   display: grid;
-  grid-template-columns: 220px;
-  background-color: #2196F3;
+  grid-template-columns: 250px;
+  # background-color: #2196F3;
   width:200;
   padding: 10px;
 }
