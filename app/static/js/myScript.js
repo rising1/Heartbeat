@@ -54,9 +54,12 @@
          $.ajax(req)
             .done(function(data){
                 results = data.split(",")
-                $('#prediction1').text(results[0]).show();
-                $('#prediction2').text(results[1]).show();
-                $('#prediction3').text(results[2]).show();
+                $('#prediction1').html("<h3>" + results[0] + "</h3> \n -score " +
+                    results[1]).show();
+                $('#prediction2').text(results[2] + " -score " +
+                    results[3]).show();
+                $('#prediction3').text(results[4] + " -score " +
+                    results[5]).show();
             } );
 
          event.preventDefault();

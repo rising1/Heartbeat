@@ -27,8 +27,8 @@ def uploader_file():
 
         choiceslist = image_handler.handle(save_pathname)
 
-    return choiceslist[0] + " " + choiceslist[3] + "," + \
-           choiceslist[1] + " " + choiceslist[4] + "," + choiceslist[2] + " " + choiceslist[5]
+    return choiceslist[0] + "," + choiceslist[3] + "," + \
+           choiceslist[1] + "," + choiceslist[4] + "," + choiceslist[2] + "," + choiceslist[5]
 
 app.config["UPLOAD_FOLDER"] =  "./temp"
 

@@ -12,7 +12,7 @@ def handle(filepath):
     choiceslist = []
     with open(filepath, 'rb') as f_bytes:
         image_bytes = f_bytes.read()
-        scores, predictedplaces, descendingscores, descendingchoices = _get_prediction(
+        scores, predictedplaces = _get_prediction(
             image_bytes)
         # print("prediction number=" + str(prediction_number))
         for i in predictedplaces:
@@ -20,8 +20,8 @@ def handle(filepath):
             choiceslist.append(view_test.birds_listing(
                 constants.BIRD_LIST)[i])
         for j in scores:
-            choiceslist.append(" (score " + str(np.round(j, 2)) + ")")
-        print("choiceslist=" + str(choiceslist))
+            choiceslist.append( str(np.round(j, 2)) )
+        # print("choiceslist=" + str(choiceslist))
     return choiceslist
 
 def _transform_image(image_bytes):
@@ -48,13 +48,18 @@ def _get_prediction(image_bytes):
     thirdchoice = np.where(birdrank == birdvalrank[0][2])
     descendingchoices = []
     descendingscores = []
-    for i in range(len(birdrank)):
+    # print("birdrank length=" + str(len(birdrank[0])))
+    # print("birdrank shape=" + str(birdrank[0]))
+    # print("birdvalrank length=" + str(len(birdvalrank[0])))
+    for i in range(len(birdrank[0])):
         descendingchoices.append(np.where(birdrank == birdvalrank[0][i]))
-        descendingscores.append(float(birdvalrank[0][i]) + 100)
+    print("descendingchoices=" + str(descendingchoices))
+        # descendingscores.append(float(birdvalrank[0][i]) + 100)
+
     scores = [float(birdvalrank[0][0]) + 100, float(birdvalrank[0][1]) + 100, float(birdvalrank[0][2]) + 100]
     print(str(scores))
     rankings = [int(firstchoice[1]), int(secondchoice[1]), int(thirdchoice[1])]
     print(str(rankings))
-    return scores, rankings, descendingscores, descendingchoices
+    return scores, rankings
 
 
