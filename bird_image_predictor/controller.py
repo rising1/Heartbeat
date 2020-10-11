@@ -26,6 +26,7 @@ def uploader_file():
         fileob.save(save_pathname)
 
         choiceslist = image_handler.handle(save_pathname)
+
     return choiceslist[0] + " " + choiceslist[3] + "," + \
            choiceslist[1] + " " + choiceslist[4] + "," + choiceslist[2] + " " + choiceslist[5]
 

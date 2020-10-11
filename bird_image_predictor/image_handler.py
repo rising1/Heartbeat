@@ -21,6 +21,7 @@ def handle(filepath):
                 constants.BIRD_LIST)[i])
         for j in scores:
             choiceslist.append(" (score " + str(np.round(j, 2)) + ")")
+        print("choiceslist=" + str(choiceslist))
     return choiceslist
 
 def _transform_image(image_bytes):
