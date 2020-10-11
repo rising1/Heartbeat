@@ -46,15 +46,6 @@ def _get_prediction(image_bytes):
     firstchoice = np.where(birdrank == birdvalrank[0][0])
     secondchoice = np.where(birdrank == birdvalrank[0][1])
     thirdchoice = np.where(birdrank == birdvalrank[0][2])
-    descendingchoices = []
-    descendingscores = []
-    # print("birdrank length=" + str(len(birdrank[0])))
-    # print("birdrank shape=" + str(birdrank[0]))
-    # print("birdvalrank length=" + str(len(birdvalrank[0])))
-    for i in range(len(birdrank[0])):
-        descendingchoices.append(np.where(birdrank == birdvalrank[0][i]))
-    print("descendingchoices=" + str(descendingchoices))
-        # descendingscores.append(float(birdvalrank[0][i]) + 100)
 
     scores = [float(birdvalrank[0][0]) + 100, float(birdvalrank[0][1]) + 100, float(birdvalrank[0][2]) + 100]
     print(str(scores))
