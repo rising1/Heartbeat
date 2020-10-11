@@ -6,17 +6,17 @@ a {
 }
 .grid-container {
   display: grid;
-  grid-template-columns: 250px;
+  grid-template-columns: 220px;
   # background-color: #2196F3;
-  width:200;
-  padding: 10px;
+  width:180;
+  padding: 2px;
 }
 .grid-item {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(230, 255, 220, 200);
   border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  font-size: 10px;
-  text-align: center;
+  padding: 5px;
+  font-size: 10px;  text-align: center;
+  width:180;
 }
 .droparea {
       border: 2px dashed #ccc;
@@ -70,9 +70,9 @@ p {
   margin-bottom: 10px;
 }
 .gallery {
-  margin: 5px;
+  margin: 10px;
   border: 1px solid #ccc;
-  width: 200px;
+  width: 190px;
 }
 
 .gallery:hover {
