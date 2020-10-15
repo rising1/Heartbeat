@@ -1,8 +1,9 @@
 import io
 import torchvision.transforms as transforms
-from PIL import Image
+from PIL import Image, ImageOps
 from torch.autograd import Variable
 import numpy as np
+import cv2
 
 from model.model_builder import model, cuda_avail
 import constants
@@ -30,8 +31,26 @@ def _transform_image(image_bytes):
                                         transforms.ToTensor(),
                                         transforms.Normalize(
                                             [0.485, 0.456, 0.406],
-                                            [0.229, 0.224, 0.225])])
+                                            [0.229, 0.224, 0.225])
+                                        ])
     image = Image.open(io.BytesIO(image_bytes))
+
+    # put code here to pad out an image which is smaller than 96
+    ht,wd = image.size
+    if ht < 96:
+        hh = 96
+    else:
+        hh = ht
+    if wd < 96:
+        ww = 96
+    else:
+        ww = wd
+
+    delta_w = ww - wd
+    delta_h = hh - ht
+    padding = (delta_w // 2, delta_h // 2, delta_w - (delta_w // 2), delta_h - (delta_h // 2))
+    image = ImageOps.expand(image, padding)
+
     return my_transforms(image).unsqueeze(0)
 
 def _get_prediction(image_bytes):
