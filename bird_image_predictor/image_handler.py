@@ -34,7 +34,7 @@ def _transform_image(image_bytes):
                                             [0.229, 0.224, 0.225])
                                         ])
     image = Image.open(io.BytesIO(image_bytes))
-
+    image = image.convert('RGB')
     # put code here to pad out an image which is smaller than 96
     ht,wd = image.size
     if ht < 96:
