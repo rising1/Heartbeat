@@ -35,21 +35,7 @@ def _transform_image(image_bytes):
                                         ])
     image = Image.open(io.BytesIO(image_bytes))
     image = image.convert('RGB')
-    # put code here to pad out an image which is smaller than 96
-    ht,wd = image.size
-    if ht < 96:
-        hh = 96
-    else:
-        hh = ht
-    if wd < 96:
-        ww = 96
-    else:
-        ww = wd
 
-    delta_w = ww - wd
-    delta_h = hh - ht
-    padding = (delta_w // 2, delta_h // 2, delta_w - (delta_w // 2), delta_h - (delta_h // 2))
-    image = ImageOps.expand(image, padding)
 
     return my_transforms(image).unsqueeze(0)
 
