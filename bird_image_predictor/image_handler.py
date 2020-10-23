@@ -3,7 +3,6 @@ import torchvision.transforms as transforms
 from PIL import Image, ImageOps
 from torch.autograd import Variable
 import numpy as np
-import cv2
 
 from model.model_builder import model, cuda_avail
 import constants
