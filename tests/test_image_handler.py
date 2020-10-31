@@ -21,8 +21,8 @@ class TestImageHandler:
 
         # then
         assert "Duck" in actual_predictions[0]
-        assert "robin" in actual_predictions[1]
-        assert "swan" in actual_predictions[2]
+        assert "Robin" in actual_predictions[1]
+        assert "Swan" in actual_predictions[2]
 
 
 
