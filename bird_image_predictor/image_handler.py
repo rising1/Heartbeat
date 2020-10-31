@@ -3,12 +3,14 @@ import torchvision.transforms as transforms
 from PIL import Image, ImageOps
 from torch.autograd import Variable
 import numpy as np
+import logging
 
 from model.model_builder import model, cuda_avail
 import constants
 from bird_image_predictor import view_test
 
 def handle(filepath):
+    logging.info("processing bird image...")
     choiceslist = []
     with open(filepath, 'rb') as f_bytes:
         image_bytes = f_bytes.read()
@@ -25,6 +27,7 @@ def handle(filepath):
     return choiceslist
 
 def _transform_image(image_bytes):
+    logging.info("Transforming image to tensor...")
     my_transforms = transforms.Compose([transforms.Resize(96),
                                         transforms.CenterCrop(72),
                                         transforms.ToTensor(),
@@ -39,6 +42,7 @@ def _transform_image(image_bytes):
     return my_transforms(image).unsqueeze(0)
 
 def _get_prediction(image_bytes):
+    logging.info("predicting bird image...")
     tensor = _transform_image(image_bytes=image_bytes)
     model.eval()
     if cuda_avail:
@@ -55,6 +59,7 @@ def _get_prediction(image_bytes):
     print(str(scores))
     rankings = [int(firstchoice[1]), int(secondchoice[1]), int(thirdchoice[1])]
     print(str(rankings))
+    logging.info("Bird image successfully returned scores and rankings")
     return scores, rankings
 
 

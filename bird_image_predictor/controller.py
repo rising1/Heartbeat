@@ -2,6 +2,7 @@ from app import app
 from flask import render_template, request
 from werkzeug.utils import secure_filename
 import os
+import logging
 
 from bird_image_predictor import image_handler, setup
 
@@ -9,6 +10,7 @@ from bird_image_predictor import image_handler, setup
 
 @app.route('/index')
 def index():
+    logging.info("/index endpoint hit")
     user = {'username': 'Pete'}
     return render_template('answer.html',title='Home',  user=user)
 
@@ -19,6 +21,7 @@ def upload_file():
 @app.route('/uploader', methods = ['GET','POST'])
 def uploader_file():
     if request.method == 'POST':
+        logging.info("Received bird picture")
         fileob = request.files['file2upload']
         filename = secure_filename(fileob.filename)
         save_pathname = os.path.join(
@@ -26,7 +29,7 @@ def uploader_file():
         fileob.save(save_pathname)
 
         choiceslist = image_handler.handle(save_pathname)
-
+    logging.info("Bird predictions are: " + choiceslist)
     return choiceslist[0] + "," + choiceslist[3] + "," + \
            choiceslist[1] + "," + choiceslist[4] + "," + choiceslist[2] + "," + choiceslist[5]
 
