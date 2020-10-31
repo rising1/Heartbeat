@@ -9,13 +9,13 @@ from model.model_builder import model, cuda_avail
 import constants
 from bird_image_predictor import view_test
 
-def handle(filepath):
+def handle(filepath, logging):
     logging.info("processing bird image...")
     choiceslist = []
     with open(filepath, 'rb') as f_bytes:
         image_bytes = f_bytes.read()
         scores, predictedplaces = _get_prediction(
-            image_bytes)
+            image_bytes, logging)
         # print("prediction number=" + str(prediction_number))
         for i in predictedplaces:
             # print(i)
@@ -26,7 +26,7 @@ def handle(filepath):
         # print("choiceslist=" + str(choiceslist))
     return choiceslist
 
-def _transform_image(image_bytes):
+def _transform_image(logging, image_bytes):
     logging.info("Transforming image to tensor...")
     my_transforms = transforms.Compose([transforms.Resize(96),
                                         transforms.CenterCrop(72),
@@ -41,9 +41,9 @@ def _transform_image(image_bytes):
 
     return my_transforms(image).unsqueeze(0)
 
-def _get_prediction(image_bytes):
+def _get_prediction(image_bytes, logging):
     logging.info("predicting bird image...")
-    tensor = _transform_image(image_bytes=image_bytes)
+    tensor = _transform_image(logging, image_bytes=image_bytes)
     model.eval()
     if cuda_avail:
         tensor = Variable(tensor.cuda())

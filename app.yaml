@@ -1,2 +1,2 @@
 runtime: python38
-              entrypoint: flask run
+entrypoint: flask run
